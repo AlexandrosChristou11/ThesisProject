@@ -48,7 +48,7 @@ class Feed extends StatelessWidget{
       //   crossAxisSpacing: 6.0,
       // )
       GridView.count(crossAxisCount: 2,
-      childAspectRatio: 240/600,
+      childAspectRatio: 240/420,
       crossAxisSpacing: 8,
       mainAxisSpacing: 8,
       children: List.generate(_matches.length, (index) {
