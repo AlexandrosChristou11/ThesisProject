@@ -1,5 +1,9 @@
+import 'dart:js';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Widgets/wishlist_empty.dart';
 import 'package:sep21/Widgets/wishlit_full.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
@@ -11,6 +15,7 @@ import '../Widgets/cart_full.dart';
 class Wishlist extends StatelessWidget {
 
   static const routeName = '/wishlist';
+
 
   @override
   Widget build(BuildContext context) {

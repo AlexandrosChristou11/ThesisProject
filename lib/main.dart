@@ -6,6 +6,7 @@ import 'package:sep21/bottom_bar.dart';
 import 'package:sep21/consts/my_custom_icons/Theme_data.dart';
 
 import 'Provider/CurstomRoutes.dart';
+import 'Provider/Matches.dart';
 
 
 
@@ -39,10 +40,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          /// (1) Dark Theme Provider - state
           ChangeNotifierProvider(create: (_) {
             return themeChangeProvide;
-          })
-        ],
+          }),
+
+          /// (2) Matches Provider - state
+          ChangeNotifierProvider(create: (_) => Matches()
+          )],
         child:
             Consumer<DarkThemeProvider>(builder: (context, themeData, child) {
           return MaterialApp(

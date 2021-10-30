@@ -75,7 +75,7 @@ class _FeedProductsState extends State<FeedProducts> {
                     Text(
                       widget.description,
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                      maxLines: 1,
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.black,

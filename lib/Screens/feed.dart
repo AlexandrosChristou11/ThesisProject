@@ -2,37 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
+import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Widgets/feeds_products.dart';
 import 'package:sep21/Models/Match.dart';
 
 class Feed extends StatelessWidget{
-  List <Match> _matches =[
-    Match("match1", "Anorthosis VS Omonoia", "Championship Game", 10.0
-        , "https://upload.wikimedia.org/wikipedia/en/thumb/5/50/Anorthosis_FC_logo.svg/1200px-Anorthosis_FC_logo.svg.png",
-        "Cup", 7000, true, true, "Anorthosis", "Omonoia", "29 October 2021"),
 
-    Match("match2", "AEL VS Aris", "Championship Game", 10.0
-        , "https://seeklogo.com/images/A/AEL-logo-4FD3D4029E-seeklogo.com.png",
-        "Championship", 4000, true, true, "AEL", "Aris", "30 October 2021"),
-
-    Match("match3", "Doxa VS Apoel", "Championship Game", 10.0
-        , "https://seeklogo.com/images/D/doxa-katokopias-fc-logo-4995917919-seeklogo.com.png",
-        "Championship", 4000, true, true, "Doxa", "Apoel", "30 October 2021"),
-
-
-    Match("match4", "AEK VS Ethnikos", "Championship Game", 10.0
-        , "https://seeklogo.com/images/A/aek-larnaca-logo-A2A11BB75C-seeklogo.com.png",
-        "Championship", 4000, true, true, "Aek", "Ethnikos", "31 October 2021"),
-
-    Match("match5", "Olympiakos VS Apollon", "Championship Game", 10.0
-        , "https://seeklogo.com/images/O/olympiakos-nicosia-logo-BE09F64A71-seeklogo.com.gif",
-        "Championship", 4000, true, true, "Olympiakos", "Apollon", "31 October 2021"),
-
-  ];
 
   static const routeName = '/feed';
   @override
   Widget build(BuildContext context) {
+
+    final matchesProvider = Provider.of<Matches>(context);
+    List<Match> matchesList = matchesProvider.matches;
 
     return Scaffold(
 
@@ -51,13 +34,13 @@ class Feed extends StatelessWidget{
       childAspectRatio: 240/420,
       crossAxisSpacing: 8,
       mainAxisSpacing: 8,
-      children: List.generate(_matches.length, (index) {
+      children: List.generate(matchesList.length, (index) {
         return FeedProducts(
-            id: _matches[index].id,
-            description:_matches[index].description,
-            price: _matches[index].price,
-            quantity: _matches[index].quantity,
-            imageURL: _matches[index].imageURL,
+            id: matchesList[index].id,
+            description:matchesList[index].description,
+            price: matchesList[index].price,
+            quantity: matchesList[index].quantity,
+            imageURL: matchesList[index].imageURL,
             isFavorite: true
 
         );
