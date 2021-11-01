@@ -1,25 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Models/Match.dart';
 
 class FeedProducts extends StatefulWidget {
-  final String id;
-  final String description;
-  final double price;
-  final String imageURL;
-  final int quantity;
-  final bool isFavorite;
 
-  const FeedProducts(
-      {
-      required this.id,
-      required this.description,
-      required this.price,
-      required this.imageURL,
-      required this.quantity,
-      required this.isFavorite})
-      ;
+
 
   @override
   _FeedProductsState createState() => _FeedProductsState();
@@ -28,6 +15,8 @@ class FeedProducts extends StatefulWidget {
 class _FeedProductsState extends State<FeedProducts> {
   @override
   Widget build(BuildContext context) {
+    final matchesAttributes = Provider.of<Match>(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
@@ -50,7 +39,7 @@ class _FeedProductsState extends State<FeedProducts> {
                             minHeight: 130,
                             maxHeight:
                                 MediaQuery.of(context).size.height * 0.3),
-                        child: Image.network(widget.imageURL,
+                        child: Image.network(matchesAttributes.imageURL,
                             fit: BoxFit.fitWidth)),
                   ),
                   Badge(
@@ -73,7 +62,7 @@ class _FeedProductsState extends State<FeedProducts> {
                       height: 4,
                     ),
                     Text(
-                      widget.description,
+                      matchesAttributes.description,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: TextStyle(
@@ -84,7 +73,7 @@ class _FeedProductsState extends State<FeedProducts> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        'Price: ' + widget.price.toString(),
+                        'Price: ' + matchesAttributes.price.toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: TextStyle(
@@ -97,7 +86,7 @@ class _FeedProductsState extends State<FeedProducts> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Quantity: ' + widget.quantity.toString(),
+                          'Quantity: ' + matchesAttributes.quantity.toString(),
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontSize: 12,

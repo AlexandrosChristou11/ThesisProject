@@ -35,14 +35,12 @@ class Feed extends StatelessWidget{
       crossAxisSpacing: 8,
       mainAxisSpacing: 8,
       children: List.generate(matchesList.length, (index) {
-        return FeedProducts(
-            id: matchesList[index].id,
-            description:matchesList[index].description,
-            price: matchesList[index].price,
-            quantity: matchesList[index].quantity,
-            imageURL: matchesList[index].imageURL,
-            isFavorite: true
+        return ChangeNotifierProvider.value(
+        value: matchesList[index],
+        child: FeedProducts(
 
+
+          ),
         );
       }),
       )

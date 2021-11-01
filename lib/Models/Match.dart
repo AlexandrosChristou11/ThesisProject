@@ -1,6 +1,8 @@
 
 
-class Match {
+import 'package:flutter/cupertino.dart';
+
+class Match with ChangeNotifier {
   final String id;
   final String title;
   final String description;

@@ -167,12 +167,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (BuildContext ctx, int index){
                               return FeedProducts(
-                                  id: matchesList[index].id,
-                                  description:matchesList[index].description,
-                                  price: matchesList[index].price,
-                                  quantity: matchesList[index].quantity,
-                                  imageURL: matchesList[index].imageURL,
-                                  isFavorite: true
+
 
                               );
                             })
