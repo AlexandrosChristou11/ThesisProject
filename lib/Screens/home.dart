@@ -105,7 +105,9 @@ class _HomeState extends State<Home> {
                     ),
                   ),
 
-                  /// ** CLUB SELECTION **
+                  /// ***************************************************
+                  ///                 CLUB SELECTION
+                  /// ***************************************************
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
@@ -124,7 +126,9 @@ class _HomeState extends State<Home> {
                       }, )
                   ),
 
-                  /// ** SPORT TYPE SELECTION **
+                  /// ***************************************************
+                  ///               SPORT TYPE (CATEGORY) SELECTION
+                  /// ***************************************************
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -166,7 +170,9 @@ class _HomeState extends State<Home> {
                         },
                       )),
 
-                  /// **  POPULAR TEAMS **
+                  /// ***************************************************
+                  ///                 POPULAR TEAMS
+                  /// ***************************************************
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -228,7 +234,9 @@ class _HomeState extends State<Home> {
                     ),
                   ),
 
-                  /// ** Popular Games **
+                  /// ***************************************************
+                  ///                POPULAR MATCHES
+                  /// ***************************************************
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(

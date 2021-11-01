@@ -32,10 +32,19 @@ class Matches with ChangeNotifier{
         , "https://seeklogo.com/images/O/olympiakos-nicosia-logo-BE09F64A71-seeklogo.com.gif",
         "Championship", 4000, true, true, "Olympiakos", "Apollon", "31 October 2021"),
 
+    Match("match6", "Anorthosis VS Apollon", "Championship Game", 10.0
+        , "https://upload.wikimedia.org/wikipedia/en/thumb/5/50/Anorthosis_FC_logo.svg/1200px-Anorthosis_FC_logo.svg.png",
+        "Championship", 7000, true, true, "Anorthosis", "Apollon", "31 October 2021"),
+
   ];
 
   List<Match> get matches{
     return _matches;
+  }
+
+  List <Match> findByTeam(String teamName){
+      return _matches.where((element) => element.homeTeam.toLowerCase().contains(teamName.toLowerCase())).toList();
+
   }
 
 }

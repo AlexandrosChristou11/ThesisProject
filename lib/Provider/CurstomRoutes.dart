@@ -6,6 +6,7 @@ import 'package:sep21/Screens/cart.dart';
 import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/Screens/home.dart';
 import 'package:sep21/Screens/wishlist.dart';
+import 'package:sep21/Inner Screens/categories_feeds.dart';
 
 
 var customRoutes = <String, WidgetBuilder>{
@@ -16,5 +17,6 @@ var customRoutes = <String, WidgetBuilder>{
     Feed.routeName: (ctx) => Feed(),
    Wishlist.routeName: (ctx) => Wishlist(),
    MatchDetails.routeName: (ctx) => MatchDetails(),
+  CategoriesFeedsScreen.routeName: (ctx) => CategoriesFeedsScreen(),
    // CategoriesFeedsScreen.routeName: (ctx) => CategoriesFeedsScreen(),
 };

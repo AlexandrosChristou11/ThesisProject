@@ -40,6 +40,8 @@ class _MatchDetailsState extends State<MatchDetails> {
     final matchesProvider = Provider.of<Matches>(context);
     List<Match> matchesList = matchesProvider.matches;
 
+
+
     return Scaffold(
       body:
       Stack(
@@ -157,7 +159,9 @@ class _MatchDetailsState extends State<MatchDetails> {
                         height: 1
                       ),
 
-                    /// ** OTHER GAMES RECOMMENTATION **
+                      /// ***************************************************
+                      ///               SPORT TYPE (CATEGORY) SELECTION
+                      /// ***************************************************
                       Container(
                         margin: EdgeInsets.only(bottom: 25),
                         width: double.infinity,
@@ -166,9 +170,12 @@ class _MatchDetailsState extends State<MatchDetails> {
                             itemCount: matchesList.length,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (BuildContext ctx, int index){
-                              return FeedProducts(
+                              return ChangeNotifierProvider.value(
+                                value: matchesList[index],
+                                child: FeedProducts(
 
 
+                                ),
                               );
                             })
                       )
