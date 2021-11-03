@@ -20,7 +20,7 @@ class _FeedProductsState extends State<FeedProducts> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () => Navigator.pushNamed(context, MatchDetails.routeName),
+        onTap: () => Navigator.pushNamed(context, MatchDetails.routeName, arguments: matchesAttributes.id),
         child: Container(
           width: 250,
           height: 290,
@@ -40,7 +40,7 @@ class _FeedProductsState extends State<FeedProducts> {
                             maxHeight:
                                 MediaQuery.of(context).size.height * 0.3),
                         child: Image.network(matchesAttributes.imageURL,
-                            fit: BoxFit.fitWidth)),
+                            fit: BoxFit.contain)),
                   ),
                   Badge(
                     toAnimate: true,

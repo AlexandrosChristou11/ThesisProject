@@ -12,7 +12,7 @@ class TeamsNavigationRail extends StatelessWidget {
     final matchesAttributes = Provider.of<Match>(context);
 
     return InkWell(
-      onTap:  () => Navigator.pushNamed(context, MatchDetails.routeName) ,
+      onTap:  () => Navigator.pushNamed(context, MatchDetails.routeName, arguments: matchesAttributes.id) ,
       child: Container(
         color: MyAppColor.blueGrey,
         padding: EdgeInsets.only(left: 5.0, right: 5.0),

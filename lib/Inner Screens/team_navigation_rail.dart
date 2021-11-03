@@ -200,6 +200,12 @@ class ContentSpace extends StatelessWidget {
   Widget build(BuildContext context) {
     final teamData = Provider.of<Matches>(context);
     final matchesTeams = teamData.findByTeam(team);
+    if (team == 'All'){
+      for (int i=0; i < teamData.matches.length; i++){
+        matchesTeams.add(teamData.matches[i]);
+      }
+    }
+
     //print ("team: "+ team );
     return Expanded(
       child: Padding(

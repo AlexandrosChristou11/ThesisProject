@@ -36,21 +36,26 @@ class _MatchDetailsState extends State<MatchDetails> {
   @override
   Widget build(BuildContext context) {
 
-    // Provider for match list
+    /// ************************************
+    ///              PROVIDERS:
+    /// ************************************
+    final themeState = Provider.of<DarkThemeProvider>(context);
     final matchesProvider = Provider.of<Matches>(context);
     List<Match> matchesList = matchesProvider.matches;
-
-
-
+    final matchID = ModalRoute.of(context)!.settings.arguments as String;
+    print ("match ID: " + matchID);
+    
+    final matcAtrr = matchesProvider.findByID(matchID);
+    
     return Scaffold(
       body:
       Stack(
         children: <Widget>[
           Container(
             foregroundDecoration: BoxDecoration(color: Colors.black12),
-            height: MediaQuery.of(context).size.height* 0.95,
+            height: MediaQuery.of(context).size.height* 0.45,
             width: double.infinity,
-            child: Image.network('https://cdn.shopify.com/s/files/1/0283/4114/1549/files/MATCH_DAY._SITE_LOGO_100x.png?v=1576698237')
+            child: Image.network(matcAtrr.imageURL)
           ),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 16.0, bottom: 20.0),
@@ -114,7 +119,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                               width: MediaQuery.of(context).size.width* 0.9,
                               alignment: Alignment.center,
                               child: Text(
-                                'Team 1 vs Team 2',
+                                  matcAtrr.homeTeam + " vs " +matcAtrr.AwayTeam,
                                 maxLines: 2,
                                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600)
                               )
@@ -126,7 +131,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                             /// ** (2) Stadium **
                             Container(
                               alignment: Alignment.center,
-                              child: Text('Stadium: ',
+                              child: Text(matcAtrr.stadium,
                                   style: TextStyle(
                                     //themeState.darkTheme
                                        // ? Theme.of(context).disabledColor
@@ -135,11 +140,29 @@ class _MatchDetailsState extends State<MatchDetails> {
                                     fontSize: 21.0,
                                   )
                               ),
-                            )
+                            ),
+
+                            /// ** (3) Date - Time **
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text(matcAtrr.date,
+                                  style: TextStyle(
+                                    //themeState.darkTheme
+                                    // ? Theme.of(context).disabledColor
+                                    /*:*/ color: MyAppColor.subTitle,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 21.0,
+                                  )
+                              ),
+                            ),
+
                           ],
-                        )
+                        ),
                       ),
-                    const SizedBox(height: 50.0),
+                    const SizedBox(height: 58.0),
+
+
+
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Divider(
@@ -148,10 +171,8 @@ class _MatchDetailsState extends State<MatchDetails> {
                           height: 1,
                         ),
                       ),
-                      _details(false, 'Match: ', 'TeamsAgainst', context),
-                      _details(false, 'Available Tickets: ', 'Availability', context),
-                      _details(false, 'Stadium: ', 'StadiumName', context),
-                      _details(false, 'Time: ', 'Timerzone', context),
+                      _details(false, 'Available Tickets: ', matcAtrr.quantity.toString(), context),
+                      _details(false, 'Date: ', matcAtrr.date, context),
                       const SizedBox(height: 15.0),
                       Divider(
                         thickness: 1,
@@ -160,12 +181,12 @@ class _MatchDetailsState extends State<MatchDetails> {
                       ),
 
                       /// ***************************************************
-                      ///               SPORT TYPE (CATEGORY) SELECTION
+                      ///               Suggested Matches
                       /// ***************************************************
                       Container(
                         margin: EdgeInsets.only(bottom: 25),
                         width: double.infinity,
-                        height: 302,
+                        height: 340,
                         child: ListView.builder(
                             itemCount: matchesList.length,
                             scrollDirection: Axis.horizontal,

@@ -21,6 +21,7 @@ class PopularMatches extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final matchesAttributes = Provider.of<Match>(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -37,7 +38,7 @@ class PopularMatches extends StatelessWidget {
             bottomLeft: Radius.circular(10.0),
             bottomRight: Radius.circular(10.0)),
             child: InkWell(
-              onTap:  () => Navigator.pushNamed(context, MatchDetails.routeName),
+              onTap:  () => Navigator.pushNamed(context, MatchDetails.routeName, arguments: matchesAttributes.id),
               child: Column(
                 children: [
                   Stack(

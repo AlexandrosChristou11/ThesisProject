@@ -54,11 +54,16 @@ class Matches with ChangeNotifier{
     return _matches.where((element) =>  element.isPopular).toList();
   }
 
+  Match findByID(String mId){
+    return _matches.firstWhere((element) => element.id==mId);
+  }
+
   List <Match> findByTeam(String teamName){
 
     return (_matches.where((element) => element.homeTeam.toLowerCase().contains(teamName.toLowerCase())).toList()) ;
 
   }
+
 
   // List <Match> findBySport(String sport){
   //   return _matches.where((element) => element.type.toLowerCase().contains(sport.toLowerCase())).toList();
