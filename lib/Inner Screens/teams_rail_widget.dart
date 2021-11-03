@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/main.dart';
+import 'package:sep21/Models/Match.dart';
+
+import 'match_details.dart';
 
 class TeamsNavigationRail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final matchesAttributes = Provider.of<Match>(context);
+
     return InkWell(
-      onTap: () {},
+      onTap:  () => Navigator.pushNamed(context, MatchDetails.routeName) ,
       child: Container(
         color: MyAppColor.blueGrey,
         padding: EdgeInsets.only(left: 5.0, right: 5.0),
@@ -21,7 +27,7 @@ class TeamsNavigationRail extends StatelessWidget {
                   color: Theme.of(context).backgroundColor,
                   image: DecorationImage(
                       image: NetworkImage(
-                        'https://image.freepik.com/free-icon/ticket_318-1629.jpg',
+                        matchesAttributes.imageURL,
                       ),
                       fit: BoxFit.contain),
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -54,7 +60,7 @@ class TeamsNavigationRail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'title',
+                      matchesAttributes.homeTeam + " vs " +matchesAttributes.AwayTeam,
                       maxLines: 4,
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
@@ -64,7 +70,7 @@ class TeamsNavigationRail extends StatelessWidget {
                       height: 20.0,
                     ),
                     FittedBox(
-                      child: Text('US 16 \$',
+                      child: Text( matchesAttributes.price.toString() + '\€',
                           maxLines: 1,
                           style: TextStyle(
                             color: MyAppColor.blueGrey,
@@ -74,7 +80,7 @@ class TeamsNavigationRail extends StatelessWidget {
                     SizedBox(
                       height: 20.0,
                     ),
-                    Text('CatergoryName',
+                    Text(matchesAttributes.type,
                         style: TextStyle(color: Colors.grey, fontSize: 18.0)),
                     SizedBox(
                       height: 20.0,

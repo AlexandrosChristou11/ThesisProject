@@ -5,7 +5,9 @@
 // (2) Function to press on the preferred team and execute appropriate messages
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sep21/Inner%20Screens/teams_rail_widget.dart';
+import 'package:sep21/Provider/Matches.dart';
 
 
 class TeamsNavigationRailScreen extends StatefulWidget {
@@ -196,6 +198,9 @@ class ContentSpace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final teamData = Provider.of<Matches>(context);
+    final matchesTeams = teamData.findByTeam(team);
+    //print ("team: "+ team );
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 8, 0, 0),
@@ -203,9 +208,11 @@ class ContentSpace extends StatelessWidget {
           removeTop: true,
           context: context,
           child: ListView.builder(
-            itemCount: 5,
+            itemCount: matchesTeams.length,
             itemBuilder: (BuildContext context, int index) =>
-                TeamsNavigationRail(),
+                ChangeNotifierProvider.value(
+                    value: matchesTeams[index],
+                    child: TeamsNavigationRail()),
           ),
         ),
       ),

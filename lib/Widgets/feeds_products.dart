@@ -62,7 +62,7 @@ class _FeedProductsState extends State<FeedProducts> {
                       height: 4,
                     ),
                     Text(
-                      matchesAttributes.description,
+                      matchesAttributes.type,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       style: TextStyle(

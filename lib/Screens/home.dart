@@ -188,7 +188,7 @@ class _HomeState extends State<Home> {
                             Navigator.of(context).pushNamed(
                               TeamsNavigationRailScreen.routeName,
                               arguments: {
-                                7,
+                                5,
                               },
                             );
                           },
