@@ -5,7 +5,9 @@ import 'package:backdrop/sub_header.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:provider/provider.dart';
 import 'package:sep21/Inner%20Screens/team_navigation_rail.dart';
+import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Widgets/backlayer.dart';
 import 'package:sep21/Widgets/popular_matches.dart';
 import 'package:sep21/Widgets/teams.dart';
@@ -39,6 +41,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final matchesData = Provider.of<Matches>(context);
+    final popularMatches = matchesData.PopularMatches;
+
     return  Scaffold(
         body: BackdropScaffold(
             frontLayerBackgroundColor:
@@ -265,9 +270,18 @@ class _HomeState extends State<Home> {
                     margin: EdgeInsets.symmetric(horizontal: 3),
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: 8,
+                      itemCount: popularMatches.length,
                       itemBuilder: (BuildContext ctx, int index){
-                        return PopularMatches();
+                        return ChangeNotifierProvider.value(
+                          value: popularMatches[index],
+                          child: PopularMatches(
+                            // imageURL:popularMatches[index].imageURL,
+                            // title: popularMatches[index].homeTeam + " vs " + popularMatches[index].AwayTeam,
+                            // type: popularMatches[index].type,
+                            // stadium: popularMatches[index].stadium,
+
+                          ),
+                        );
                       },
                     ),
                   )

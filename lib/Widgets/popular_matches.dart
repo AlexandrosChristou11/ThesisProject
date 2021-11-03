@@ -5,12 +5,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:sep21/Inner%20Screens/match_details.dart';
+import 'package:sep21/Models/Match.dart';
 
 class PopularMatches extends StatelessWidget {
-  const PopularMatches({Key? key}) : super(key: key);
+  // const PopularMatches({Key? key, required this.imageURL, required this.title, required this.type, required this.stadium}) : super(key: key);
+  //
+  //  final String imageURL;
+  //  final String title;
+  // final String type;
+  //  final String  stadium;
+  //
 
   @override
   Widget build(BuildContext context) {
+    final matchesAttributes = Provider.of<Match>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -27,7 +37,7 @@ class PopularMatches extends StatelessWidget {
             bottomLeft: Radius.circular(10.0),
             bottomRight: Radius.circular(10.0)),
             child: InkWell(
-              onTap: (){},
+              onTap:  () => Navigator.pushNamed(context, MatchDetails.routeName),
               child: Column(
                 children: [
                   Stack(
@@ -37,8 +47,8 @@ class PopularMatches extends StatelessWidget {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: NetworkImage(
-                                      'https://w7.pngwing.com/pngs/565/341/png-transparent-stadium-football-icon-stadium-sports-s-rectangle-sport-structure.png'),
-                                  fit: BoxFit.fill))),
+                                      matchesAttributes.imageURL),
+                                  fit: BoxFit.contain))),
                       Positioned(
                         right: 12,
                         top: 10,
@@ -70,36 +80,54 @@ class PopularMatches extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Title',
+                          Text(matchesAttributes.homeTeam + " vs " + matchesAttributes.AwayTeam,
                               maxLines: 1,
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold))
                         ],
                       )),
+                  Container(
+                      //padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(matchesAttributes.stadium,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize: 13, fontWeight: FontWeight.bold))
+                        ],
+                      )),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Description',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.grey[800])),
-                      Material ( color: Colors.transparent ,
-                          child: InkWell(
-                            onTap: (){},
-                            borderRadius: BorderRadius.circular(30),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(
-                                MaterialCommunityIcons.cart_plus, size: 25,
-                                color: Colors.black,
+                      Expanded(
+                        flex: 4,
+                        child: Text(matchesAttributes.type,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey[800])),
+                      ),
+                      Spacer(),
+                      Expanded(
+                        flex: 1,
+                        child: Material ( color: Colors.transparent ,
+                            child: InkWell(
+                              onTap: (){},
+                              borderRadius: BorderRadius.circular(30),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  MaterialCommunityIcons.cart_plus, size: 25,
+                                  color: Colors.black,
 
-                                ),
-                            )
-                            )
-                          )
+                                  ),
+                              )
+                              )
+                            ),
+                      )
                     ],
                   )
                 ],

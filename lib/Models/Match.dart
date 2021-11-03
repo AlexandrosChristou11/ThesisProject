@@ -16,8 +16,9 @@ class Match with ChangeNotifier {
   final String homeTeam;
   final String AwayTeam;
   final String date;
+  final String stadium;
 
-  Match(this.id, this.title, this.type, this.price, this.imageURL, this.categoryName, this.quantity, this.isFavorite, this.isPopular, this.homeTeam, this.AwayTeam, this.date, this.sport);
+  Match(this.id, this.title, this.type, this.price, this.imageURL, this.categoryName, this.quantity, this.isFavorite, this.isPopular, this.homeTeam, this.AwayTeam, this.date, this.sport, this.stadium);
 
 
 }
