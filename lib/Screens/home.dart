@@ -10,8 +10,10 @@ import 'package:sep21/Inner%20Screens/team_navigation_rail.dart';
 import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Widgets/backlayer.dart';
 import 'package:sep21/Widgets/popular_matches.dart';
-import 'package:sep21/Widgets/teams.dart';
+import 'package:sep21/Widgets/sportCategories.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
+
+import 'feed.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -116,14 +118,14 @@ class _HomeState extends State<Home> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Select Club:",
+                      "Select Sport:",
                       style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
                     ),
                   ),
                   Container(
                     width: double.infinity, height: 180,
                     child: ListView.builder(
-                        itemCount: 9,
+                        itemCount: 4,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext ctx,
                       int index){
@@ -139,7 +141,7 @@ class _HomeState extends State<Home> {
                     child: Row(
                       children: [
                         Text(
-                          "Select your match:",
+                          "Select your sport:",
                           style: TextStyle(
                               fontWeight: FontWeight.w800, fontSize: 20),
                         ),
@@ -170,7 +172,7 @@ class _HomeState extends State<Home> {
                             child: Container(
                                 color: Colors.blueGrey,
                                 child: Image.asset(_sportImages[index],
-                                    fit: BoxFit.fill)),
+                                    fit: BoxFit.contain)),
                           );
                         },
                       )),
@@ -253,7 +255,9 @@ class _HomeState extends State<Home> {
                         ),
                         Spacer(),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(Feed.routeName, arguments: 'popular');
+                          },
                           child: Text("View all ..",
                               style: TextStyle(
                                   fontWeight: FontWeight.w800,

@@ -14,8 +14,17 @@ class Feed extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
+    /// ************************************
+    ///              PROVIDERS:
+    /// ************************************
+    final popular = ModalRoute.of(context)!.settings.arguments as String;
     final matchesProvider = Provider.of<Matches>(context);
     List<Match> matchesList = matchesProvider.matches;
+
+    if (popular == 'popular') {
+      matchesList = matchesProvider.PopularMatches;
+    }
+
 
     return Scaffold(
 

@@ -20,49 +20,49 @@ class TeamsWidget extends StatefulWidget {
 class _TeamsWidgetState extends State<TeamsWidget> {
   List teams = [
     {
-      'teamName': 'Anorthosis',
+      'sportName': 'Football',
       'category' : 'Football',
-      'teamImagePath': 'assets/images/Teams/ano.png',
+      'teamImagePath': 'assets/images/Sports/ba.jpg',
     },
     {
-      'teamName': 'AEK',
-      'category' : 'Football',
-      'teamImagePath': 'assets/images/Teams/aek.png',
-    },
-    {
-      'teamName': 'AEL',
-      'teamImagePath': 'assets/images/Teams/ael.png',
-    },
-    {
-      'teamName': 'APOEL',
-      'category' : 'Football',
-      'teamImagePath': 'assets/images/Teams/apoel.png',
-    },
-    {
-      'teamName': 'APOLLON',
-      'category' : 'Football',
-      'teamImagePath': 'assets/images/Teams/apoll.png',
-    },
-    {
-      'teamName': 'DOXA',
+      'sportName': 'Basketball',
       'category' : 'Basketball',
-      'teamImagePath': 'assets/images/Teams/3393.png',
+      'teamImagePath': 'assets/images/Sports/bask.png',
     },
     {
-      'teamName': 'OLYMPIAKOS NICOSIA',
-      'category' : 'Basketball',
-      'teamImagePath': 'assets/images/Teams/Olympiakos-Nicosia_LOGO.png',
+      'sportName': 'Handball',
+      'teamImagePath': 'assets/images/Sports/download.png',
     },
     {
-      'teamName': 'OMONOIA NICOSIA',
-      'category' : 'Basketball',
-      'teamImagePath': 'assets/images/Teams/omo.png',
+      'sportName': 'Volleyball',
+      'category' : 'Volleyball',
+      'teamImagePath': 'assets/images/Sports/vol.jpg',
     },
-    {
-      'teamName': 'PAFOS FC',
-      'category' : 'Handball',
-      'teamImagePath': 'assets/images/Teams/pafos.png',
-    },
+    // {
+    //   'teamName': 'APOLLON',
+    //   'category' : 'Football',
+    //   'teamImagePath': 'assets/images/Teams/apoll.png',
+    // },
+    // {
+    //   'teamName': 'DOXA',
+    //   'category' : 'Basketball',
+    //   'teamImagePath': 'assets/images/Teams/3393.png',
+    // },
+    // {
+    //   'teamName': 'OLYMPIAKOS NICOSIA',
+    //   'category' : 'Basketball',
+    //   'teamImagePath': 'assets/images/Teams/Olympiakos-Nicosia_LOGO.png',
+    // },
+    // {
+    //   'teamName': 'OMONOIA NICOSIA',
+    //   'category' : 'Basketball',
+    //   'teamImagePath': 'assets/images/Teams/omo.png',
+    // },
+    // {
+    //   'teamName': 'PAFOS FC',
+    //   'category' : 'Handball',
+    //   'teamImagePath': 'assets/images/Teams/pafos.png',
+    // },
   ];
 
   @override
@@ -71,7 +71,7 @@ class _TeamsWidgetState extends State<TeamsWidget> {
       children: [
         InkWell(
           onTap: (){
-            Navigator.of(context).pushNamed(CategoriesFeedsScreen.routeName, arguments: '${teams[widget.index]['teamName']}');
+            Navigator.of(context).pushNamed(CategoriesFeedsScreen.routeName, arguments: '${teams[widget.index]['sportName']}');
 
           },
           child: Container(

@@ -131,7 +131,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                             /// ** (2) Stadium **
                             Container(
                               alignment: Alignment.center,
-                              child: Text(matcAtrr.stadium,
+                              child: Text(matcAtrr.stadium.name,
                                   style: TextStyle(
                                     //themeState.darkTheme
                                        // ? Theme.of(context).disabledColor

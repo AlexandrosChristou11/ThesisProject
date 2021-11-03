@@ -1,6 +1,7 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:sep21/Models/Stadium.dart';
 
 class Match with ChangeNotifier {
   final String id;
@@ -16,7 +17,7 @@ class Match with ChangeNotifier {
   final String homeTeam;
   final String AwayTeam;
   final String date;
-  final String stadium;
+  final Stadium stadium;
 
   Match(this.id, this.title, this.type, this.price, this.imageURL, this.categoryName, this.quantity, this.isFavorite, this.isPopular, this.homeTeam, this.AwayTeam, this.date, this.sport, this.stadium);
 

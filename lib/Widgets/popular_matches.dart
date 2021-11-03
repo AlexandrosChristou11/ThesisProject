@@ -20,6 +20,10 @@ class PopularMatches extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    /// ************************************
+    ///              PROVIDERS:
+    /// ************************************
     final matchesAttributes = Provider.of<Match>(context);
 
     return Padding(
@@ -51,8 +55,8 @@ class PopularMatches extends StatelessWidget {
                                       matchesAttributes.imageURL),
                                   fit: BoxFit.contain))),
                       Positioned(
-                        right: 12,
-                        top: 10,
+                        right: 10,
+                        top: 8,
                         child: Icon(
                           Entypo.star,
                           color: Colors.grey.shade800,
@@ -60,7 +64,7 @@ class PopularMatches extends StatelessWidget {
                       ),
                       Positioned(
                         right: 10,
-                        top: 7,
+                        top: 8,
                         child: Icon(
                           Entypo.star_outlined,
                           color: Colors.white,
@@ -92,7 +96,7 @@ class PopularMatches extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(matchesAttributes.stadium,
+                          Text(matchesAttributes.stadium.name,
                               maxLines: 1,
                               style: TextStyle(
                                   fontSize: 13, fontWeight: FontWeight.bold))

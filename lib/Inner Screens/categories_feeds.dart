@@ -17,7 +17,7 @@ class CategoriesFeedsScreen extends StatelessWidget{
     final matchesProvider = Provider.of<Matches>(context, listen: false);
     final categoryName = ModalRoute.of(context)!.settings.arguments as String;
     print (categoryName);
-    final List<Match> matchesList = matchesProvider.findByTeam(categoryName);
+    final List<Match> matchesList = matchesProvider.findBySport(categoryName);
 
     return Scaffold(
 
