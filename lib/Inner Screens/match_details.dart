@@ -9,12 +9,14 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Screens/cart.dart';
 import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/Screens/wishlist.dart';
 import 'package:sep21/Widgets/feeds_products.dart';
+import 'package:sep21/Widgets/show_tickets_feed.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
@@ -39,6 +41,7 @@ class _MatchDetailsState extends State<MatchDetails> {
     /// ************************************
     ///              PROVIDERS:
     /// ************************************
+    final cartProvider = Provider.of<CartProvider>(context);
     final themeState = Provider.of<DarkThemeProvider>(context);
     final matchesProvider = Provider.of<Matches>(context);
     List<Match> matchesList = matchesProvider.matches;
@@ -255,9 +258,8 @@ class _MatchDetailsState extends State<MatchDetails> {
                     shape: RoundedRectangleBorder(side: BorderSide.none),
                     color: Colors.redAccent.shade400,
                     onPressed: (){
-                      /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("Sending Message"),
-                      ));*/
+                      ShowTicketOptions(matcAtrr, context);
+                      //cartProvider.addProductToCart(matchID, matcAtrr.price, matcAtrr.title, matcAtrr.imageURL);
                     },
                     child: Text(
                       'Add to Card'.toUpperCase(),
@@ -328,6 +330,21 @@ class _MatchDetailsState extends State<MatchDetails> {
     );
   }
 }
+
+/// Method which is called when the 'AddToCart' button is clicked
+/// It shows all tickets type about the match
+void ShowTicketOptions(Match match , BuildContext context) => showDialog(
+    context: context,
+    builder: (BuildContext ctx){
+      return AlertDialog(
+        content: DisplayTickets(match),
+
+      );
+    }
+
+) ;
+
+
 
 
 /// called when the wishlist icon is being pressed

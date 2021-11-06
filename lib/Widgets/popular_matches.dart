@@ -8,6 +8,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Models/Match.dart';
+import 'package:sep21/Widgets/show_tickets_feed.dart';
 
 class PopularMatches extends StatelessWidget {
   // const PopularMatches({Key? key, required this.imageURL, required this.title, required this.type, required this.stadium}) : super(key: key);
@@ -120,7 +121,7 @@ class PopularMatches extends StatelessWidget {
                         flex: 1,
                         child: Material ( color: Colors.transparent ,
                             child: InkWell(
-                              onTap: (){},
+                              onTap:(){ print ('hello');},// ShowTicketOption(matchesAttributes, context),
                               borderRadius: BorderRadius.circular(30),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -141,4 +142,23 @@ class PopularMatches extends StatelessWidget {
           )),
     );
   }
+
 }
+
+ShowTicketOption(Match matchesAttributes, BuildContext context) async {
+
+  await Future.delayed(Duration(seconds: 1), ()
+  {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            content: DisplayTickets(matchesAttributes),
+
+          );
+        });
+  });
+}
+
+
+

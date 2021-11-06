@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
 import '../bottom_bar.dart';
@@ -12,8 +14,13 @@ class Cart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List products = [];
-    return !products.isEmpty
+    /// ************
+    ///  PROVIDERS:
+    /// ************
+    final cartProvider = Provider.of<CartProvider>(context);
+
+
+    return cartProvider.getCartItems.isEmpty
     // (a) In case that 'Cart' is empty (No tickets selected)
     // -> then appear a different screen !
         ? Scaffold(
@@ -35,9 +42,21 @@ class Cart extends StatelessWidget {
             ),
             body: Container(
               margin: EdgeInsets.only(bottom: 60),
-              child: ListView.builder(itemCount:5 ,
+              child: ListView.builder(itemCount:cartProvider.getCartItems.length,
                   itemBuilder: (BuildContext ctx, int index){
-                return CartFull();
+                return ChangeNotifierProvider.value(
+                value: cartProvider.getCartItems.values.toList()[index]
+                ,child: CartFull(
+                     matchId:cartProvider.getCartItems.keys.toList()[index] ,
+                    // id: cartProvider.getCartItems.values.toList()[index].id,// cast to list cause is of type 'Map'
+                    // matchId: cartProvider.getCartItems.keys.toList()[index],
+                    // price: cartProvider.getCartItems.values.toList()[index].price,
+                    // title: cartProvider.getCartItems.values.toList()[index].title,
+                    // imageUrl: cartProvider.getCartItems.values.toList()[index].imageUrl,
+                    // quantity: cartProvider.getCartItems.values.toList()[index].quantity,
+                    // stadium: cartProvider.getCartItems.values.toList()[index].stadium ,
+                  ),
+                );
                   }
 
               ),

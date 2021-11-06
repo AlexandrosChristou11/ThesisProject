@@ -5,6 +5,7 @@ import 'package:sep21/bottom_bar.dart';
 
 import 'package:sep21/consts/my_custom_icons/Theme_data.dart';
 
+import 'Provider/Cart_Provider.dart';
 import 'Provider/CurstomRoutes.dart';
 import 'Provider/Matches.dart';
 
@@ -47,7 +48,12 @@ class _MyAppState extends State<MyApp> {
 
           /// (2) Matches Provider - state
           ChangeNotifierProvider(create: (_) => Matches()
-          )],
+          ),
+
+          /// (3) Cart Provider
+           ChangeNotifierProvider(create: (_) => CartProvider())
+
+        ],
         child:
             Consumer<DarkThemeProvider>(builder: (context, themeData, child) {
           return MaterialApp(
