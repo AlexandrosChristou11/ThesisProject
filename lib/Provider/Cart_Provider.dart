@@ -54,5 +54,24 @@ class CartProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  void reduceItemCartByOne(String matchID, double price, String title, String imageURL) {
+    if (_cartItems.containsKey(matchID)) {
+      /// ToDoo:
+      /// 1) add additional IDs arguments to each product
+      ///   representing each sector and apply more checks
+      ///   to distinguish the ticket type and sector !
+      _cartItems.update(matchID, (existingCart) =>
+          CartAttr(
+              id: existingCart.id,
+              title: existingCart.title,
+              quantity: existingCart.quantity - 1 ,
+              price: existingCart.price,
+              imageUrl: existingCart.imageUrl
+              ,
+              stadium: existingCart.stadium
+          ));
+    }
+    notifyListeners();
+  }
 
 }

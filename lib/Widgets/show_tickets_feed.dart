@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:sep21/Models/CartAttr.dart';
 import 'package:sep21/Models/Match.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
@@ -25,11 +26,13 @@ class DisplayTickets extends StatefulWidget {
 
 class _DisplayTicketsState extends State<DisplayTickets> {
 
-
   @override
   Widget build(BuildContext context) {
     final themeChanged = Provider.of<DarkThemeProvider>(context);
     final cartProvider = Provider.of<CartProvider>(context);
+    final cartAttr = Provider.of<CartAttr>(context);
+
+
     print(widget.matchAttr.stadium.north.quantity);
     print(widget.matchAttr.stadium.north.name);
    // Match match = Provider.of<Match>(context);
@@ -155,7 +158,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                               ],),
                             ),
                             // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text('3',
+                            child: Text(cartAttr.quantity.toString(),
                               textAlign: TextAlign.center,),
                           ),
                         ),
@@ -489,27 +492,31 @@ class _DisplayTicketsState extends State<DisplayTickets> {
               ],
             ),
           ),
-          Expanded(
-            flex: 3,
-            child: Container(
-                height: 50,
-                child: RaisedButton(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    shape: RoundedRectangleBorder(side: BorderSide.none),
-                    color: Colors.redAccent.shade400,
-                    onPressed: (){
-                     // ShowTicketOptions(matcAtrr, context);
-                      cartProvider.addProductToCart(widget.matchAttr.id, widget.matchAttr.price, widget.matchAttr.title, widget.matchAttr.imageURL);
+          Column(
 
-                    },
-                    child: Text(
-                        'Add to Card'.toUpperCase(),
-                        style: TextStyle(
-                            fontSize: 16, color: Colors.white
-                        )
-                    )
-                )
-            ),
+            children: [
+              Container(
+                  height: 50,
+                  child: RaisedButton(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(side: BorderSide.none),
+                      color: Colors.redAccent.shade400,
+                      onPressed: (){
+                       // ShowTicketOptions(matcAtrr, context);
+                        cartProvider.addProductToCart(widget.matchAttr.id, widget.matchAttr.price, widget.matchAttr.title, widget.matchAttr.imageURL);
+                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        //   content: Text("Tickes added to your basket!"),
+                        // ));
+                      },
+                      child: Text(
+                          'Add to Card'.toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 16, color: Colors.white
+                          )
+                      )
+                  )
+              ),
+            ],
           ),
 
         ],

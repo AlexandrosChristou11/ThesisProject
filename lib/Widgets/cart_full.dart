@@ -7,6 +7,7 @@ import 'package:sep21/Models/Stadium.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 class CartFull extends StatefulWidget {
@@ -38,6 +39,8 @@ class _CartFullState extends State<CartFull> {
   Widget build(BuildContext context) {
     final cartAttr = Provider.of<CartAttr>(context);
     final themeChanged = Provider.of<DarkThemeProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
+    
     double subTotal = cartAttr.price * cartAttr.quantity;
     return InkWell(
         onTap:  () => Navigator.pushNamed(context, MatchDetails.routeName, arguments: widget.matchId) ,
@@ -135,12 +138,17 @@ class _CartFullState extends State<CartFull> {
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(4),
-                            onTap: () {},
+                            onTap: cartAttr.quantity <1? DisplayErrorMessage(context) :
+                                () { cartProvider.reduceItemCartByOne(widget.matchId, cartAttr.price, cartAttr.title, cartAttr.imageUrl); },
                             child: Container(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
                                   child: Icon(Entypo.minus,
-                                      color: Colors.red, size: 23),
+                                      color:
+                                      /// Set minus button '-' as grey - diactivate
+                                      /// when the quantity reaches 0
+                                      cartAttr.quantity <1?
+                                      Colors.grey : Colors.red, size: 23),
                                 )),
                           ),
                         ),
@@ -167,12 +175,18 @@ class _CartFullState extends State<CartFull> {
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(4),
-                            onTap: () {},
+                            onTap:cartAttr.quantity ==6? DisplayErrorMessage(context) :
+                                (){ cartProvider.addProductToCart(widget.matchId, cartAttr.price, cartAttr.title, cartAttr.imageUrl); },
                             child: Container(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
                                   child: Icon(Entypo.plus,
-                                      color: Colors.green, size: 23),
+                                      /// Display plus button '+' as grey - active
+                                      /// if quantity exceeds number 6 (limit of tickets)
+                                      color:
+                                      cartAttr.quantity >= 6
+                                          ? Colors.grey : Colors.green,
+                                      size: 23),
                                 )),
                           ),
                         ),
@@ -187,4 +201,17 @@ class _CartFullState extends State<CartFull> {
       ),
     );
   }
+}
+
+DisplayErrorMessage(BuildContext ctx) {
+  Fluttertoast.showToast(
+      msg: "Quantity can not be negative!",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.SNACKBAR,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0
+  );
+
 }
