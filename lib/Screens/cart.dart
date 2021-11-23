@@ -12,8 +12,39 @@ class Cart extends StatelessWidget {
 
   static const routeName = '/cart';
 
+
   @override
   Widget build(BuildContext context) {
+
+    Future<void> _showDialogForRemoveItem(String title, String subtitle, VoidCallback  fct) async {
+      showDialog(context: context, builder: (BuildContext ctx){
+        return AlertDialog(
+          title: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 6.0),
+                child: Icon(MyAppIcons.warning,size: 24,),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(title ),
+              )
+            ],
+          ),
+          content: Text(subtitle),
+          actions: [
+            TextButton(onPressed: ()=> Navigator.pop(context), child: Text('Cancel')),
+            TextButton(onPressed: (){
+              fct();
+              Navigator.pop(context);
+            }, child: Text('OK')),
+          ],
+        );
+
+      });
+    }
+
+
     /// ************
     ///  PROVIDERS:
     /// ************
@@ -32,10 +63,12 @@ class Cart extends StatelessWidget {
         : Scaffold(
             bottomSheet: checkoutSection(context),
             appBar: AppBar(
-              title: Text('Number of Tickets'),
+              title: Text('Cart (${cartProvider.getCartItems.length}) '),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () { _showDialogForRemoveItem('Clear Cart', 'Do you want to clear your cart?',
+                          ()=> {cartProvider.clearCart() }
+                  ); },
                   icon: Icon(MyAppIcons.trash),
                 )
               ],

@@ -28,6 +28,7 @@ class MyAppIcons {
 
   // -- CART --
   static IconData trash = Feather.trash;
+  static const IconData warning = IconData(0xf02a0, fontFamily: 'MaterialIcons');
 
 
   // -- HOME --

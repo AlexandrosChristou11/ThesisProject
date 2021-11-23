@@ -30,13 +30,13 @@ class _DisplayTicketsState extends State<DisplayTickets> {
   Widget build(BuildContext context) {
     final themeChanged = Provider.of<DarkThemeProvider>(context);
     final cartProvider = Provider.of<CartProvider>(context);
-    final cartAttr = Provider.of<CartAttr>(context);
+    //final cartAttr = Provider.of<CartAttr>(context);
 
 
     print(widget.matchAttr.stadium.north.quantity);
     print(widget.matchAttr.stadium.north.name);
    // Match match = Provider.of<Match>(context);
-    //print(widget.matchAttr.title + ' | ' + widget.matchAttr.id);
+    print(widget.matchAttr.title + ' | ' + widget.matchAttr.id);
     return Scaffold(
       body: ListView(
         children: [
@@ -158,7 +158,8 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                               ],),
                             ),
                             // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text(cartAttr.quantity.toString(),
+                            child: Text('3',
+                              //cartAttr.quantity.toString(),
                               textAlign: TextAlign.center,),
                           ),
                         ),

@@ -53,6 +53,7 @@ class _MyAppState extends State<MyApp> {
           /// (3) Cart Provider
            ChangeNotifierProvider(create: (_) => CartProvider())
 
+
         ],
         child:
             Consumer<DarkThemeProvider>(builder: (context, themeData, child) {

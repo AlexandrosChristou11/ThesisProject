@@ -74,4 +74,21 @@ class CartProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  ///  removeItem method is being called when the user
+  ///  press the 'x' button in the cart screen.
+  ///  Then the product/ticket will be deleted
+  ///  from the list
+  void removeItem(String matchId){
+    _cartItems.remove(matchId);
+    notifyListeners();
+
+  }
+
+  /// when method clearCart  is invoked
+  /// then the cart will be cleared.
+  void clearCart(){
+    _cartItems.clear();
+    notifyListeners();
+  }
+
 }

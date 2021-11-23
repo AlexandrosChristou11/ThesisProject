@@ -8,6 +8,7 @@ import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
 
 
 class CartFull extends StatefulWidget {
@@ -35,6 +36,35 @@ class CartFull extends StatefulWidget {
 }
 
 class _CartFullState extends State<CartFull> {
+
+  Future<void> _showDialogForRemoveItem(String title, String subtitle, VoidCallback  fct) async {
+    showDialog(context: context, builder: (BuildContext ctx){
+      return AlertDialog(
+        title: Row(
+          children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 6.0),
+            child: Icon(MyAppIcons.warning,size: 24,),
+          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(title ),
+            )
+          ],
+        ),
+        content: Text(subtitle),
+        actions: [
+          TextButton(onPressed: ()=> Navigator.pop(context), child: Text('Cancel')),
+          TextButton(onPressed: (){
+            fct();
+            Navigator.pop(context);
+          }, child: Text('OK')),
+        ],
+      );
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartAttr = Provider.of<CartAttr>(context);
@@ -61,7 +91,9 @@ class _CartFullState extends State<CartFull> {
                   image: DecorationImage(
                       image: NetworkImage(
                           cartAttr.imageUrl),
-                      fit: BoxFit.contain)),
+                     // fit: BoxFit.contain
+                    )
+              ),
             ),
             Flexible(
               child: Padding(
@@ -84,7 +116,11 @@ class _CartFullState extends State<CartFull> {
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(32),
-                            onTap: () {},
+                            onTap: () {
+                              _showDialogForRemoveItem('Remove Item', 'Tickets will be removed from cart',
+                                ()=> {cartProvider.removeItem(widget.matchId) }
+                            );},
+                            //{cartProvider.removeItem(widget.matchId); },
                             child: Container(
                                 height: 50,
                                 width: 50,
