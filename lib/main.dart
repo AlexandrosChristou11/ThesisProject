@@ -7,6 +7,7 @@ import 'package:sep21/consts/my_custom_icons/Theme_data.dart';
 
 import 'Provider/Cart_Provider.dart';
 import 'Provider/CurstomRoutes.dart';
+import 'Provider/Favorite_Provider.dart';
 import 'Provider/Matches.dart';
 
 
@@ -51,7 +52,10 @@ class _MyAppState extends State<MyApp> {
           ),
 
           /// (3) Cart Provider
-           ChangeNotifierProvider(create: (_) => CartProvider())
+           ChangeNotifierProvider(create: (_) => CartProvider()),
+
+          /// (4) Favorites Provider
+           ChangeNotifierProvider(create: (_) => FavoritesProvider())
 
 
         ],

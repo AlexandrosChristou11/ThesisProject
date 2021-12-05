@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
+import 'package:sep21/Provider/Favorite_Provider.dart';
 import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Screens/cart.dart';
 import 'package:sep21/Screens/feed.dart';
@@ -47,8 +48,9 @@ class _MatchDetailsState extends State<MatchDetails> {
     List<Match> matchesList = matchesProvider.matches;
     final matchID = ModalRoute.of(context)!.settings.arguments as String;
     print ("match ID: " + matchID);
-    
-    final matcAtrr = matchesProvider.findByID(matchID);
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
+
+    final matchAtrr = matchesProvider.findByID(matchID);
     
     return Scaffold(
       body:
@@ -58,7 +60,7 @@ class _MatchDetailsState extends State<MatchDetails> {
             foregroundDecoration: BoxDecoration(color: Colors.black12),
             height: MediaQuery.of(context).size.height* 0.45,
             width: double.infinity,
-            child: Image.network(matcAtrr.imageURL)
+            child: Image.network(matchAtrr.imageURL)
           ),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 16.0, bottom: 20.0),
@@ -122,7 +124,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                               width: MediaQuery.of(context).size.width* 0.9,
                               alignment: Alignment.center,
                               child: Text(
-                                  matcAtrr.homeTeam + " vs " +matcAtrr.AwayTeam,
+                                  matchAtrr.homeTeam + " vs " +matchAtrr.AwayTeam,
                                 maxLines: 2,
                                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600)
                               )
@@ -134,7 +136,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                             /// ** (2) Stadium **
                             Container(
                               alignment: Alignment.center,
-                              child: Text(matcAtrr.stadium.name,
+                              child: Text(matchAtrr.stadium.name,
                                   style: TextStyle(
                                     //themeState.darkTheme
                                        // ? Theme.of(context).disabledColor
@@ -148,7 +150,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                             /// ** (3) Date - Time **
                             Container(
                               alignment: Alignment.center,
-                              child: Text(matcAtrr.date,
+                              child: Text(matchAtrr.date,
                                   style: TextStyle(
                                     //themeState.darkTheme
                                     // ? Theme.of(context).disabledColor
@@ -174,8 +176,8 @@ class _MatchDetailsState extends State<MatchDetails> {
                           height: 1,
                         ),
                       ),
-                      _details(false, 'Available Tickets: ', matcAtrr.quantity.toString(), context),
-                      _details(false, 'Date: ', matcAtrr.date, context),
+                      _details(false, 'Available Tickets: ', matchAtrr.quantity.toString(), context),
+                      _details(false, 'Date: ', matchAtrr.date, context),
                       const SizedBox(height: 15.0),
                       Divider(
                         thickness: 1,
@@ -258,7 +260,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                     shape: RoundedRectangleBorder(side: BorderSide.none),
                     color: Colors.redAccent.shade400,
                     onPressed: (){
-                      ShowTicketOptions(matcAtrr, context);
+                      ShowTicketOptions(matchAtrr, context);
                       //cartProvider.addProductToCart(matchID, matcAtrr.price, matcAtrr.title, matcAtrr.imageURL);
                     },
                     child: Text(
@@ -303,14 +305,16 @@ class _MatchDetailsState extends State<MatchDetails> {
               Expanded(
                 flex: 1,
                 child: Container(
+                    color: themeState.darkTheme ? Colors.black:
+                    MyAppColor.subTitle,
                     height: 50,
                     child: InkWell(
                         splashColor: MyAppColor.favColor,
-                        onTap: (){},
+                        onTap:(){ favoritesProvider.AddAndRemoveFromFavorite(matchAtrr.id, matchAtrr.price, matchAtrr.title, matchAtrr.imageURL);},
                         child: Center(
                           child: Icon(
-                            MyAppIcons.wishlist,
-                            color: Colors.black,
+                            favoritesProvider.getFavoriteItems.containsKey(matchAtrr.id)? Icons.favorite : MyAppIcons.wishlist ,
+                            color: favoritesProvider.getFavoriteItems.containsKey(matchAtrr.id)? Colors.red : Colors.white,
 
                           )
                         )

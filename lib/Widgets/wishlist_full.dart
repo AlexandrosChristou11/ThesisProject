@@ -4,18 +4,28 @@
 // @author: Alexandros Christou - 27Oct21
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sep21/Models/FavoritesAttr.dart';
+import 'package:sep21/Provider/Favorite_Provider.dart';
+import 'package:sep21/Services/Global_methods.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 
 class WishlistFull extends StatefulWidget {
   //const WishlistFull({Key? key}) : super(key: key);
+  final String matchId;
+
+  const WishlistFull({Key? key, required this.matchId}) ;
 
   @override
   _WishlistFullState createState() => _WishlistFullState();
 }
 
 class _WishlistFullState extends State<WishlistFull> {
+
   @override
   Widget build(BuildContext context) {
+    final favoritesAttributes = Provider.of<FavoritestAttr>(context);
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
     return Stack(
       children: <Widget>[
         Container(
@@ -33,7 +43,7 @@ class _WishlistFullState extends State<WishlistFull> {
                   children: <Widget>[
                     Container(
                       height: 80,
-                      child: Image.network('https://upload.wikimedia.org/wikipedia/en/thumb/5/50/Anorthosis_FC_logo.svg/1200px-Anorthosis_FC_logo.svg.png'),
+                      child: Image.network(favoritesAttributes.imageUrl),
                     ),
                     SizedBox(
                       width: 80,
@@ -43,7 +53,7 @@ class _WishlistFullState extends State<WishlistFull> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'title', style: TextStyle(
+                            favoritesAttributes.title, style: TextStyle(
                             fontSize: 16.0, fontWeight: FontWeight.bold
                           ),
                           ),
@@ -51,7 +61,7 @@ class _WishlistFullState extends State<WishlistFull> {
                             height: 20.0,
                           ),
                           Text(
-                            'name', style: TextStyle(
+                            favoritesAttributes.stadium.name, style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18.0
                           ),
                           )
@@ -66,14 +76,15 @@ class _WishlistFullState extends State<WishlistFull> {
 
           )
         ),
-        positionedRemoved(),
+        positionedRemoved(favoritesProvider),
 
       ],
 
     );
   }
 
-  positionedRemoved() {
+  positionedRemoved(FavoritesProvider favoritesProvider) {
+    GlobalMethods globalMethods = GlobalMethods();
     return Positioned(
       top:20, right: 15,
       child: Container(
@@ -87,10 +98,15 @@ class _WishlistFullState extends State<WishlistFull> {
             child: (Icon(
               Icons.clear, color: Colors.white,
             ))
-            ,onPressed: () {  },),
+            ,onPressed: ()=>{
+              globalMethods.showDialogForRemoveItem
+              ('Remove Wish', 'Match will be removed from wishlist',
+              ()=> favoritesProvider.removeItem(widget.matchId)
+              , context)},
+
       ),
       
-    );
+    ));
 
   }
 }

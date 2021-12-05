@@ -10,6 +10,7 @@ import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Models/CartAttr.dart';
 import 'package:sep21/Models/Match.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
+import 'package:sep21/Provider/Favorite_Provider.dart';
 import 'package:sep21/Widgets/show_tickets_feed.dart';
 
 class PopularMatches extends StatelessWidget {
@@ -29,7 +30,8 @@ class PopularMatches extends StatelessWidget {
     /// ************************************
     final matchesAttributes = Provider.of<Match>(context);
     final cartProvider = Provider.of<CartProvider>(context);
-    
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -63,7 +65,9 @@ class PopularMatches extends StatelessWidget {
                         top: 8,
                         child: Icon(
                           Entypo.star,
-                          color: Colors.grey.shade800,
+                          color: favoritesProvider.getFavoriteItems.containsKey(matchesAttributes.id) ?
+                          Colors.red  :
+                          Colors.grey.shade800,
                         ),
                       ),
                       Positioned(

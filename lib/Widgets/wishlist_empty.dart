@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
+import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 
 class  WishlistsEmpty extends StatelessWidget{
@@ -44,7 +45,7 @@ class  WishlistsEmpty extends StatelessWidget{
           Container(
             width: MediaQuery.of(context).size.width*0.8,
             height: MediaQuery.of(context).size.height*0.07,
-            child: RaisedButton(onPressed: () {  },
+            child: RaisedButton(onPressed: ()=> Navigator.of(context).pushNamed(Feed.routeName),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                   side: BorderSide(color: Colors.red),),
