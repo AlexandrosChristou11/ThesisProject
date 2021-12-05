@@ -7,6 +7,7 @@ import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
 import '../bottom_bar.dart';
 import '../Widgets/cart_empty.dart';
 import '../Widgets/cart_full.dart';
+import 'package:sep21/Services/Global_methods.dart';
 
 class Cart extends StatelessWidget {
 
@@ -16,33 +17,8 @@ class Cart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Future<void> _showDialogForRemoveItem(String title, String subtitle, VoidCallback  fct) async {
-      showDialog(context: context, builder: (BuildContext ctx){
-        return AlertDialog(
-          title: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 6.0),
-                child: Icon(MyAppIcons.warning,size: 24,),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(title ),
-              )
-            ],
-          ),
-          content: Text(subtitle),
-          actions: [
-            TextButton(onPressed: ()=> Navigator.pop(context), child: Text('Cancel')),
-            TextButton(onPressed: (){
-              fct();
-              Navigator.pop(context);
-            }, child: Text('OK')),
-          ],
-        );
-
-      });
-    }
+    /// Declaration of Global methods class ...
+    GlobalMethods globalMethods = GlobalMethods();
 
 
     /// ************
@@ -61,14 +37,16 @@ class Cart extends StatelessWidget {
     // (b) in case that 'Cart' is not empty (Tickets are selected)
     // -> then show 'Basket'
         : Scaffold(
-            bottomSheet: checkoutSection(context),
+            bottomSheet: checkoutSection(context, cartProvider.totalAmount),
             appBar: AppBar(
-              title: Text('Cart (${cartProvider.getCartItems.length}) '),
+              backgroundColor: Theme.of(context).backgroundColor,
+              title: Text('Cart (${cartProvider.getCartItems.length}) ', style: TextStyle(color: Colors.black),),
+
               actions: [
-                IconButton(
-                  onPressed: () { _showDialogForRemoveItem('Clear Cart', 'Do you want to clear your cart?',
+                IconButton(color: Colors.black,
+                  onPressed: () { globalMethods.showDialogForRemoveItem('Clear Cart', 'Do you want to clear your cart?',
                           ()=> {cartProvider.clearCart() }
-                  ); },
+                  ,context); },
                   icon: Icon(MyAppIcons.trash),
                 )
               ],
@@ -97,7 +75,8 @@ class Cart extends StatelessWidget {
     }
   }
 
-  Widget checkoutSection(BuildContext ctx) {
+  Widget checkoutSection(BuildContext ctx, double totalAmount) {
+
     return Container(
 
       decoration: BoxDecoration(
@@ -137,12 +116,12 @@ class Cart extends StatelessWidget {
               ),
             ),
             Spacer(),
-            Text('Total',
+            Text('Total ',
                 style: TextStyle(
                     color: Theme.of(ctx).textSelectionColor,
                     fontSize: 18,
                     fontWeight: FontWeight.w600)),
-            Text('120\$',
+            Text( totalAmount.toString() +'\€',
                // textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.blue,

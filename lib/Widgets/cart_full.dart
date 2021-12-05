@@ -6,6 +6,7 @@ import 'package:sep21/Models/CartAttr.dart';
 import 'package:sep21/Models/Stadium.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
+import 'package:sep21/Services/Global_methods.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
@@ -37,33 +38,9 @@ class CartFull extends StatefulWidget {
 
 class _CartFullState extends State<CartFull> {
 
-  Future<void> _showDialogForRemoveItem(String title, String subtitle, VoidCallback  fct) async {
-    showDialog(context: context, builder: (BuildContext ctx){
-      return AlertDialog(
-        title: Row(
-          children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 6.0),
-            child: Icon(MyAppIcons.warning,size: 24,),
-          ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(title ),
-            )
-          ],
-        ),
-        content: Text(subtitle),
-        actions: [
-          TextButton(onPressed: ()=> Navigator.pop(context), child: Text('Cancel')),
-          TextButton(onPressed: (){
-            fct();
-            Navigator.pop(context);
-          }, child: Text('OK')),
-        ],
-      );
+  /// Declaration of Global methods class ...
+  GlobalMethods globalMethods = GlobalMethods();
 
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,9 +94,9 @@ class _CartFullState extends State<CartFull> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(32),
                             onTap: () {
-                              _showDialogForRemoveItem('Remove Item', 'Tickets will be removed from cart',
+                              globalMethods.showDialogForRemoveItem('Remove Item', 'Tickets will be removed from cart',
                                 ()=> {cartProvider.removeItem(widget.matchId) }
-                            );},
+                            , context);},
                             //{cartProvider.removeItem(widget.matchId); },
                             child: Container(
                                 height: 50,
@@ -175,7 +152,7 @@ class _CartFullState extends State<CartFull> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(4),
                             onTap: cartAttr.quantity <1? DisplayErrorMessage(context) :
-                                () { cartProvider.reduceItemCartByOne(widget.matchId, cartAttr.price, cartAttr.title, cartAttr.imageUrl); },
+                                () { cartProvider.reduceItemCartByOne(widget.matchId); },
                             child: Container(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
