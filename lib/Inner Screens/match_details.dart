@@ -33,9 +33,9 @@ class MatchDetails extends StatefulWidget {
 class _MatchDetailsState extends State<MatchDetails> {
   @override
   Widget build(BuildContext context) {
-    /// ************************************
+    /// ------------------------------------
     ///              PROVIDERS:
-    /// ************************************
+    /// ------------------------------------
     final cartProvider = Provider.of<CartProvider>(context);
     final themeState = Provider.of<DarkThemeProvider>(context);
     final matchesProvider = Provider.of<Matches>(context);

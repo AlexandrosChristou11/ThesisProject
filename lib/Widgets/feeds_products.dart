@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Models/Match.dart';
+import 'package:sep21/Widgets/feeds_dialog.dart';
 
 class FeedProducts extends StatefulWidget {
 
@@ -96,7 +97,12 @@ class _FeedProductsState extends State<FeedProducts> {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                              onTap: null,
+                              onTap: () async {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context)=>FeedDialog(matchId: matchesAttributes.id)
+                                );
+                              },
                               borderRadius: BorderRadius.circular(18),
                               child:
                                   Icon(Icons.more_horiz, color: Colors.grey)),
