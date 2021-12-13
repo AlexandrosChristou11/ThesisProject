@@ -19,8 +19,7 @@ class FavoritesProvider with ChangeNotifier{
 
   void AddAndRemoveFromFavorite(String matchID, double price, String title, String imageURL){
     if (_FavoriteItems.containsKey(matchID)){
-    /// Todoo...
-      
+
       removeItem(matchID);
       
     }else{
