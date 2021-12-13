@@ -10,6 +10,7 @@ import 'package:sep21/Screens/wishlist.dart';
 import 'package:sep21/Screens/cart.dart';
 
 class UserInfo extends StatefulWidget{
+  static const routeName = '/userInfo';
   @override
   _UserInfoState createState() => _UserInfoState();
 

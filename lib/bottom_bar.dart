@@ -124,7 +124,7 @@ class _BottomBarScreenState extends State<BottomBarScreen>{
             child: (Icon(MyAppIcons.search)),
             onPressed: (){
               setState(() {
-                _selectedIndex = 0; //
+                _selectedIndex = 2; //
               });
             },
           ),
