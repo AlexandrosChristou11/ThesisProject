@@ -9,6 +9,7 @@ import 'Provider/Cart_Provider.dart';
 import 'Provider/CurstomRoutes.dart';
 import 'Provider/Favorite_Provider.dart';
 import 'Provider/Matches.dart';
+import 'Screens/landingPage.dart';
 
 
 
@@ -66,7 +67,7 @@ class _MyAppState extends State<MyApp> {
             theme: Styles.themeData(themeChangeProvide.darkTheme, context),
             initialRoute: '/',
             routes: customRoutes,
-            home: BottomBarScreen(),
+            home: LandingPage(),
           );
         }));
   }
