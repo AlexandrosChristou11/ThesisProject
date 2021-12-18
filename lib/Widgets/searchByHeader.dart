@@ -20,29 +20,34 @@ class SearchByHeader extends SliverPersistentHeaderDelegate{
   final double stackPaddingTop;
   final double titlePaddingTop;
   final Widget title;
-  final Widget subTitle;
-  final Widget leading;
-  final Widget action;
+  // final Widget subTitle;
+  // final Widget leading;
+  // final Widget action;
   final Widget stackChild;
 
 
   SearchByHeader({
-      this.flexibleSpace = 250,
-      this.backgroundHeight = 200,
-      required this.stackPaddingTop,
-      this.titlePaddingTop = 35,
-      required this.title,
-      required this.subTitle,
-      required this.leading,
-      required this.action,
-      required this.stackChild
-    });
+    this.flexibleSpace = 250,
+    this.backgroundHeight = 200,
+    required this.stackPaddingTop,
+    this.titlePaddingTop = 35,
+    required this.title,
+  //  required this.subTitle,
+    required this.stackChild,
+    //required this.leading,
+    //required this.action,
+
+  });
+
+
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
 
     var percent = shrinkOffset / (maxExtent - minExtent);
     double calculate = 1 - percent < 0 ? 0 : (1-percent);
+
+
 
     return SizedBox(
       height: maxExtent,
@@ -162,7 +167,8 @@ class SearchByHeader extends SliverPersistentHeaderDelegate{
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:<Widget> [
-                leading ?? SizedBox(),
+                //leading ??
+                    SizedBox(),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -174,16 +180,17 @@ class SearchByHeader extends SliverPersistentHeaderDelegate{
                           padding: EdgeInsets.only(top: 14 * (1 - calculate)),
                         ),
                     ),
-                    if (calculate > .5) ...[
-                      SizedBox(height: 10),
-                      Opacity(opacity: calculate, child: subTitle ?? SizedBox(),)
-                    ]
+                    // if (calculate > .5) ...[
+                    //   SizedBox(height: 10),
+                    //   Opacity(opacity: calculate, child: subTitle ?? SizedBox(),)
+                    // ]
                   ],
                 ),
                 Expanded(child: SizedBox()),
                 Padding(
                     padding: EdgeInsets.only(top: 14 * calculate),
-                    child: action ?? SizedBox(),)
+                    child: //action ??
+                   SizedBox(),)
               ],
             ),
           )),
@@ -205,18 +212,13 @@ class SearchByHeader extends SliverPersistentHeaderDelegate{
   }
 
   @override
-  // TODO: implement maxExtent
-  double get maxExtent => throw UnimplementedError();
+  double get maxExtent => flexibleSpace;
 
   @override
-  // TODO: implement minExtent
-  double get minExtent => throw UnimplementedError();
+  double get minExtent => kToolbarHeight + 25;
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    // TODO: implement shouldRebuild
-    throw UnimplementedError();
-  }
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 
 
 
