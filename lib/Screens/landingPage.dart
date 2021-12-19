@@ -9,6 +9,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Screens/Authentication/login.dart';
+import 'package:sep21/Screens/Authentication/signUp.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -160,7 +161,7 @@ class _LandingPageState extends State<LandingPage>
                                     borderRadius: BorderRadius.circular(30),
                                     side: BorderSide(
                                         color: MyAppColor.backgroundColor)))),
-                    onPressed: () {},
+                    onPressed: ()=>{Navigator.pushNamed(context, SingUpScreen.routName)},
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

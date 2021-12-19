@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Inner%20Screens/team_navigation_rail.dart';
+import 'package:sep21/Screens/Authentication/signUp.dart';
 import 'package:sep21/Screens/cart.dart';
 import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/Screens/home.dart';
@@ -22,5 +23,7 @@ var customRoutes = <String, WidgetBuilder>{
   CategoriesFeedsScreen.routeName: (ctx) => CategoriesFeedsScreen(),
   UserInfo.routeName: (ctx) => UserInfo(),
   LoginScreen.routName: (ctx) => LoginScreen(),
+  SingUpScreen.routName: (ctx) => SingUpScreen(),
+
    // CategoriesFeedsScreen.routeName: (ctx) => CategoriesFeedsScreen(),
 };
