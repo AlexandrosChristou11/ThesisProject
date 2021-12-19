@@ -138,6 +138,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             /// Determine whether the image avatar is null and display
                             /// the appropriate icon
                             backgroundImage: _pickedImage==null ? null : FileImage(_pickedImage!),
+                              backgroundColor: MyAppColor.gradiendFEnd
                           ),
                     ),
                   ),

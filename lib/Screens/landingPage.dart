@@ -11,6 +11,8 @@ import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Screens/Authentication/login.dart';
 import 'package:sep21/Screens/Authentication/signUp.dart';
 
+import 'bottom_bar.dart';
+
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
 
@@ -228,7 +230,9 @@ class _LandingPageState extends State<LandingPage>
 
                 /// (4) Continue as guest ...
                 OutlineButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, BottomBarScreen.routeName);
+                  },
                   shape: StadiumBorder(),
                   highlightedBorderColor: Colors.deepPurpleAccent.shade200,
 

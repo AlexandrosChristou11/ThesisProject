@@ -10,7 +10,7 @@ import 'package:sep21/Widgets/wishlist_empty.dart';
 import 'package:sep21/Widgets/wishlist_full.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
-import '../bottom_bar.dart';
+import 'bottom_bar.dart';
 import '../Widgets/cart_empty.dart';
 import '../Widgets/cart_full.dart';
 

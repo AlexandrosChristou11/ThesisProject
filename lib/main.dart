@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
-import 'package:sep21/bottom_bar.dart';
+import 'package:sep21/Screens/bottom_bar.dart';
 
 import 'package:sep21/consts/my_custom_icons/Theme_data.dart';
 
