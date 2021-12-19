@@ -22,10 +22,27 @@ class _LoginScreenState extends State<LoginScreen> {
   String _emailAddress = '';
   String _password = '';
   bool _obscureText = true;
+  final FocusNode _passwordFocusNode = FocusNode();
+
+
+  void _submitForm(){
+    bool isValid = _formKey.currentState!.validate(); /// return true if the form is valid ..
+    FocusScope.of(context).unfocus(); /// deactivate focus when the user attepmts to click directly to login button ..
+    if (isValid){
+      _formKey.currentState!.save();
+    }
+  }
+
+  @override
+  void dispose() {
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body:
         Stack(
           children: [
@@ -95,6 +112,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   return null;
                                 }
                               },
+                          textInputAction: TextInputAction.next,
+                          onEditingComplete: ()=> FocusScope.of(context).requestFocus(_passwordFocusNode), /// allows the  user to move directly to the password field.
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                               border: const UnderlineInputBorder(), filled: true,
@@ -120,13 +139,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                           },
                           keyboardType: TextInputType.emailAddress,
+                          focusNode: _passwordFocusNode,
                           decoration: InputDecoration(
                               border: const UnderlineInputBorder(), filled: true,
-                              prefixIcon: Icon(Icons.password),
+                              prefixIcon: Icon(Icons.lock),
                               suffixIcon: GestureDetector(onTap:
                                   (){
                                 setState(() {
-                                  _obscureText!=_obscureText; /// change the value the boolean expression to hide/show the password
+                                  _obscureText= !_obscureText; /// change the value the boolean expression to hide/show the password
                                 });
                               },
                               child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off ), /// determine the value of _obscureText varibale and show the appropriate icon
@@ -137,6 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             _password = value!;
                           } ,
                           obscureText: _obscureText, /// Hide password ..
+                          onEditingComplete: _submitForm,
                         ),
                       ),
                       Row(children: [
@@ -155,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             borderRadius: BorderRadius.circular(30),
                                             side: BorderSide(
                                                 color: MyAppColor.backgroundColor)))),
-                                onPressed: ()=> {Navigator.pushNamed(context, LoginScreen.routName)},
+                                onPressed: _submitForm,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -170,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       size: 17,
                                     )
                                   ],
-                                ))),
+                                )),
                         SizedBox(
                           width: 10,
                         ),
