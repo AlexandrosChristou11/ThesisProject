@@ -13,6 +13,7 @@ import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'dart:async';
 import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class SingUpScreen extends StatefulWidget {
 
@@ -33,7 +34,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _phoneFocusNode = FocusNode();
-  late File _pickedImage ;
+  File? _pickedImage;
 
 
   void _submitForm(){
@@ -42,6 +43,35 @@ class _SingUpScreenState extends State<SingUpScreen> {
     if (isValid){
       _formKey.currentState!.save();
     }
+  }
+
+  void _pickAvatarCamera() async{
+      final picker = ImagePicker();
+      final pickedImg = await picker.pickImage(source: ImageSource.camera);
+      final pickedImgFile = File(pickedImg!.path);
+      setState(() {
+        _pickedImage = pickedImgFile;
+      });
+
+      Navigator.pop(context);
+  }
+
+  void _pickAvatarGallery() async{
+    final picker = ImagePicker();
+    final pickedImg = await await picker.pickImage(source: ImageSource.gallery);
+    final pickedImgFile = File(pickedImg!.path);
+    setState(() {
+      _pickedImage = pickedImgFile;
+    });
+    Navigator.pop(context);
+  }
+
+  void  _removeAvatar(){
+    setState(() {
+      _pickedImage = null;
+    });
+
+    Navigator.pop(context);
   }
 
   @override
@@ -107,7 +137,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             radius: 69,
                             /// Determine whether the image avatar is null and display
                             /// the appropriate icon
-                            //backgroundImage: _pickedImage==null ? null : FileImage(_pickedImage),
+                            backgroundImage: _pickedImage==null ? null : FileImage(_pickedImage!),
                           ),
                     ),
                   ),
@@ -134,7 +164,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
 
                                     /// (1) Take from camera..
                                     InkWell(
-                                      onTap: (){},
+                                      onTap: _pickAvatarCamera,
                                       splashColor: Colors.blueGrey,
                                       child:
                                       Row(
@@ -151,7 +181,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
 
                                     /// (2) Select from Gallery ...
                                     InkWell(
-                                      onTap: (){},
+                                      onTap: _pickAvatarGallery,
                                       splashColor: Colors.blueGrey,
                                       child:
                                       Row(
@@ -168,7 +198,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
 
                                     /// (3) Remove Avatar Image ..
                                     InkWell(
-                                      onTap: (){},
+                                      onTap: _removeAvatar,
                                       splashColor: Colors.red,
                                       child:
                                       Row(
