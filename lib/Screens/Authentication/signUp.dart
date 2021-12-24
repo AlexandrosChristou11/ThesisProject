@@ -14,6 +14,8 @@ import 'package:wave/wave.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class SingUpScreen extends StatefulWidget {
 
@@ -29,7 +31,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
   String _emailAddress = '';
   String _password = '';
   String _fullName = '';
-  late int _phoneNumber;
+  late String _phoneNumber;
   bool _obscureText = true;
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
@@ -37,11 +39,16 @@ class _SingUpScreenState extends State<SingUpScreen> {
   File? _pickedImage;
 
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+
   void _submitForm(){
     bool isValid = _formKey.currentState!.validate(); /// return true if the form is valid ..
     FocusScope.of(context).unfocus(); /// deactivate focus when the user attepmts to click directly to login button ..
     if (isValid){
       _formKey.currentState!.save();
+      _auth.createUserWithEmailAndPassword(email: _emailAddress.toLowerCase().trim(), password: _password.trim());
     }
   }
 
@@ -74,6 +81,8 @@ class _SingUpScreenState extends State<SingUpScreen> {
     Navigator.pop(context);
   }
 
+ 
+
   @override
   void dispose() {
     _passwordFocusNode.dispose();
@@ -84,6 +93,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body:
@@ -120,302 +130,304 @@ class _SingUpScreenState extends State<SingUpScreen> {
               ),
             ),
 
-            Column(
-              children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
 
-                SizedBox(height: 30,),
-                /// ------------------------
-                ///  (2) PROFILE PICTURE
-                /// ------------------------
-                Stack(children: [
+                  SizedBox(height: 30,),
+                  /// ------------------------
+                  ///  (2) PROFILE PICTURE
+                  /// ------------------------
+                  Stack(children: [
 
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                    child: CircleAvatar(radius: 71,
-                          backgroundColor: MyAppColor.gradiendLEnd,
-                          child: CircleAvatar(
-                            radius: 69,
-                            /// Determine whether the image avatar is null and display
-                            /// the appropriate icon
-                            backgroundImage: _pickedImage==null ? null : FileImage(_pickedImage!),
-                              backgroundColor: MyAppColor.gradiendFEnd
-                          ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                      child: CircleAvatar(radius: 71,
+                            backgroundColor: MyAppColor.gradiendLEnd,
+                            child: CircleAvatar(
+                              radius: 69,
+                              /// Determine whether the image avatar is null and display
+                              /// the appropriate icon
+                              backgroundImage: _pickedImage==null ? null : FileImage(_pickedImage!),
+                                backgroundColor: MyAppColor.gradiendFEnd
+                            ),
+                      ),
                     ),
-                  ),
-                  Positioned(
-                      top: 120,
-                      left: 110,
-                      child: RawMaterialButton(
-                        elevation: 10,
-                        fillColor: MyAppColor.gradiendLEnd,
-                        child: Icon(Icons.add_a_photo, color: Colors.white,),
-                        padding: EdgeInsets.all(15),
-                        shape: CircleBorder(),
-                        onPressed: () { 
-                          showDialog(context: context, builder:(BuildContext ctx){
-                            return AlertDialog(title: Text('Choose Option',
-                              style: TextStyle(fontWeight: FontWeight.w600, color: MyAppColor.gradiendLStart),
-                            ),
-                              /// ----------------
-                              ///  Dialog options
-                              /// ----------------
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: [
+                    Positioned(
+                        top: 120,
+                        left: 110,
+                        child: RawMaterialButton(
+                          elevation: 10,
+                          fillColor: MyAppColor.gradiendLEnd,
+                          child: Icon(Icons.add_a_photo, color: Colors.white,),
+                          padding: EdgeInsets.all(15),
+                          shape: CircleBorder(),
+                          onPressed: () { 
+                            showDialog(context: context, builder:(BuildContext ctx){
+                              return AlertDialog(title: Text('Choose Option',
+                                style: TextStyle(fontWeight: FontWeight.w600, color: MyAppColor.gradiendLStart),
+                              ),
+                                /// ----------------
+                                ///  Dialog options
+                                /// ----------------
+                                content: SingleChildScrollView(
+                                  child: ListBody(
+                                    children: [
 
-                                    /// (1) Take from camera..
-                                    InkWell(
-                                      onTap: _pickAvatarCamera,
-                                      splashColor: Colors.blueGrey,
-                                      child:
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Icon(Icons.camera, color:Colors.blueGrey ,),
-                                          ),
-                                          Text('Camera', style: TextStyle(fontSize: 18, color: MyAppColor.title, fontWeight: FontWeight.w500),)
-                                        ],
+                                      /// (1) Take from camera..
+                                      InkWell(
+                                        onTap: _pickAvatarCamera,
+                                        splashColor: Colors.blueGrey,
+                                        child:
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Icon(Icons.camera, color:Colors.blueGrey ,),
+                                            ),
+                                            Text('Camera', style: TextStyle(fontSize: 18, color: MyAppColor.title, fontWeight: FontWeight.w500),)
+                                          ],
 
+                                        ),
                                       ),
-                                    ),
 
-                                    /// (2) Select from Gallery ...
-                                    InkWell(
-                                      onTap: _pickAvatarGallery,
-                                      splashColor: Colors.blueGrey,
-                                      child:
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Icon(Icons.image, color:Colors.blueGrey ,),
-                                          ),
-                                          Text('Gallery', style: TextStyle(fontSize: 18, color: MyAppColor.title, fontWeight: FontWeight.w500),)
-                                        ],
+                                      /// (2) Select from Gallery ...
+                                      InkWell(
+                                        onTap: _pickAvatarGallery,
+                                        splashColor: Colors.blueGrey,
+                                        child:
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Icon(Icons.image, color:Colors.blueGrey ,),
+                                            ),
+                                            Text('Gallery', style: TextStyle(fontSize: 18, color: MyAppColor.title, fontWeight: FontWeight.w500),)
+                                          ],
 
+                                        ),
                                       ),
-                                    ),
 
-                                    /// (3) Remove Avatar Image ..
-                                    InkWell(
-                                      onTap: _removeAvatar,
-                                      splashColor: Colors.red,
-                                      child:
-                                      Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Icon(Icons.remove_circle, color:Colors.red ,),
-                                          ),
-                                          Text('Remove', style: TextStyle(fontSize: 18, color: MyAppColor.title, fontWeight: FontWeight.w500),)
-                                        ],
+                                      /// (3) Remove Avatar Image ..
+                                      InkWell(
+                                        onTap: _removeAvatar,
+                                        splashColor: Colors.red,
+                                        child:
+                                        Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Icon(Icons.remove_circle, color:Colors.red ,),
+                                            ),
+                                            Text('Remove', style: TextStyle(fontSize: 18, color: MyAppColor.title, fontWeight: FontWeight.w500),)
+                                          ],
 
-                                      ),
-                                    )
+                                        ),
+                                      )
 
-                                  ],
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } );
+                          },))
+
+                  ],),
+
+                  Form(
+                      key: _formKey,
+                      child:Column(children: [
+
+                        ///  (b) Name signup Form ...
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: TextFormField(
+                            key: ValueKey('name'),
+                            validator:
+                                (value){
+                              if (value!.isEmpty){
+                                return 'Name field can not be empty';
+                              }else{
+                                return null;
+                              }
+                            },
+                            textInputAction: TextInputAction.next,
+                            onEditingComplete: ()=> FocusScope.of(context).requestFocus(_emailFocusNode), /// allows the  user to move directly to the email field.
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                                border: const UnderlineInputBorder(), filled: true,
+                                prefixIcon: Icon(Icons.person),
+                                labelText: 'Full Name',
+                                fillColor: Theme.of(context).backgroundColor ),
+                            onSaved: (value){
+                              _fullName = value!;
+                            } ,
+                          ),
+                        ),
+
+                        ///  (b) Email signup Form ...
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: TextFormField(
+                            key: ValueKey('email'),
+                            focusNode: _emailFocusNode,
+                            validator:
+                                (value){
+                              if (value!.isEmpty || !value.contains('@')){
+                                return 'Please enter a valid email';
+                              }else{
+                                return null;
+                              }
+                            },
+                            textInputAction: TextInputAction.next,
+                            onEditingComplete: ()=> FocusScope.of(context).requestFocus(_passwordFocusNode), /// allows the  user to move directly to the password field.
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                                border: const UnderlineInputBorder(), filled: true,
+                                prefixIcon: Icon(Icons.email),
+                                labelText: 'Email Address',
+                                fillColor: Theme.of(context).backgroundColor ),
+                            onSaved: (value){
+                              _emailAddress = value!;
+                            } ,
+                          ),
+                        ),
+                        ///  (c) Password - Signup Form ...
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: TextFormField(
+                            key: ValueKey('password'),
+                            validator:
+                                (value){
+                              if (value!.isEmpty || value.length <7 ){
+                                return 'Please enter a valid password';
+                              }else{
+                                return null;
+                              }
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            focusNode: _passwordFocusNode,
+                            decoration: InputDecoration(
+                                border: const UnderlineInputBorder(), filled: true,
+                                prefixIcon: Icon(Icons.lock),
+                                suffixIcon: GestureDetector(onTap:
+                                    (){
+                                  setState(() {
+                                    _obscureText= !_obscureText; /// change the value the boolean expression to hide/show the password
+                                  });
+                                },
+                                  child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off ), /// determine the value of _obscureText varibale and show the appropriate icon
+                                ),
+                                labelText: 'Password',
+                                fillColor: Theme.of(context).backgroundColor ),
+                            onSaved: (value){
+                              _password = value!;
+                            } ,
+                            obscureText: _obscureText, /// Hide password ..
+                            onEditingComplete: _submitForm,
+                          ),
+                        ),
+
+                        /// (d) Phone Number - Signup form ..
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: TextFormField(
+                            key: ValueKey('phone'),
+                            focusNode: _phoneFocusNode,
+                            validator:
+                                (value){
+                              if (value!.isEmpty){
+                                return 'Please enter a valid phone number';
+                              }else{
+                                return null;
+                              }
+                            },
+                            textInputAction: TextInputAction.next,
+                            onEditingComplete: ()=> FocusScope.of(context).requestFocus(_phoneFocusNode), /// allows the  user to move directly to the submit field.
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(
+                                border: const UnderlineInputBorder(), filled: true,
+                                prefixIcon: Icon(Icons.phone_android),
+                                labelText: 'Phone Number',
+                                fillColor: Theme.of(context).backgroundColor ),
+                            onSaved: (value){
+                              _phoneNumber = value! ;
+                            } ,
+                          ),
+                        ),
+
+                        Row(children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          ElevatedButton(
+
+                            /// Button's rounded border ..
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                  MaterialStateProperty.all(Colors.blue.shade300),
+                                  shape:
+                                  MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(30),
+                                          side: BorderSide(
+                                              color: MyAppColor.backgroundColor)))),
+                              onPressed: _submitForm,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text('Sign up',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600, fontSize: 17)),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Icon(
+                                    Feather.user,
+                                    size: 17,
+                                  )
+                                ],
+                              )),
+                          SizedBox(
+                            width: 10,
+                          ),
+
+
+                          SizedBox(
+                            width: 10,
+                          ),
+                        ]),
+                        SizedBox(height: 40),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Divider(
+                                  color: Colors.white,
+                                  thickness: 2,
                                 ),
                               ),
-                            );
-                          } );
-                        },))
-
-                ],),
-
-                Form(
-                    key: _formKey,
-                    child:Column(children: [
-
-                      ///  (b) Name signup Form ...
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: TextFormField(
-                          key: ValueKey('name'),
-                          validator:
-                              (value){
-                            if (value!.isEmpty){
-                              return 'Name field can not be empty';
-                            }else{
-                              return null;
-                            }
-                          },
-                          textInputAction: TextInputAction.next,
-                          onEditingComplete: ()=> FocusScope.of(context).requestFocus(_emailFocusNode), /// allows the  user to move directly to the email field.
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                              border: const UnderlineInputBorder(), filled: true,
-                              prefixIcon: Icon(Icons.person),
-                              labelText: 'Full Name',
-                              fillColor: Theme.of(context).backgroundColor ),
-                          onSaved: (value){
-                            _fullName = value!;
-                          } ,
-                        ),
-                      ),
-
-                      ///  (b) Email signup Form ...
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: TextFormField(
-                          key: ValueKey('email'),
-                          focusNode: _emailFocusNode,
-                          validator:
-                              (value){
-                            if (value!.isEmpty || !value.contains('@')){
-                              return 'Please enter a valid email';
-                            }else{
-                              return null;
-                            }
-                          },
-                          textInputAction: TextInputAction.next,
-                          onEditingComplete: ()=> FocusScope.of(context).requestFocus(_passwordFocusNode), /// allows the  user to move directly to the password field.
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                              border: const UnderlineInputBorder(), filled: true,
-                              prefixIcon: Icon(Icons.email),
-                              labelText: 'Email Address',
-                              fillColor: Theme.of(context).backgroundColor ),
-                          onSaved: (value){
-                            _emailAddress = value!;
-                          } ,
-                        ),
-                      ),
-                      ///  (c) Password - Signup Form ...
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: TextFormField(
-                          key: ValueKey('password'),
-                          validator:
-                              (value){
-                            if (value!.isEmpty || value.length <7 ){
-                              return 'Please enter a valid password';
-                            }else{
-                              return null;
-                            }
-                          },
-                          keyboardType: TextInputType.emailAddress,
-                          focusNode: _passwordFocusNode,
-                          decoration: InputDecoration(
-                              border: const UnderlineInputBorder(), filled: true,
-                              prefixIcon: Icon(Icons.lock),
-                              suffixIcon: GestureDetector(onTap:
-                                  (){
-                                setState(() {
-                                  _obscureText= !_obscureText; /// change the value the boolean expression to hide/show the password
-                                });
-                              },
-                                child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off ), /// determine the value of _obscureText varibale and show the appropriate icon
-                              ),
-                              labelText: 'Password',
-                              fillColor: Theme.of(context).backgroundColor ),
-                          onSaved: (value){
-                            _password = value!;
-                          } ,
-                          obscureText: _obscureText, /// Hide password ..
-                          onEditingComplete: _submitForm,
-                        ),
-                      ),
-
-                      /// (d) Phone Number - Signup form ..
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: TextFormField(
-                          key: ValueKey('phone'),
-                          focusNode: _phoneFocusNode,
-                          validator:
-                              (value){
-                            if (value!.isEmpty){
-                              return 'Please enter a valid phone number';
-                            }else{
-                              return null;
-                            }
-                          },
-                          textInputAction: TextInputAction.next,
-                          onEditingComplete: ()=> FocusScope.of(context).requestFocus(_phoneFocusNode), /// allows the  user to move directly to the submit field.
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                              border: const UnderlineInputBorder(), filled: true,
-                              prefixIcon: Icon(Icons.phone_android),
-                              labelText: 'Phone Number',
-                              fillColor: Theme.of(context).backgroundColor ),
-                          onSaved: (value){
-                            _phoneNumber = value! as int;
-                          } ,
-                        ),
-                      ),
-
-                      Row(children: [
-                        SizedBox(
-                          width: 10,
-                        ),
-                        ElevatedButton(
-
-                          /// Button's rounded border ..
-                            style: ButtonStyle(
-                                backgroundColor:
-                                MaterialStateProperty.all(Colors.blue.shade300),
-                                shape:
-                                MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        side: BorderSide(
-                                            color: MyAppColor.backgroundColor)))),
-                            onPressed: _submitForm,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text('Sign up',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600, fontSize: 17)),
-                                SizedBox(
-                                  width: 5,
+                            ),
+                            Text(
+                              "Or continue with",
+                              style: TextStyle(color: Colors.black54),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Divider(
+                                  color: Colors.white,
+                                  thickness: 2,
                                 ),
-                                Icon(
-                                  Feather.user,
-                                  size: 17,
-                                )
-                              ],
-                            )),
-                        SizedBox(
-                          width: 10,
-                        ),
-
-
-                        SizedBox(
-                          width: 10,
-                        ),
-                      ]),
-                      SizedBox(height: 40),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Divider(
-                                color: Colors.white,
-                                thickness: 2,
                               ),
                             ),
-                          ),
-                          Text(
-                            "Or continue with",
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Divider(
-                                color: Colors.white,
-                                thickness: 2,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
 
-                    ],) )
-              ],
+                      ],) )
+                ],
+              ),
             )
 
           ],

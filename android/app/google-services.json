@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "343271128157",
+    "project_id": "ticketingapp-2e138",
+    "storage_bucket": "ticketingapp-2e138.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343271128157:android:2371fa527f5aefb062e1b4",
+        "android_client_info": {
+          "package_name": "com.example.sep21"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "343271128157-d207p7no8ufs4e291qh3d8v5rlrplmtr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sep21",
+            "certificate_hash": "615dd0716555fb30333e6d535d48487ef199e8c8"
+          }
+        },
+        {
+          "client_id": "343271128157-455rq8lim8i7kvq7vvtj4jeva4e37ad6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTksj2XyBsW9X6YmXht1mdMs0vdFTAgpk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "343271128157-455rq8lim8i7kvq7vvtj4jeva4e37ad6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
