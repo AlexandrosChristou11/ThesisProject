@@ -7,6 +7,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 
 
@@ -34,6 +35,34 @@ class GlobalMethods{
             fct();
             Navigator.pop(context);
           }, child: Text('OK')),
+        ],
+      );
+
+    });
+  }
+
+  Future<void> authenticationErrorHandler(String subtitle,  BuildContext context) async {
+    showDialog(context: context, builder: (BuildContext ctx){
+      return AlertDialog(
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 6.0),
+              child: Icon(MyAppIcons.warning,size: 24, color: Colors.red,),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Error occurred:' ),
+            )
+          ],
+        ),
+        content: Text(subtitle),
+        actions: [
+
+          TextButton(onPressed: (){
+
+            Navigator.pop(context);
+          }, child: Text('OK', style: TextStyle(color: MyAppColor.favColor),)),
         ],
       );
 
