@@ -2,9 +2,11 @@
 /// Date: 18Dec21
 /// Implementation of Login Screen ..
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
+import 'package:sep21/Services/Global_methods.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
@@ -23,13 +25,32 @@ class _LoginScreenState extends State<LoginScreen> {
   String _password = '';
   bool _obscureText = true;
   final FocusNode _passwordFocusNode = FocusNode();
+  GlobalMethods gb = new GlobalMethods();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
 
-
-  void _submitForm(){
+  void _submitForm() async{
     bool isValid = _formKey.currentState!.validate(); /// return true if the form is valid ..
     FocusScope.of(context).unfocus(); /// deactivate focus when the user attepmts to click directly to login button ..
     if (isValid){
+      setState(() {
+        _isLoading = true;
+      });
+
       _formKey.currentState!.save();
+      try{
+        await _auth.
+        signInWithEmailAndPassword(email: _emailAddress.toLowerCase().trim(), password: _password.trim());
+      }catch(e){
+
+        gb.authenticationErrorHandler(e.toString(), context);
+        print('error occured: ' + e.toString());
+      }finally{
+        setState(() {
+          _isLoading = false;
+        });
+      }
+
     }
   }
 
@@ -165,7 +186,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             width: 10,
                           ),
-                           ElevatedButton(
+
+                          /// Progress bar indicator
+                          _isLoading ?
+                          CircularProgressIndicator()
+                          : ElevatedButton(
 
                                 /// Button's rounded border ..
                                   style: ButtonStyle(
