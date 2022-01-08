@@ -25,6 +25,7 @@ class MyAppIcons {
   static IconData exit = Icons.exit_to_app_rounded;
   static IconData darkMode = Ionicons.md_moon;
   static IconData camera = Icons.camera_alt_outlined;
+  static IconData logout = IconData(0xe3b3, fontFamily: 'MaterialIcons');
 
   // -- CART --
   static IconData trash = Feather.trash;

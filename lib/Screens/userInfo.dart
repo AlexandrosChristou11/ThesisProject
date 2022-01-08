@@ -1,13 +1,15 @@
 
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:list_tile_switch/list_tile_switch.dart';
 import 'package:sep21/Screens/wishlist.dart';
 import 'package:sep21/Screens/cart.dart';
+
 
 class UserInfo extends StatefulWidget{
   static const routeName = '/userInfo';
@@ -20,7 +22,7 @@ class _UserInfoState extends State<UserInfo> {
 
   late ScrollController _scrollController;
   var top = 0.0;
-
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -31,6 +33,7 @@ class _UserInfoState extends State<UserInfo> {
     });});
 
   }
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -191,9 +194,15 @@ class _UserInfoState extends State<UserInfo> {
                 child: InkWell(
                   splashColor: Theme.of(context).splashColor,
                   child: ListTile(title: Text('Logout'),
-                    onTap: (){
-                      Navigator.canPop(context)?
-                          Navigator.pop(context): null;
+                    onTap: () async{
+                      // Navigator.canPop(context)?
+                      //     Navigator.pop(context): null;
+                      setState(() {
+                        bool stateLoading = !_isLoading;
+                        _isLoading = stateLoading;
+                      });
+                      SignOut(context);
+
 
                     },
                     leading: Icon(MyAppIcons.exit ),
@@ -281,4 +290,42 @@ class _UserInfoState extends State<UserInfo> {
       ),
     );
   }
-}
+
+  void SignOut(BuildContext context) {
+    showDialog(context: context, builder: (BuildContext ctx){
+      return AlertDialog(
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 6.0),
+              child: Icon(MyAppIcons.logout,size: 24, color: Colors.red,),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Log out' ),
+            )
+          ],
+        ),
+        content: Text('Do you want to log out?'),
+        actions: [
+
+
+
+           TextButton(onPressed: () async{
+            Navigator.pop(context);
+          },
+              child: Text('Cancel', style: TextStyle(color: MyAppColor.favColor),)),
+
+
+
+          TextButton(onPressed: () async{
+
+            Navigator.pop(context);
+            await _auth.signOut().then( (value)=> Navigator.pop(context) );
+          },
+              child: Text('OK', style: TextStyle(color: MyAppColor.favColor),)),
+        ],
+      );
+
+    });
+}}
