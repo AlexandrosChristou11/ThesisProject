@@ -7,6 +7,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Services/Global_methods.dart';
@@ -17,6 +18,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class SingUpScreen extends StatefulWidget {
@@ -47,6 +49,9 @@ class _SingUpScreenState extends State<SingUpScreen> {
   void _submitForm() async{
     bool isValid = _formKey.currentState!.validate(); /// return true if the form is valid ..
     FocusScope.of(context).unfocus(); /// deactivate focus when the user attepmts to click directly to login button ..
+    var date = DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
     if (isValid){
       setState(() {
         _isLoading = true;
@@ -54,11 +59,26 @@ class _SingUpScreenState extends State<SingUpScreen> {
 
       _formKey.currentState!.save();
       try{
-       await _auth.createUserWithEmailAndPassword(email: _emailAddress.toLowerCase().trim(), password: _password.trim());
+       await _auth.createUserWithEmailAndPassword(
+           email: _emailAddress.toLowerCase().trim(),
+           password: _password.trim());
+       final User? user = _auth.currentUser;
+       final userId = user!.uid;
+       FirebaseFirestore.instance.collection('Users').doc(userId).set({
+         'id': userId,
+         'name': _fullName,
+         'email' : _emailAddress,
+         'phoneNumber' : _phoneNumber,
+         'ImageUrl': '', /// todoo ..
+         'joinedAt' : formattedDate,
+
+       });
+       Navigator.canPop(context) ? Navigator.pop(context) : null;
+
       }catch(e){
 
         gb.authenticationErrorHandler(e.toString(), context);
-        print('error occured: ' + e.toString());
+        print('error occurred : ' + e.toString());
       }finally{
         setState(() {
           _isLoading = false;
@@ -358,6 +378,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                 return null;
                               }
                             },
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly], /// restricts phone number fields only as numbers ..
                             textInputAction: TextInputAction.next,
                             onEditingComplete: ()=> FocusScope.of(context).requestFocus(_phoneFocusNode), /// allows the  user to move directly to the submit field.
                             keyboardType: TextInputType.phone,
