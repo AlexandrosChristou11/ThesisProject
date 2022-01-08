@@ -3,6 +3,7 @@
 /// Implementation of Landing Page which will be displayed at first
 /// launch & whenever the user decides to log out
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -82,8 +83,23 @@ class _LandingPageState extends State<LandingPage>
       final googleAuthentication = await goolgeAccount.authentication;
       if (googleAuthentication.accessToken != null && googleAuthentication.idToken != null){
        try{
+         var date = DateTime.now().toString();
+         var dateParse = DateTime.parse(date);
+         var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
+
          final authResult = await _auth.signInWithCredential(GoogleAuthProvider.credential(
              idToken:  googleAuthentication.idToken, accessToken: googleAuthentication.accessToken));
+
+
+         await FirebaseFirestore.instance.collection('Users').doc(authResult.user!.uid).set({
+           'id': authResult.user!.uid,
+           'name': authResult.user!.displayName,
+           'email' : authResult.user!.email,
+           'phoneNumber' : authResult.user!.phoneNumber,
+           'ImageUrl': authResult.user!.photoURL,
+           'joinedAt' : formattedDate,
+
+         });
        }
        catch (e){
          gb.authenticationErrorHandler(e.toString(), context);

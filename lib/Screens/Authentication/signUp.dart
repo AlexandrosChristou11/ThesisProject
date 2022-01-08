@@ -73,6 +73,9 @@ class _SingUpScreenState extends State<SingUpScreen> {
               password: _password.trim());
           final User? user = _auth.currentUser;
           final userId = user!.uid;
+          user.updateProfile(displayName: _fullName, photoURL: _url);
+          // user.updatePhotoURL(_url);
+          user.reload();
           await FirebaseFirestore.instance.collection('Users').doc(userId).set({
             'id': userId,
             'name': _fullName,

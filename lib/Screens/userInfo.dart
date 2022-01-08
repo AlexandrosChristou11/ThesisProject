@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:list_tile_switch/list_tile_switch.dart';
 import 'package:sep21/Screens/wishlist.dart';
 import 'package:sep21/Screens/cart.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 
 class UserInfo extends StatefulWidget{
@@ -31,9 +33,42 @@ class _UserInfoState extends State<UserInfo> {
     _scrollController.addListener(() {setState(() {
 
     });});
-
+    GetData();
   }
   FirebaseAuth _auth = FirebaseAuth.instance;
+  String _userId = "";
+  String _name = "";
+  String _email = "";
+  String _joinedAt = "";
+  String _phoneNumber = "";
+  String _imageUrl = "";
+
+  void GetData() async{
+    User? user = _auth.currentUser;
+    _userId = user!.uid;
+    final DocumentSnapshot userDocuments =
+          await FirebaseFirestore.instance.collection('Users').doc(_userId).get();
+
+    //print ("user name: " + user.);
+    print ("image url: " + user.photoURL.toString());
+    print ("email " + user.email.toString());
+
+    setState(() {
+      _name = userDocuments.get('name');
+      _email = user.email!;
+      _phoneNumber = userDocuments.get('phoneNumber');
+      _joinedAt = userDocuments.get('joinedAt');
+      _imageUrl = userDocuments.get('ImageUrl');
+
+      // _name = user.displayName!;
+      // _email = user.email!;
+      // _phoneNumber = user.phoneNumber!;
+      // _joinedAt = userDocuments.get('joinedAt');
+      // _imageUrl = user.photoURL!;
+    });
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +130,7 @@ class _UserInfoState extends State<UserInfo> {
                               image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: NetworkImage(
-                                    'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                                    _imageUrl),
                               ),
                             ),
                           ),
@@ -104,7 +139,7 @@ class _UserInfoState extends State<UserInfo> {
                           ),
                           Text(
                             // 'top.toString()',
-                            'Guest',
+                            _name==null ? 'Guest' : _name,
                             style: TextStyle(
                                 fontSize: 20.0, color: Colors.white),
                           ),
@@ -115,7 +150,7 @@ class _UserInfoState extends State<UserInfo> {
                 ),
                 background: Image(
                   image: NetworkImage(
-                      'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                      _imageUrl),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -162,11 +197,12 @@ class _UserInfoState extends State<UserInfo> {
             child: userTitle('User Information'),
           ),
       Divider(thickness: 1, color: Colors.grey),
-      userListTile("Email" , "Sub", 0 ,context),
-      userListTile("Phone" , "Number", 1 ,context),
+            userListTile("Username" , _name ?? '', 0 ,context),
+      userListTile("Email" , _email ?? '', 1 ,context),
+      userListTile("Phone" , _phoneNumber.toString()?? '', 2 ,context),
       //userListTile("Local Ship" , "sub", 2 ,context),
-      userListTile("Joined Date" , "date", 3 ,context),
-      userListTile("Fan Card" , "id", 3 ,context),
+      userListTile("Joined Date" , _joinedAt ?? '', 3 ,context),
+      userListTile("Fan Card" , "id", 4 ,context),
 
 
           Padding(
@@ -193,7 +229,7 @@ class _UserInfoState extends State<UserInfo> {
                 color: Colors.transparent,
                 child: InkWell(
                   splashColor: Theme.of(context).splashColor,
-                  child: ListTile(title: Text('Logout'),
+                  child:  ListTile(title: Text('Logout'),
                     onTap: () async{
                       // Navigator.canPop(context)? Navigator.pop(context):null;
                       showDialog(
