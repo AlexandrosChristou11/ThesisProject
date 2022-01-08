@@ -40,7 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
       _formKey.currentState!.save();
       try{
         await _auth.
-        signInWithEmailAndPassword(email: _emailAddress.toLowerCase().trim(), password: _password.trim());
+        signInWithEmailAndPassword
+          (email: _emailAddress.toLowerCase().trim(),
+            password: _password.trim())
+            .then((value) => Navigator.canPop(context) ? Navigator.pop(context): null);
       }catch(e){
 
         gb.authenticationErrorHandler(e.toString(), context);
