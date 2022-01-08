@@ -19,7 +19,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
 
 class SingUpScreen extends StatefulWidget {
 
@@ -41,6 +41,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _phoneFocusNode = FocusNode();
   File? _pickedImage;
+  late String _url;
   GlobalMethods gb = new GlobalMethods();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _isLoading = false;
@@ -53,27 +54,38 @@ class _SingUpScreenState extends State<SingUpScreen> {
     var dateParse = DateTime.parse(date);
     var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";
     if (isValid){
-      setState(() {
-        _isLoading = true;
-      });
+
 
       _formKey.currentState!.save();
       try{
-       await _auth.createUserWithEmailAndPassword(
-           email: _emailAddress.toLowerCase().trim(),
-           password: _password.trim());
-       final User? user = _auth.currentUser;
-       final userId = user!.uid;
-       FirebaseFirestore.instance.collection('Users').doc(userId).set({
-         'id': userId,
-         'name': _fullName,
-         'email' : _emailAddress,
-         'phoneNumber' : _phoneNumber,
-         'ImageUrl': '', /// todoo ..
-         'joinedAt' : formattedDate,
+        if (_pickedImage == null){
+          gb.authenticationErrorHandler('Please pick an image', context);
+        }else{
+          setState(() {
+            _isLoading = true;
+          });
+          final reference = FirebaseStorage.instance.ref('UsersImages').child(_fullName + ".jpg");
+          await reference.putFile(_pickedImage!);
+          _url = await reference.getDownloadURL();
 
-       });
-       Navigator.canPop(context) ? Navigator.pop(context) : null;
+          await _auth.createUserWithEmailAndPassword(
+              email: _emailAddress.toLowerCase().trim(),
+              password: _password.trim());
+          final User? user = _auth.currentUser;
+          final userId = user!.uid;
+          await FirebaseFirestore.instance.collection('Users').doc(userId).set({
+            'id': userId,
+            'name': _fullName,
+            'email' : _emailAddress,
+            'phoneNumber' : _phoneNumber,
+            'ImageUrl': _url,
+            'joinedAt' : formattedDate,
+
+          });
+          Navigator.canPop(context) ? Navigator.pop(context) : null;
+        }
+
+
 
       }catch(e){
 
