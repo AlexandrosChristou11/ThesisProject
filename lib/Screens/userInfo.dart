@@ -195,15 +195,39 @@ class _UserInfoState extends State<UserInfo> {
                   splashColor: Theme.of(context).splashColor,
                   child: ListTile(title: Text('Logout'),
                     onTap: () async{
-                      // Navigator.canPop(context)?
-                      //     Navigator.pop(context): null;
-                      setState(() {
-                        bool stateLoading = !_isLoading;
-                        _isLoading = stateLoading;
-                      });
-                      SignOut(context);
-
-
+                      // Navigator.canPop(context)? Navigator.pop(context):null;
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext ctx) {
+                            return AlertDialog(
+                              title: Row(
+                                children: [
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(right: 6.0),
+                                    child: Icon(MyAppIcons.logout,size: 24, color: Colors.red,),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Sign out'),
+                                  ),
+                                ],
+                              ),
+                              content: Text('Do you wanna Sign out?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Cancel')),
+                                TextButton(
+                                    onPressed: () async {
+                                      await _auth.signOut().then((value) => Navigator.pop(context));
+                                    },
+                                    child: Text('OK', style: TextStyle(color: Colors.red),))
+                              ],
+                            );
+                          });
                     },
                     leading: Icon(MyAppIcons.exit ),
         ),
@@ -291,7 +315,7 @@ class _UserInfoState extends State<UserInfo> {
     );
   }
 
-  void SignOut(BuildContext context) {
+  Future <void> SignOut(BuildContext context) async {
     showDialog(context: context, builder: (BuildContext ctx){
       return AlertDialog(
         title: Row(

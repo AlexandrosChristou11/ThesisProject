@@ -3,13 +3,17 @@
 /// Implementation of Landing Page which will be displayed at first
 /// launch & whenever the user decides to log out
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Screens/Authentication/login.dart';
 import 'package:sep21/Screens/Authentication/signUp.dart';
+import 'package:sep21/Services/Global_methods.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'bottom_bar.dart';
 
@@ -32,6 +36,9 @@ class _LandingPageState extends State<LandingPage>
     "https://images.assetsdelivery.com/compings_v2/dmytrohrynchak/dmytrohrynchak1809/dmytrohrynchak180900093.jpg",
     "https://media.gettyimages.com/vectors/handball-player-in-attack-team-sport-vector-id484966946?s=2048x2048"
   ];
+  GlobalMethods gb = new GlobalMethods();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   /// triggers the animation to start directly at screen launching
   /// and once the status is completed -> reset the animation
@@ -63,6 +70,26 @@ class _LandingPageState extends State<LandingPage>
     // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
+  }
+
+  Future <void> _GoogleSignIn() async{
+    final gooleSignIn = GoogleSignIn();
+    final goolgeAccount = await gooleSignIn.signIn();
+
+    // check if google account is not empty
+    if (goolgeAccount != null) {
+      // get credentials
+      final googleAuthentication = await goolgeAccount.authentication;
+      if (googleAuthentication.accessToken != null && googleAuthentication.idToken != null){
+       try{
+         final authResult = await _auth.signInWithCredential(GoogleAuthProvider.credential(
+             idToken:  googleAuthentication.idToken, accessToken: googleAuthentication.accessToken));
+       }
+       catch (e){
+         gb.authenticationErrorHandler(e.toString(), context);
+       }
+      }
+    }
   }
 
   @override
@@ -219,7 +246,7 @@ class _LandingPageState extends State<LandingPage>
               children: [
                 /// (3) Google sign in ...
                 OutlineButton(
-                  onPressed: () {},
+                  onPressed: _GoogleSignIn,
                   shape: StadiumBorder(),
                   highlightedBorderColor: Colors.red.shade200,
 
