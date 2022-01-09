@@ -7,6 +7,7 @@ import 'package:sep21/Screens/bottom_bar.dart';
 import 'package:sep21/Screens/cart.dart';
 import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/Screens/home.dart';
+import 'package:sep21/Screens/uploadNewMatch.dart';
 import 'package:sep21/Screens/userInfo.dart';
 import 'package:sep21/Screens/wishlist.dart';
 import 'package:sep21/Inner Screens/categories_feeds.dart';
@@ -26,6 +27,7 @@ var customRoutes = <String, WidgetBuilder>{
   LoginScreen.routName: (ctx) => LoginScreen(),
   SingUpScreen.routName: (ctx) => SingUpScreen(),
   BottomBarScreen.routeName: (ctx) => BottomBarScreen(),
+  UploadMatchForm.routeName: (ctx) => UploadMatchForm(),
 
    // CategoriesFeedsScreen.routeName: (ctx) => CategoriesFeedsScreen(),
 };

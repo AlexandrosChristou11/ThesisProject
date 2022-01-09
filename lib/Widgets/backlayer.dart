@@ -1,15 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sep21/Screens/cart.dart';
 import 'package:sep21/Screens/feed.dart';
+import 'package:sep21/Screens/uploadNewMatch.dart';
 import 'package:sep21/Screens/wishlist.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
 
 class BackLayerMenu extends StatelessWidget {
   //const BackLayerMenu({Key? key}) : super(key: key);
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  String _userId = "";
+
 
   @override
   Widget build(BuildContext context) {
+    User? user = _auth.currentUser;
+    _userId = user!.uid;
+    print('CURRENT USER IS : ' + user.displayName.toString());
+    print('USERS UID IS : ' + user.uid.toString());
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -19,7 +29,7 @@ class BackLayerMenu extends StatelessWidget {
                 colors: [MyAppColor.starterColor, MyAppColor.endColor],
                 //begin: const FractionalOffset(0.0, 0.0),
                 //end: const FractionalOffset(1.0, 0.0),
-                //stops: [0.0, 0.0, 0.0],
+               // stops: [0.0, 0.0, 3.0],
                 tileMode: TileMode.clamp),
           ),
         ),
@@ -95,19 +105,19 @@ class BackLayerMenu extends StatelessWidget {
                 const SizedBox(height: 10.0),
                 content(context, () {
                  navigateTo(context, Feed.routeName);
-                }, 'Feed', 0),
+                }, 'Wishlist', 2),
                 const SizedBox(height: 10.0),
                 content(context, () {
                   navigateTo(context, Cart.routeName);
                 }, 'Cart', 1),
                 const SizedBox(height: 10.0),
-                content(context, () {
-                  navigateTo(context, Wishlist.routeName);
-                }, 'Wishlist', 2),
-                const SizedBox(height: 10.0),
-                content(context, () {
-                  navigateTo(context, Feed.routeName);
-                }, 'Upload a new product', 3),
+                /// Check if the user is the admin and allow him to
+                /// upload new matches
+                if (user.displayName == "admin") content(context, () {
+                  navigateTo(context, UploadMatchForm.routeName);
+                }, 'Upload a new product', 3) else const SizedBox(height: 10.0),
+
+
               ],
             ),
           ),
