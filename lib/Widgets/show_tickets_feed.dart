@@ -33,8 +33,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
     //final cartAttr = Provider.of<CartAttr>(context);
 
 
-    print(widget.matchAttr.stadium.north.quantity);
-    print(widget.matchAttr.stadium.north.name);
+
    // Match match = Provider.of<Match>(context);
     print(widget.matchAttr.title + ' | ' + widget.matchAttr.id);
     return Scaffold(
@@ -49,9 +48,9 @@ class _DisplayTicketsState extends State<DisplayTickets> {
               children: [
                 ListTile(
                   leading: Icon(Icons.arrow_drop_down_circle),
-                  title: Text(widget.matchAttr.stadium.west.name.toString()),
+                  //title: Text(widget.matchAttr.stadium.west.name.toString()),
                   subtitle: Text(
-                    'Available Tickets:' + widget.matchAttr.stadium.west.quantity.toString(),
+                    'Available Tickets:', //+ widget.matchAttr.stadium.west.quantity.toString(),
                     style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
                 ),
@@ -211,9 +210,9 @@ class _DisplayTicketsState extends State<DisplayTickets> {
               children: [
                 ListTile(
                   leading: Icon(Icons.arrow_drop_down_circle),
-                  title: Text(widget.matchAttr.stadium.east.name.toString()),
+                  //title: Text(widget.matchAttr.stadium.east.name.toString()),
                   subtitle: Text(
-                    'Available Tickets:' + widget.matchAttr.stadium.east.quantity.toString(),
+                    'Available Tickets:',// + widget.matchAttr.stadium.east.quantity.toString(),
                     style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
                 ),
@@ -356,9 +355,9 @@ class _DisplayTicketsState extends State<DisplayTickets> {
               children: [
                 ListTile(
                   leading: Icon(Icons.arrow_drop_down_circle),
-                  title: Text(widget.matchAttr.stadium.south.name.toString()),
+                  //title: Text(widget.matchAttr.stadium.south.name.toString()),
                   subtitle: Text(
-                    'Available Tickets:' + widget.matchAttr.stadium.south.quantity.toString(),
+                    'Available Tickets:',// + widget.matchAttr.stadium.south.quantity.toString(),
                     style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
                 ),

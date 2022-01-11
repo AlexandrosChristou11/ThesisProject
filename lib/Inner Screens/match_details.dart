@@ -124,14 +124,14 @@ class _MatchDetailsState extends State<MatchDetails> {
                                   /// ** (2) Stadium **
                                   Container(
                                     alignment: Alignment.center,
-                                    child: Text(matchAtrr.stadium.name,
-                                        style: TextStyle(
-                                          //themeState.darkTheme
-                                          // ? Theme.of(context).disabledColor
-                                          /*:*/ color: MyAppColor.subTitle,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 21.0,
-                                        )),
+                                    // child: Text(matchAtrr.stadium.name,
+                                    //     style: TextStyle(
+                                    //       //themeState.darkTheme
+                                    //       // ? Theme.of(context).disabledColor
+                                    //       /*:*/ color: MyAppColor.subTitle,
+                                    //       fontWeight: FontWeight.bold,
+                                    //       fontSize: 21.0,
+                                    //     )),
                                   ),
 
                                   /// ** (3) Date - Time **

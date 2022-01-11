@@ -49,7 +49,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
 
   void _submitForm() async{
     bool isValid = _formKey.currentState!.validate(); /// return true if the form is valid ..
-    FocusScope.of(context).unfocus(); /// deactivate focus when the user attepmts to click directly to login button ..
+    FocusScope.of(context).unfocus(); /// deactivate focus when the user attempts to click directly to login button ..
     var date = DateTime.now().toString();
     var dateParse = DateTime.parse(date);
     var formattedDate = "${dateParse.day}-${dateParse.month}-${dateParse.year}";

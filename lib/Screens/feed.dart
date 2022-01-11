@@ -27,6 +27,7 @@ class Feed extends StatelessWidget{
     /// ************************************
     final popular = ModalRoute.of(context)!.settings.arguments as String;
     final matchesProvider = Provider.of<Matches>(context);
+
     List<Match> matchesList = matchesProvider.matches;
 
     if (popular == 'popular') {
