@@ -41,6 +41,7 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
   var _location = '';
   var _sportType = '';
   var _matchType = '';
+
   var _sectorAStudentQuantity = '';
   var _sectorAStudentPrice = '';
   var _sectorARegularQuantity = '';
@@ -49,6 +50,11 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
   var _sectorBStudentPrice = '';
   var _sectorBRegularQuantity = '';
   var _sectorBRegularPrice = '';
+  var _sectorCStudentQuantity = '';
+  var _sectorCStudentPrice = '';
+  var _sectorCRegularQuantity = '';
+  var _sectorCRegularPrice = '';
+
   late String _url;
   var _uuid = Uuid();
   late double _height;
@@ -132,7 +138,6 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
     if (isValid) {
       _formKey.currentState!.save();
 
-      _formKey.currentState!.save();
       try{
         if (_pickedImage == null){
           gb.authenticationErrorHandler('Please pick an image', context);
@@ -140,14 +145,15 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
           setState(() {
             _isLoading = true;
           });
-          final reference = FirebaseStorage.instance.ref('MatchImages').child(_matchName + ".jpg");
+          final matchId = _uuid.v4(); /// setting a unique id for each match
+          final reference = FirebaseStorage.instance.ref('MatchImages').child(matchId + ".jpg");
           await reference.putFile(_pickedImage!);
           _url = await reference.getDownloadURL();
 
           final User? user = _auth.currentUser;
           final userId = user!.uid;
 
-          final matchId = _uuid.v4();
+
 
           await FirebaseFirestore.instance.collection('Matches').doc(matchId).set({
             'MatchId' : matchId,
@@ -168,6 +174,10 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
             'Sector B Student Ticket Price' : _sectorBStudentPrice,
             'Sector B Regular Ticket Quantity' : _sectorBRegularQuantity,
             'Sector B Regular Ticket Price' : _sectorBRegularPrice,
+            'Sector C Student Ticket Quantity' : _sectorCStudentQuantity,
+            'Sector C Student Ticket Price' : _sectorCStudentPrice,
+            'Sector C Regular Ticket Quantity' : _sectorCRegularQuantity,
+            'Sector C Regular Ticket Price' : _sectorCRegularPrice,
             'Image' : _url
 
          // print(_dateAndTime);
@@ -891,12 +901,12 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 3.0),
-                          child: userTitle('SECTOR A'),
+                          child: userTitle('SECTOR: SOUTH'),
                         ),
 
 
                         /// ------------------------------------------------------
-                        ///                   SECTOR A TICKETS
+                        ///                   SECTOR A TICKETS - SOUTCH
                         /// ------------------------------------------------------
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1034,7 +1044,7 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                       labelText: 'Quantity',
                                     ),
                                     onSaved: (value) {
-                                      _sectorAStudentPrice = value!;
+                                      _sectorAStudentQuantity = value!;
                                     },
                                   ),
                                 ))
@@ -1050,12 +1060,12 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 3.0),
-                          child: userTitle('SECTOR B'),
+                          child: userTitle('SECTOR: EAST'),
                         ),
 
 
                         /// ------------------------------------------------------
-                        ///                   SECTOR B TICKETS
+                        ///                   SECTOR B -EAST TICKETS
                         /// ------------------------------------------------------
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1206,6 +1216,164 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             color: Colors.black54,
                             thickness: 2.0,
                           ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3.0),
+                          child: userTitle('SECTOR: WEST'),
+                        ),
+
+
+                        /// ------------------------------------------------------
+                        ///                   SECTOR C - WEST TICKETS
+                        /// ------------------------------------------------------
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 1),
+                                  child: TextFormField(
+                                    initialValue: "REGULAR",
+                                    showCursor: true,
+                                    readOnly: true,
+                                    key: ValueKey('Sector C'),
+                                    decoration: InputDecoration(
+                                      labelText: 'Ticket Type',
+                                    ),
+
+                                  ),
+                                )),
+                            Flexible(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 9),
+                                  child: TextFormField(
+                                    key: ValueKey('Price'),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Price is missing';
+                                      }
+                                      return null;
+                                    },
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
+                                    ],
+                                    // keyboardType: TextInputType.emailAddress,
+                                    decoration: InputDecoration(
+                                      labelText: 'Price €',
+                                    ),
+                                    onSaved: (value) {
+                                      _sectorCRegularPrice = value!;
+                                    },
+                                  ),
+                                ))
+                            ,Flexible(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 9),
+                                  child: TextFormField(
+                                    key: ValueKey('Quantity'),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Quantity is missing';
+                                      }
+                                      return null;
+                                    },
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
+                                    ],
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: InputDecoration(
+                                      labelText: 'Quantity',
+                                    ),
+                                    onSaved: (value) {
+                                      _sectorCRegularQuantity = value!;
+                                    },
+                                  ),
+                                ))
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                                flex: 3,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 1),
+                                  child: TextFormField(
+                                    initialValue: "STUDENT",
+                                    showCursor: true,
+                                    readOnly: true,
+                                    key: ValueKey('Sector C'),
+                                    decoration: InputDecoration(
+                                      //labelText: 'Ticket Type',
+                                    ),
+
+                                  ),
+                                )),
+                            Flexible(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 9),
+                                  child: TextFormField(
+                                    key: ValueKey('Price'),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Price is missing';
+                                      }
+                                      return null;
+                                    },
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
+                                    ],
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: InputDecoration(
+                                      labelText: 'Price €',
+                                    ),
+                                    onSaved: (value) {
+                                      _sectorCStudentPrice = value!;
+                                    },
+                                  ),
+                                ))
+                            ,Flexible(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 9),
+                                  child: TextFormField(
+                                    key: ValueKey('Quantity'),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Quantity is missing';
+                                      }
+                                      return null;
+                                    },
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
+                                    ],
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: InputDecoration(
+                                      labelText: 'Quantity',
+                                    ),
+                                    onSaved: (value) {
+                                      _sectorCStudentQuantity = value!;
+                                    },
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 150,
+                              child:  Divider(
+                                color: Theme.of(context).disabledColor,
+                                thickness: 10.0,
+                              ),
+                            ),
+                          ],
                         ),
 
 

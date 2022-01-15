@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Models/CartAttr.dart';
 import 'package:sep21/Models/Match.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
@@ -50,7 +51,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                   leading: Icon(Icons.arrow_drop_down_circle),
                   //title: Text(widget.matchAttr.stadium.west.name.toString()),
                   subtitle: Text(
-                    'Available Tickets:', //+ widget.matchAttr.stadium.west.quantity.toString(),
+                    'Available Tickets:' + ( widget.matchAttr.SectorA_StudentQuantity + widget.matchAttr.SectorA_RegularQuantity).toString(),
                     style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
                 ),
@@ -100,7 +101,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                             ],),
                           ),
                           // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                          child: Text('3',
+                          child: Text('0',//widget.matchAttr.SectorA_RegularQuantity.toString(),
                             textAlign: TextAlign.center,),
                         ),
                       ),
@@ -157,7 +158,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                               ],),
                             ),
                             // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text('3',
+                            child: Text( '0',//widget.matchAttr.SectorA_StudentQuantity.toString(),
                               //cartAttr.quantity.toString(),
                               textAlign: TextAlign.center,),
                           ),
@@ -209,10 +210,10 @@ class _DisplayTicketsState extends State<DisplayTickets> {
             child: Column(
               children: [
                 ListTile(
-                  leading: Icon(Icons.arrow_drop_down_circle),
+                  //leading: Icon(Icons.arrow_drop_down_circle),
                   //title: Text(widget.matchAttr.stadium.east.name.toString()),
                   subtitle: Text(
-                    'Available Tickets:',// + widget.matchAttr.stadium.east.quantity.toString(),
+                    'Available Tickets: ' + (widget.matchAttr.SectorB_StudentQuantity + widget.matchAttr.SectorB_RegularQuantity).toString(),
                     style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
                 ),
@@ -262,7 +263,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                               ],),
                             ),
                             // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text('3',
+                            child: Text('0',//widget.matchAttr.SectorB_RegularQuantity.toString(),
                               textAlign: TextAlign.center,),
                           ),
                         ),
@@ -319,7 +320,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                             ],),
                           ),
                           // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                          child: Text('3',
+                          child: Text('0',//widget.matchAttr.SectorB_StudentQuantity.toString(),
                             textAlign: TextAlign.center,),
                         ),
                       ),
@@ -354,10 +355,10 @@ class _DisplayTicketsState extends State<DisplayTickets> {
             child: Column(
               children: [
                 ListTile(
-                  leading: Icon(Icons.arrow_drop_down_circle),
+                  //leading: Icon(Icons.arrow_drop_down_circle),
                   //title: Text(widget.matchAttr.stadium.south.name.toString()),
                   subtitle: Text(
-                    'Available Tickets:',// + widget.matchAttr.stadium.south.quantity.toString(),
+                    'Available Tickets:' + (widget.matchAttr.SectorC_RegularQuantity + widget.matchAttr.SectorC_StudentQuantity).toString(),
                     style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   ),
                 ),
@@ -409,7 +410,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                               ],),
                             ),
                             // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text('3',
+                            child: Text('0',//widget.matchAttr.SectorC_RegularQuantity.toString(),
                               textAlign: TextAlign.center,),
                           ),
                         ),
@@ -466,7 +467,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                           ],),
                         ),
                         // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                        child: Text('3',
+                        child: Text( '0',//widget.matchAttr.SectorC_RegularQuantity.toString(),
                           textAlign: TextAlign.center,),
                       ),
                     ),
@@ -502,8 +503,8 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                       shape: RoundedRectangleBorder(side: BorderSide.none),
                       color: Colors.redAccent.shade400,
                       onPressed: (){
-                       // ShowTicketOptions(matcAtrr, context);
-                        cartProvider.addProductToCart(widget.matchAttr.id, widget.matchAttr.price, widget.matchAttr.title, widget.matchAttr.imageURL);
+                        //ShowTicketOptions(matcAtrr, context);
+                        cartProvider.addProductToCart(widget.matchAttr.id, widget.matchAttr.SectorB_RegularPrice, widget.matchAttr.title, widget.matchAttr.imageURL);
                         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         //   content: Text("Tickes added to your basket!"),
                         // ));

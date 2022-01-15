@@ -279,13 +279,13 @@ class _HomeState extends State<Home> {
                       itemBuilder: (BuildContext ctx, int index){
                         return ChangeNotifierProvider.value(
                           value: popularMatches[index],
-                          //child: PopularMatches(
-                            // imageURL:popularMatches[index].imageURL,
-                            // title: popularMatches[index].homeTeam + " vs " + popularMatches[index].AwayTeam,
-                            // type: popularMatches[index].type,
-                            // stadium: popularMatches[index].stadium,
+                          child: PopularMatches(
+                            imageURL:popularMatches[index].imageURL,
+                            title: popularMatches[index].homeTeam + " vs " + popularMatches[index].AwayTeam,
+                            type: popularMatches[index].type,
+                            stadium: popularMatches[index].stadium,
 
-                         // ),
+                          ),
                         );
                       },
                     ),

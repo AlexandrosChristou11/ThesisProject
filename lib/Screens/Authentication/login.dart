@@ -10,6 +10,8 @@ import 'package:sep21/Services/Global_methods.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
+import 'forgetPassword.dart';
+
 class LoginScreen extends StatefulWidget {
 
   static const routName = '\LoginScreen';
@@ -185,6 +187,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             onEditingComplete: _submitForm,
                           ),
                         ),
+
+                        /// ----------------------------------------------------
+                        ///                     FORGET PASSWORD
+                        /// ----------------------------------------------------
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
+                            child: TextButton(
+                              onPressed: (){ Navigator.pushNamed(context, ForgetPassword.routeName); },
+                              child: Text('Forget password?',
+                                      style: TextStyle(color: Colors.blue.shade900, decoration: TextDecoration.underline)),
+                            ),
+                          ),
+                        ),
+
                         Row(children: [
                           SizedBox(
                             width: 10,

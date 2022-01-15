@@ -36,10 +36,7 @@ class _FeedProductsState extends State<FeedProducts> {
                     borderRadius: BorderRadius.circular(2),
                     child: Container(
                         width: double.infinity,
-                        constraints: BoxConstraints(
-                            minHeight: 130,
-                            maxHeight:
-                                MediaQuery.of(context).size.height * 0.3),
+                        height:MediaQuery.of(context).size.height * 0.3,
                         child: Image.network(matchesAttributes.imageURL,
                             fit: BoxFit.contain)),
                   ),
@@ -74,7 +71,7 @@ class _FeedProductsState extends State<FeedProducts> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
-                        'Price: ' + matchesAttributes.price.toString(),
+                        'Price: ' ,//+ matchesAttributes.price.toString(),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: TextStyle(
@@ -87,7 +84,7 @@ class _FeedProductsState extends State<FeedProducts> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Quantity: ' + matchesAttributes.quantity.toString(),
+                          'Quantity: ',// + matchesAttributes.quantity.toString(),
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontSize: 12,

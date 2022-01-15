@@ -141,7 +141,7 @@ class FeedDialog extends StatelessWidget {
     ];
 
     void _Favorites(){
-      favoritesProvider.AddAndRemoveFromFavorite(matchId, matchAtrr.price, matchAtrr.title, matchAtrr.imageURL);
+      favoritesProvider.AddAndRemoveFromFavorite(matchId, /*matchAtrr.price*/ 0, matchAtrr.title, matchAtrr.imageURL);
       Navigator.canPop(context)? Navigator.pop(context):null;
     }
 

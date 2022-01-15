@@ -34,6 +34,7 @@ class CartProvider with ChangeNotifier{
         price: existingCart.price,
         imageUrl: existingCart.imageUrl
         ,stadium: existingCart.stadium
+
       ));
     }else{
       _cartItems.putIfAbsent(matchID, () => CartAttr(

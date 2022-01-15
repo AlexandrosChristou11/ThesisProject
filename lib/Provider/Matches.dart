@@ -24,23 +24,32 @@ class Matches with ChangeNotifier {
   Future <void> FetchMatches() async{
     await FirebaseFirestore.instance.collection('Matches').get()
         .then((QuerySnapshot matchesSnapshots) => {
+          _matches = [], /// We place this here to avoid re-initialization and duplication of content
           matchesSnapshots.docs.forEach((element) {
-            _matches = []; /// We place this here to avoid re-initialization and duplication of content
             _matches.insert(0, Match(
-              element.get('MatchId'),
-              element.get('MatchTitle'),
-              element.get('Competition'),
-              10.0,
+             element.get('MatchId'),
+             element.get('MatchTitle'),
+             element.get('Competition'),
+             element.get('Sport'),
+              0,
               element.get('Image'),
-              element.get('Sport'),
-              1,
-              false,
               true,
               element.get('HomeTeam'),
               element.get('AwayTeam'),
               element.get('DateAndTime'),
-              element.get('Sport'),
               element.get('Location'),
+              int.parse( element.get('Sector A Student Ticket Quantity') ),
+              double.parse( element.get('Sector A Student Ticket Price') ),
+              int.parse( element.get('Sector A Regular Ticket Quantity') ),
+              double.parse(element.get('Sector A Regular Ticket Price') ),
+              int.parse( element.get('Sector B Student Ticket Quantity')),
+              double.parse( element.get('Sector B Student Ticket Price') ),
+              int.parse( element.get('Sector B Regular Ticket Quantity')),
+              double.parse( element.get('Sector B Regular Ticket Price') ),
+              int.parse (element.get('Sector C Student Ticket Quantity')),
+              double.parse( element.get('Sector C Student Ticket Price')),
+              int.parse(element.get('Sector C Regular Ticket Quantity')),
+              double.parse(element.get('Sector C Regular Ticket Price'))
 
             ));
           })

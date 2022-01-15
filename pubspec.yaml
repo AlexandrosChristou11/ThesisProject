@@ -50,6 +50,7 @@ dependencies:
   icon_picker: ^2.0.1
   date_format: ^2.0.5
   uuid: ^3.0.5
+  toast: ^0.1.5
 
 dev_dependencies:
   flutter_test:

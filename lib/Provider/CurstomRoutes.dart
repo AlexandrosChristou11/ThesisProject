@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Inner%20Screens/team_navigation_rail.dart';
+import 'package:sep21/Screens/Authentication/forgetPassword.dart';
 import 'package:sep21/Screens/Authentication/signUp.dart';
 import 'package:sep21/Screens/bottom_bar.dart';
 import 'package:sep21/Screens/cart.dart';
@@ -28,6 +29,7 @@ var customRoutes = <String, WidgetBuilder>{
   SingUpScreen.routName: (ctx) => SingUpScreen(),
   BottomBarScreen.routeName: (ctx) => BottomBarScreen(),
   UploadMatchForm.routeName: (ctx) => UploadMatchForm(),
+  ForgetPassword.routeName: (ctx) => ForgetPassword(),
 
    // CategoriesFeedsScreen.routeName: (ctx) => CategoriesFeedsScreen(),
 };

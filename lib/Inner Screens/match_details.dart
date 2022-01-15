@@ -161,7 +161,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                               ),
                             ),
                             _details(false, 'Available Tickets: ',
-                                matchAtrr.quantity.toString(), context),
+                              '2',context),//  matchAtrr.quantity.toString(), context),
                             _details(false, 'Date: ', matchAtrr.date, context),
                             const SizedBox(height: 15.0),
                             Divider(
@@ -175,7 +175,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                                 width: double.infinity,
                                 height: 340,
                                 child: ListView.builder(
-                                    itemCount: matchesList.length,
+                                    itemCount: matchesList.length < 5 ? matchesList.length : 5 ,
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder: (BuildContext ctx, int index) {
                                       return ChangeNotifierProvider.value(
@@ -315,7 +315,7 @@ class _MatchDetailsState extends State<MatchDetails> {
                             onTap: () {
                               favoritesProvider.AddAndRemoveFromFavorite(
                                   matchAtrr.id,
-                                  matchAtrr.price,
+                                  matchAtrr.SectorB_RegularPrice,
                                   matchAtrr.title,
                                   matchAtrr.imageURL);
                             },
