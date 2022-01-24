@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:sep21/Screens/cart.dart';
+import 'package:sep21/Screens/Card/cart.dart';
 import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/Screens/home.dart';
 import 'package:sep21/Screens/search.dart';

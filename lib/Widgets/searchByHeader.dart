@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/Favorite_Provider.dart';
-import 'package:sep21/Screens/cart.dart';
+import 'package:sep21/Screens/Card/cart.dart';
 import 'package:sep21/Screens/userInfo.dart';
-import 'package:sep21/Screens/wishlist.dart';
+import 'package:sep21/Screens/Wishlist/wishlist.dart';
 
 class SearchByHeader extends SliverPersistentHeaderDelegate{
 

@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sep21/Screens/cart.dart';
+import 'package:sep21/Screens/Card/cart.dart';
 import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/Screens/uploadNewMatch.dart';
-import 'package:sep21/Screens/wishlist.dart';
+import 'package:sep21/Screens/Wishlist/wishlist.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
 

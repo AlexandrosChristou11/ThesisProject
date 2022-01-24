@@ -9,11 +9,11 @@ import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/Favorite_Provider.dart';
 import 'package:sep21/Provider/Matches.dart';
-import 'package:sep21/Screens/wishlist.dart';
+import 'package:sep21/Screens/Wishlist/wishlist.dart';
 import 'package:sep21/Widgets/feeds_products.dart';
 import 'package:sep21/Models/Match.dart';
 
-import 'cart.dart';
+import 'Card/cart.dart';
 
 class Feed extends StatelessWidget{
 

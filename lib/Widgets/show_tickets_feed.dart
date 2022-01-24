@@ -35,6 +35,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
 
 
 
+
    // Match match = Provider.of<Match>(context);
     print(widget.matchAttr.title + ' | ' + widget.matchAttr.id);
     return Scaffold(
@@ -505,6 +506,8 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                       onPressed: (){
                         //ShowTicketOptions(matcAtrr, context);
                         cartProvider.addProductToCart(widget.matchAttr.id, widget.matchAttr.SectorB_RegularPrice, widget.matchAttr.title, widget.matchAttr.imageURL);
+                        cartProvider.addProductToCart(widget.matchAttr.id, widget.matchAttr.SectorA_RegularPrice, widget.matchAttr.title, widget.matchAttr.imageURL);
+
                         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         //   content: Text("Tickes added to your basket!"),
                         // ));

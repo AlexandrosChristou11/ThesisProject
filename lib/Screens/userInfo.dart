@@ -8,8 +8,8 @@ import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:list_tile_switch/list_tile_switch.dart';
-import 'package:sep21/Screens/wishlist.dart';
-import 'package:sep21/Screens/cart.dart';
+import 'package:sep21/Screens/Wishlist/wishlist.dart';
+import 'package:sep21/Screens/Card/cart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 
