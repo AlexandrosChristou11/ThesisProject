@@ -26,6 +26,7 @@ class MyAppIcons {
   static IconData darkMode = Ionicons.md_moon;
   static IconData camera = Icons.camera_alt_outlined;
   static IconData logout = IconData(0xe3b3, fontFamily: 'MaterialIcons');
+  static const IconData seat = IconData(0xf54a, fontFamily: 'MaterialIcons');
 
   // -- CART --
   static IconData trash = Feather.trash;

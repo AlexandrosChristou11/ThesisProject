@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
+import 'package:sep21/Provider/OrdersProvider.dart';
 import 'package:sep21/Screens/Authentication/userState.dart';
 import 'package:sep21/Screens/bottom_bar.dart';
 import 'package:sep21/Screens/mainScreen.dart';
@@ -80,7 +81,10 @@ class _MyAppState extends State<MyApp> {
                ChangeNotifierProvider(create: (_) => CartProvider()),
 
               /// (4) Favorites Provider
-               ChangeNotifierProvider(create: (_) => FavoritesProvider())
+               ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+
+              /// (5) Orders Provider
+              ChangeNotifierProvider(create: (_) => OrderProvider()),
 
 
             ],

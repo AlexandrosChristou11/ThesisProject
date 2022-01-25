@@ -12,6 +12,8 @@ import 'package:sep21/Screens/Wishlist/wishlist.dart';
 import 'package:sep21/Screens/Card/cart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import 'Orders/order.dart';
+
 
 class UserInfo extends StatefulWidget{
   static const routeName = '/userInfo';
@@ -181,6 +183,18 @@ class _UserInfoState extends State<UserInfo> {
                 ),
               ),
             ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                splashColor: Theme.of(context).splashColor,
+                child: ListTile(title: Text('My Tickets'),
+                  trailing: Icon(Icons.chevron_right_rounded),
+                  onTap: ()=> Navigator.of(context).pushNamed(Order.routeName),
+                  leading: Icon(MyAppIcons.seat),
+                ),
+              ),
+            ),
+
             Material(
               color: Colors.transparent,
               child: InkWell(

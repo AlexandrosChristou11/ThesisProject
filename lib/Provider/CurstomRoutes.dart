@@ -6,6 +6,7 @@ import 'package:sep21/Screens/Authentication/forgetPassword.dart';
 import 'package:sep21/Screens/Authentication/signUp.dart';
 import 'package:sep21/Screens/CustomCardPaymentScreen.dart';
 import 'package:sep21/Screens/NoWebhookPaymentCardFormScreen.dart';
+import 'package:sep21/Screens/Orders/order.dart';
 import 'package:sep21/Screens/bottom_bar.dart';
 import 'package:sep21/Screens/Card/cart.dart';
 import 'package:sep21/Screens/feed.dart';
@@ -33,7 +34,8 @@ var customRoutes = <String, WidgetBuilder>{
   UploadMatchForm.routeName: (ctx) => UploadMatchForm(),
   ForgetPassword.routeName: (ctx) => ForgetPassword(),
   CustomCardPaymentScreen.routName: (ctx) => CustomCardPaymentScreen(),
-  NoWebhookPaymentCardFormScreen.routName: (ctx) => NoWebhookPaymentCardFormScreen()
+  NoWebhookPaymentCardFormScreen.routName: (ctx) => NoWebhookPaymentCardFormScreen(),
+  Order.routeName: (ctx) => Order()
 
    // CategoriesFeedsScreen.routeName: (ctx) => CategoriesFeedsScreen(),
 };

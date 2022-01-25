@@ -33,7 +33,8 @@ class CartProvider with ChangeNotifier{
         quantity: existingCart.quantity + 1,
         price: existingCart.price,
         imageUrl: existingCart.imageUrl
-        ,stadium: existingCart.stadium
+        ,stadium: existingCart.stadium,
+        matchId: matchID
 
       ));
     }else{
@@ -48,7 +49,7 @@ class CartProvider with ChangeNotifier{
             new Sector("NORTH", 1200),
             new Sector("WEST", 3700),
             new Sector("EAST", 1500),
-          )
+          ), matchId: matchID
       ));
 
     }
@@ -67,8 +68,8 @@ class CartProvider with ChangeNotifier{
               title: existingCart.title,
               quantity: existingCart.quantity - 1 ,
               price: existingCart.price,
-              imageUrl: existingCart.imageUrl
-              ,
+              imageUrl: existingCart.imageUrl,
+              matchId: '3' ,
               stadium: existingCart.stadium
           ));
     }

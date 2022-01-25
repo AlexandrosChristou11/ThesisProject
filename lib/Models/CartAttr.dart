@@ -11,8 +11,9 @@ class CartAttr with ChangeNotifier{
   final String imageUrl;
   final Stadium stadium;
   //final String ticketId;
+  final String matchId;
 
-  CartAttr({required this.id, required this.title, required this.quantity, required this.price, required this.imageUrl,required this.stadium,});
+  CartAttr({required this.id, required this.title, required this.quantity, required this.price, required this.imageUrl,required this.stadium,required this.matchId, });
 
 
 }
