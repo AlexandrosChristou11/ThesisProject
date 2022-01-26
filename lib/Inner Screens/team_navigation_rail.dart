@@ -5,6 +5,7 @@
 // (2) Function to press on the preferred team and execute appropriate messages
 
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Inner%20Screens/teams_rail_widget.dart';
 import 'package:sep21/Provider/Matches.dart';
@@ -213,7 +214,17 @@ class ContentSpace extends StatelessWidget {
         child: MediaQuery.removePadding(
           removeTop: true,
           context: context,
-          child: ListView.builder(
+          child: matchesTeams.isEmpty?
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Feather.database, size: 100,),
+                  SizedBox(height: 40,),
+                  Text('No matches available for this team', textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
+                ],
+              )
+              :ListView.builder(
             itemCount: matchesTeams.length,
             itemBuilder: (BuildContext context, int index) =>
                 ChangeNotifierProvider.value(

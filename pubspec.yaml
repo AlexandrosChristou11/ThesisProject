@@ -53,6 +53,7 @@ dependencies:
   toast: ^0.1.5
   flutter_stripe: ^2.1.1
   http: ^0.13.4
+  share_plus: ^3.0.4
 
 dev_dependencies:
   flutter_test:

@@ -21,6 +21,8 @@ import 'package:sep21/Widgets/show_tickets_feed.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Models/Match.dart';
+import 'package:share_plus/share_plus.dart';
+
 
 class MatchDetails extends StatefulWidget {
   //const MatchDetails({Key? key}) : super(key: key);
@@ -82,7 +84,9 @@ class _MatchDetailsState extends State<MatchDetails> {
                               color: Colors.transparent,
                               child: InkWell(
                                   splashColor: Colors.purple[200],
-                                  onTap: () {},
+                                  onTap: () { Share.share(
+                                      'Hey mate! Would you like to join the game with me? Hurry up, few tickets left!'
+                                          'Follow the link to download the app: https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.example.sep21', subject: 'Tickets for ${matchAtrr.title}'); },
                                   borderRadius: BorderRadius.circular(30),
                                   child: Padding(
                                       padding: const EdgeInsets.all(8.0),

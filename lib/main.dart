@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   final Future<FirebaseApp> _firebaseInitialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Object>(
+    return FutureBuilder(
       future: _firebaseInitialization,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting){
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
         else if (snapshot.hasError){
           MaterialApp(
               home: Scaffold(body: Center(
-                child: Text("Error occured"),
+                child: Text("Error occurred"),
               ),)
           );
         }
