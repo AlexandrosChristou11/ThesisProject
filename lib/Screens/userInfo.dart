@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,13 +16,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 import 'Orders/order.dart';
 
-
-class UserInfo extends StatefulWidget{
-  static const routeName = '/userInfo';
-  @override
-  _UserInfoState createState() => _UserInfoState();
-
-}
 
 class _UserInfoState extends State<UserInfo> {
 
@@ -174,23 +169,36 @@ class _UserInfoState extends State<UserInfo> {
             Divider(thickness: 1, color: Colors.grey),
             Material(
               color: Colors.transparent,
-              child: InkWell(
-                splashColor: Theme.of(context).splashColor,
-                child: ListTile(title: Text('Wishlist'),
-                  trailing: Icon(Icons.chevron_right_rounded),
-                  onTap: ()=> Navigator.of(context).pushNamed(Wishlist.routeName),
-                  leading: Icon(MyAppIcons.wishlist),
+              child:
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
-              ),
+                  //color:  Colors.grey.shade100,
+                  child: InkWell(
+                    splashColor: Theme.of(context).splashColor,
+                    child: ListTile(title: Text('Wishlist'),
+                      trailing: Icon(Icons.chevron_right_rounded),
+                      onTap: ()=> Navigator.of(context).pushNamed(Wishlist.routeName),
+                      leading: Icon(MyAppIcons.favorite, color: Colors.red,),
+                    ),
+                  ),
+                ),
+
             ),
             Material(
               color: Colors.transparent,
               child: InkWell(
                 splashColor: Theme.of(context).splashColor,
-                child: ListTile(title: Text('My Tickets'),
-                  trailing: Icon(Icons.chevron_right_rounded),
-                  onTap: ()=> Navigator.of(context).pushNamed(Order.routeName),
-                  leading: Icon(MyAppIcons.seat),
+                child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  child: ListTile(title: Text('My Tickets'),
+                    trailing: Icon(Icons.chevron_right_rounded),
+                    onTap: ()=> Navigator.of(context).pushNamed(Order.routeName),
+                    leading: Icon(MyAppIcons.seat, color: Colors.green.shade300,),
+                  ),
                 ),
               ),
             ),
@@ -199,10 +207,15 @@ class _UserInfoState extends State<UserInfo> {
               color: Colors.transparent,
               child: InkWell(
                 splashColor: Theme.of(context).splashColor,
-                child: ListTile(title: Text('Cart'),
-                  trailing: Icon(Icons.chevron_right_rounded),
-                  onTap: ()=> Navigator.of(context).pushNamed(Cart.routeName),
-                  leading: Icon(MyAppIcons.cart),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                  child: ListTile(title: Text('Cart'),
+                    trailing: Icon(Icons.chevron_right_rounded),
+                    onTap: ()=> Navigator.of(context).pushNamed(Cart.routeName),
+                    leading: Icon(MyAppIcons.cart, color: Colors.deepPurpleAccent.shade400,),
+                  ),
                 ),
               ),
             ),
@@ -211,12 +224,18 @@ class _UserInfoState extends State<UserInfo> {
             child: userTitle('User Information'),
           ),
       Divider(thickness: 1, color: Colors.grey),
-            userListTile("Username" , _name ?? '', 0 ,context),
-      userListTile("Email" , _email ?? '', 1 ,context),
-      userListTile("Phone" , _phoneNumber.toString()?? '', 2 ,context),
-      //userListTile("Local Ship" , "sub", 2 ,context),
-      userListTile("Joined Date" , _joinedAt ?? '', 3 ,context),
-      userListTile("Fan Card" , "id", 4 ,context),
+            Card(shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),child: userListTile("Username" , _name ?? '', 0 ,context)),
+      Card(shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),child: userListTile("Email" , _email ?? '', 1 ,context)),
+      Card(shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),child: userListTile("Phone" , _phoneNumber.toString()?? '', 2 ,context)),
+      Card(shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),child: userListTile("Joined Date" , _joinedAt ?? '', 3 ,context)),
 
 
           Padding(
@@ -226,20 +245,42 @@ class _UserInfoState extends State<UserInfo> {
           Divider(thickness: 1, color: Colors.grey),
 
           // -- USER SETTINGS --
-          ListTileSwitch(
-            value: themeChange.darkTheme,
-            leading: Icon(MyAppIcons.darkMode),
-            onChanged: (value) {
-              setState(() {
-                themeChange.darkTheme = value;
-              });
-            },
-            visualDensity: VisualDensity.comfortable,
-            switchType: SwitchType.cupertino,
-            switchActiveColor: Colors.indigo,
-            title: Text('Dark Theme'),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: ListTileSwitch(
+              value: themeChange.darkTheme,
+              leading: themeChange.darkTheme ?  Icon(MyAppIcons.darkMode, color: Colors.amber.shade800,): Icon(MyAppIcons.lightMode, color: Colors.amber.shade800) ,
+              onChanged: (value) {
+                setState(() {
+                  themeChange.darkTheme = value;
+                });
+              },
+              visualDensity: VisualDensity.comfortable,
+              switchType: SwitchType.cupertino,
+              switchActiveColor: Colors.indigo,
+              title: themeChange.darkTheme ? Text('Dark Mode') :Text('Light Mode'),
 
-          ), Material(
+            ),
+          ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                splashColor: Theme.of(context).splashColor,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: ListTile(title: Text('Rate our application'),
+                    trailing: Icon(Icons.chevron_right_rounded),
+                    onTap: ()=> Navigator.of(context).pushNamed(Cart.routeName),
+                    leading: Icon(MyAppIcons.feedback_outlined, color: Colors.amberAccent,),
+                  ),
+                ),
+              ),
+            ),
+            Material(
                 color: Colors.transparent,
                 child: InkWell(
                   splashColor: Theme.of(context).splashColor,
@@ -302,6 +343,8 @@ class _UserInfoState extends State<UserInfo> {
     //pixels from top where scaling should end
     final double scaleEnd = scaleStart / 2;
 
+
+
     double top = defaultTopMargin;
     double scale = 1.0;
     if (_scrollController.hasClients) {
@@ -336,7 +379,8 @@ class _UserInfoState extends State<UserInfo> {
   }
 
   List<IconData> _userTileIcons = [
-    MyAppIcons.email, MyAppIcons.phone, MyAppIcons.local_ship, MyAppIcons.watch_later, MyAppIcons.exit ];
+    MyAppIcons.user,MyAppIcons.email, MyAppIcons.phone, MyAppIcons.watch_later, MyAppIcons.exit ];
+
 
   Widget userListTile (String title, String sub, int index, BuildContext context){
     return   Material(
@@ -346,19 +390,17 @@ class _UserInfoState extends State<UserInfo> {
         child: ListTile(title: Text(title),
           onTap: (){},
           subtitle: Text(sub),
-          leading: Icon(_userTileIcons[index]),
+          leading: Icon(_userTileIcons[index], color: Colors.blueAccent.shade100,),
         ),
       ),
     );
   }
 
 
-
-
-
   Widget userTitle (String title){
     return Padding(
       padding: const EdgeInsets.all(14.0),
+     // padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Text(title,
         style: TextStyle (fontWeight: FontWeight.bold,fontSize: 22),
       ),
@@ -403,3 +445,11 @@ class _UserInfoState extends State<UserInfo> {
 
     });
 }}
+
+
+
+class UserInfo extends StatefulWidget{
+  static const routeName = '/userInfo';
+  @override
+  _UserInfoState createState() => _UserInfoState();
+}

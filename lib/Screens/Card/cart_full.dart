@@ -114,7 +114,7 @@ class _CartFullState extends State<CartFull> {
                           width: 5,
                         ),
                         Text(
-                          cartAttr.price.toString() + '€',
+                          cartAttr.price.toStringAsFixed(2) + '€',
                           style:
                               TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                         )
@@ -127,7 +127,7 @@ class _CartFullState extends State<CartFull> {
                           width: 5,
                         ),
                         Text(
-                          subTotal.toString() + '€' ,
+                          subTotal.toStringAsFixed(2) + '€' ,
                           style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
@@ -140,7 +140,7 @@ class _CartFullState extends State<CartFull> {
                     Row(
                       children: [
                         Text(
-                          'Ships Free',
+                          'Quantity:',
                           style: TextStyle(
                               color: themeChanged.darkTheme
                                   ? Colors.brown.shade900
@@ -173,7 +173,7 @@ class _CartFullState extends State<CartFull> {
                             decoration: BoxDecoration(
                                 gradient: LinearGradient(colors: [
                               MyAppColor.gradiendLStart,
-                              MyAppColor.blueGrey,
+                              MyAppColor.gradiendLEnd,
                             ], stops: [
                               0.0,
                               0.7

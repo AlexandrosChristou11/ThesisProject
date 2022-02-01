@@ -26,4 +26,7 @@ class MyAppColor {
   static Color starterColor = Color(0xFF0277BD); //purple 600
   static Color purple800 = Color(0xFF6A1B9A);
 
-  static Color blueGrey = Color(0xFF455A64);}
+  static Color blueGrey = Color(0xFF455A64);
+  static Color selected = Color(0xFF0288D1);
+}
+

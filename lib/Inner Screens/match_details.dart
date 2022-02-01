@@ -9,6 +9,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Provider/Favorite_Provider.dart';
@@ -19,9 +20,10 @@ import 'package:sep21/Screens/Wishlist/wishlist.dart';
 import 'package:sep21/Widgets/feeds_products.dart';
 import 'package:sep21/Widgets/show_tickets_feed.dart';
 import 'package:provider/provider.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Models/Match.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 
 class MatchDetails extends StatefulWidget {
@@ -33,6 +35,22 @@ class MatchDetails extends StatefulWidget {
 }
 
 class _MatchDetailsState extends State<MatchDetails> {
+
+  IconData _getSportIcon(String type){
+    if (type.toLowerCase() == 'football'){
+      return MyAppIcons.sports_soccer;
+    }else if (type.toLowerCase() == 'basketball'){
+      return MyAppIcons.sports_basketball_rounded;
+    }else if (type.toLowerCase() == 'handball'){
+      return MyAppIcons.sports_handball_rounded;
+    }
+    else if (type.toLowerCase() == 'volley'){
+      return MyAppIcons.sports_volleyball_rounded;
+    }
+
+    return MyAppIcons.sports_soccer;
+  }
+
   @override
   Widget build(BuildContext context) {
     /// ------------------------------------
@@ -48,6 +66,10 @@ class _MatchDetailsState extends State<MatchDetails> {
 
     final matchAtrr = matchesProvider.findByID(matchID);
 
+    int matchQuantity = matchAtrr.SectorA_RegularQuantity + matchAtrr.SectorA_StudentQuantity +
+        matchAtrr.SectorB_RegularQuantity + matchAtrr.SectorB_StudentQuantity +
+        matchAtrr.SectorC_RegularQuantity + matchAtrr.SectorC_StudentQuantity;
+
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -55,13 +77,13 @@ class _MatchDetailsState extends State<MatchDetails> {
               foregroundDecoration: BoxDecoration(color: Colors.black12),
               height: MediaQuery.of(context).size.height * 0.45,
               width: double.infinity,
-              child: Image.network(matchAtrr.imageURL)),
+              child: Image.network(matchAtrr.imageURL), ),
           SingleChildScrollView(
               padding: const EdgeInsets.only(top: 16.0, bottom: 20.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const SizedBox(height: 250),
+                    const SizedBox(height: 200),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -71,21 +93,8 @@ class _MatchDetailsState extends State<MatchDetails> {
                               color: Colors.transparent,
                               child: InkWell(
                                   splashColor: Colors.purple[200],
-                                  onTap: () {},
-                                  borderRadius: BorderRadius.circular(30),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Icon(
-                                        Icons.save,
-                                        size: 23,
-                                        color: Colors.white,
-                                      )))),
-                          Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                  splashColor: Colors.purple[200],
                                   onTap: () { Share.share(
-                                      'Hey mate! Would you like to join the game with me? Hurry up, few tickets left!'
+                                      'Hey mate! Would you like to join the game ${matchAtrr.title}, with me? Hurry up, few tickets left!'
                                           'Follow the link to download the app: https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.example.sep21', subject: 'Tickets for ${matchAtrr.title}'); },
                                   borderRadius: BorderRadius.circular(30),
                                   child: Padding(
@@ -108,15 +117,42 @@ class _MatchDetailsState extends State<MatchDetails> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  /// ** (1) TEAMS **
+                                  /// ** (1) TITLE **
                                   Container(
                                       width: MediaQuery.of(context).size.width *
                                           0.9,
                                       alignment: Alignment.center,
                                       child: Text(
-                                          matchAtrr.homeTeam +
-                                              " vs " +
-                                              matchAtrr.AwayTeam,
+                                          matchAtrr.title,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600))
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 10.0),
+                            Padding(padding: const EdgeInsets.only(top:0.01),
+                            child:  Divider(
+                                thickness: 1, color: Colors.grey, height: 1),),
+
+                            Padding(
+
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                /// -- MATCH DETAILS --
+                                  Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          'Match Details:',
                                           maxLines: 2,
                                           style: TextStyle(
                                               fontSize: 25,
@@ -124,36 +160,9 @@ class _MatchDetailsState extends State<MatchDetails> {
                                   SizedBox(
                                     height: 8,
                                   ),
-
-                                  /// ** (2) Stadium **
-                                  Container(
-                                    alignment: Alignment.center,
-                                    // child: Text(matchAtrr.stadium.name,
-                                    //     style: TextStyle(
-                                    //       //themeState.darkTheme
-                                    //       // ? Theme.of(context).disabledColor
-                                    //       /*:*/ color: MyAppColor.subTitle,
-                                    //       fontWeight: FontWeight.bold,
-                                    //       fontSize: 21.0,
-                                    //     )),
-                                  ),
-
-                                  /// ** (3) Date - Time **
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Text(matchAtrr.date,
-                                        style: TextStyle(
-                                          //themeState.darkTheme
-                                          // ? Theme.of(context).disabledColor
-                                          /*:*/ color: MyAppColor.subTitle,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 21.0,
-                                        )),
-                                  ),
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 58.0),
 
                             Padding(
                               padding:
@@ -164,16 +173,48 @@ class _MatchDetailsState extends State<MatchDetails> {
                                 height: 1,
                               ),
                             ),
-                            _details(false, 'Available Tickets: ',
-                              '2',context),//  matchAtrr.quantity.toString(), context),
-                            _details(false, 'Date: ', matchAtrr.date, context),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            _details(false, '${matchAtrr.sport}, ${matchAtrr.type}', 'info', context, _getSportIcon(matchAtrr.sport)),
+                            _details(false, matchAtrr.stadium, '2',context, MyAppIcons.location_on),//  matchAtrr.quantity.toString(), context),
+                            //_details(false, ' ${DateFormat("dd-MM-yyyy").format(DateTime.parse(matchAtrr.date))} ', matchAtrr.date, context, MyAppIcons.date_range),
+                            _details(false, ' ${ Jiffy(matchAtrr.date).yMMMd } ', matchAtrr.date, context, MyAppIcons.date_range),
+                            _details(false, ' ${DateFormat.Hm().format(DateTime.parse(matchAtrr.date))} ', matchAtrr.date, context, MyAppIcons.access_time),
+                            _details(false, ' Availability: ${matchQuantity} ', matchAtrr.date, context, MyAppIcons.data_saver_off),
                             const SizedBox(height: 15.0),
                             Divider(
                                 thickness: 1, color: Colors.grey, height: 1),
+                            const SizedBox(height: 20.0),
 
                             /// ***************************************************
                             ///               Suggested Matches
                             /// ***************************************************
+
+
+
+                             Padding(
+                               padding: const EdgeInsets.only(left:8.0),
+                               child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    /// -- MATCH DETAILS --
+                                    Container(
+                                        width: MediaQuery.of(context).size.width *
+                                            0.9,
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                            'Suggested for you ..',
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.w600))),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                  ],
+                                ),
+                             ),
                             Container(
                                 margin: EdgeInsets.only(bottom: 25),
                                 width: double.infinity,
@@ -189,13 +230,16 @@ class _MatchDetailsState extends State<MatchDetails> {
                                     }))
                           ],
                         ))
-                  ])),
+                  ]),
+          ),
+
 
           /// ** TOP APP BAR **
           Positioned(
               top: 0,
               left: 0,
               right: 0,
+
               child: AppBar(
                   backgroundColor: Colors.transparent,
                   elevation: 0,
@@ -281,30 +325,30 @@ class _MatchDetailsState extends State<MatchDetails> {
                   ),
 
                   /// (2) Buy Now Button
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                        height: 50,
-                        child: RaisedButton(
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            shape:
-                                RoundedRectangleBorder(side: BorderSide.none),
-                            color: Colors.white,
-                            onPressed: () {},
-                            child: Row(
-                              children: [
-                                Text('Buy Now'.toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 14, color: Colors.black)),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Icon(Icons.payment,
-                                    color: Colors.green.shade700, size: 19),
-                              ],
-                            ))),
-                  ),
+                  // Expanded(
+                  //   flex: 3,
+                  //   child: Container(
+                  //       height: 50,
+                  //       child: RaisedButton(
+                  //           materialTapTargetSize:
+                  //               MaterialTapTargetSize.shrinkWrap,
+                  //           shape:
+                  //               RoundedRectangleBorder(side: BorderSide.none),
+                  //           color: Colors.white,
+                  //           onPressed: () {},
+                  //           child: Row(
+                  //             children: [
+                  //               Text('Buy Now'.toUpperCase(),
+                  //                   style: TextStyle(
+                  //                       fontSize: 14, color: Colors.black)),
+                  //               SizedBox(
+                  //                 width: 5,
+                  //               ),
+                  //               Icon(Icons.payment,
+                  //                   color: Colors.green.shade700, size: 19),
+                  //             ],
+                  //           ))),
+                  // ),
 
                   /// (3) Add to Wishlist
                   Expanded(
@@ -353,27 +397,20 @@ void ShowTicketOptions(Match match, BuildContext context) => showDialog(
       );
     });
 
-/// called when the wishlist icon is being pressed
-AddToFavotite(BuildContext context) {}
-_details(bool stateTheme, String title, String info, BuildContext context) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 15, left: 16, right: 16),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(title,
-            style: TextStyle(
-                color: TextSelectionTheme.of(context).selectionColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 21.0)),
-        Text(info,
-            style: TextStyle(
-                color: stateTheme
-                    ? Theme.of(context).disabledColor
-                    : MyAppColor.subTitle,
-                fontWeight: FontWeight.w600,
-                fontSize: 21.0)),
-      ],
+
+_details(bool stateTheme, String title, String info, BuildContext context, IconData icon) {
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+    //color:  Colors.grey.shade100,
+    child: InkWell(
+      splashColor: Theme.of(context).splashColor,
+      child: ListTile(title: Text(title),
+        //railing: Icon(Icons.chevron_right_rounded),
+        //onTap: ()=> Navigator.of(context).pushNamed(Wishlist.routeName),
+        leading: Icon(icon, color: MyAppColor.gradiendLStart,),
+      ),
     ),
   );
 }

@@ -1,9 +1,14 @@
 import 'package:badges/badges.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Models/Match.dart';
 import 'package:sep21/Widgets/feeds_dialog.dart';
+import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 class FeedProducts extends StatefulWidget {
 
@@ -14,9 +19,27 @@ class FeedProducts extends StatefulWidget {
 }
 
 class _FeedProductsState extends State<FeedProducts> {
+  IconData _getSportIcon(String type){
+    if (type.toLowerCase() == 'football'){
+      return MyAppIcons.sports_soccer;
+    }else if (type.toLowerCase() == 'basketball'){
+      return MyAppIcons.sports_basketball_rounded;
+    }else if (type.toLowerCase() == 'handball'){
+      return MyAppIcons.sports_handball_rounded;
+    }
+    else if (type.toLowerCase() == 'volley'){
+      return MyAppIcons.sports_volleyball_rounded;
+    }
+
+    return MyAppIcons.sports_soccer;
+  }
+
   @override
   Widget build(BuildContext context) {
     final matchesAttributes = Provider.of<Match>(context);
+    int matchQuantity = matchesAttributes.SectorA_RegularQuantity + matchesAttributes.SectorA_StudentQuantity +
+                  matchesAttributes.SectorB_RegularQuantity + matchesAttributes.SectorB_StudentQuantity +
+                  matchesAttributes.SectorC_RegularQuantity + matchesAttributes.SectorC_StudentQuantity;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -27,6 +50,7 @@ class _FeedProductsState extends State<FeedProducts> {
           height: 290,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
+              //color: Theme.of(context).backgroundColor),
               color: Theme.of(context).backgroundColor),
           child: Column(
             children: [
@@ -59,53 +83,128 @@ class _FeedProductsState extends State<FeedProducts> {
                     SizedBox(
                       height: 4,
                     ),
-                    Text(
-                      matchesAttributes.type,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w900),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        'Price: ' ,//+ matchesAttributes.price.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w900),
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(_getSportIcon(matchesAttributes.sport), size: 14,),
+                        Flexible(
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                              child: Text(' ${matchesAttributes.title}',
+                                  overflow: TextOverflow.fade,
+                                  maxLines: 2,
+                                  softWrap: false,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w900)),
+                            
+                          ),
+                        ),
+                      ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Quantity: ',// + matchesAttributes.quantity.toString(),
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w600),
+                        Icon(MyAppIcons.date_range, size: 14,),
+
+                         // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text(
+                              //' ${DateFormat("dd-MM-yyyy").format(DateTime.parse(matchesAttributes.date))}' ,//+ matchesAttributes.price.toString(),
+                              ' ${Jiffy(matchesAttributes.date).yMMMd}' ,//+ matchesAttributes.price.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w900),
+
                         ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                              onTap: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context)=>FeedDialog(matchId: matchesAttributes.id)
-                                );
-                              },
-                              borderRadius: BorderRadius.circular(18),
-                              child:
-                                  Icon(Icons.more_horiz, color: Colors.grey)),
-                        )
+                          ),
                       ],
-                    )
+                    ),
+                    Row(
+                      children: [
+                        Icon(MyAppIcons.location_on, size: 14,),
+
+                           Flexible(
+                             child: Padding(
+                               padding: const EdgeInsets.all(2.0),
+                               child: Text(
+                                ' ${matchesAttributes.stadium}' ,//+ matchesAttributes.price.toString(),
+                                overflow: TextOverflow.ellipsis,
+
+                                softWrap: false,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900),
+                          ),
+                             ),
+                           ),
+
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(MyAppIcons.data_saver_off, size: 14,),
+                        Text(
+                            ' ${matchQuantity} tickets left ' ,//+ matchesAttributes.price.toString(),
+                            overflow: TextOverflow.ellipsis,
+
+                            softWrap: false,
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w900),
+                          ),
+                        Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                    onTap: () async {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context)=>FeedDialog(matchId: matchesAttributes.id)
+                                      );
+                                    },
+                                    borderRadius: BorderRadius.circular(18),
+                                    child:
+                                        Icon(Icons.more_horiz, color: MyAppColor.gradiendLStart)),
+                              )
+
+
+                      ],
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       'Available tickets: ${matchQuantity}',// + matchesAttributes.quantity.toString(),
+                    //       overflow: TextOverflow.ellipsis,
+                    //       style: TextStyle(
+                    //           fontSize: 12,
+                    //           //color: Colors.grey,
+                    //           fontWeight: FontWeight.w600),
+                    //     ),
+                    //     Material(
+                    //       color: Colors.transparent,
+                    //       child: InkWell(
+                    //           onTap: () async {
+                    //             showDialog(
+                    //               context: context,
+                    //               builder: (BuildContext context)=>FeedDialog(matchId: matchesAttributes.id)
+                    //             );
+                    //           },
+                    //           borderRadius: BorderRadius.circular(18),
+                    //           child:
+                    //               Icon(Icons.more_horiz, color: Colors.grey)),
+                    //     )
+                    //   ],
+                    // )
                   ],
                 ),
               )

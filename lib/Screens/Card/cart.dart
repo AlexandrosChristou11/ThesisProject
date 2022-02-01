@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Services/payment_service.dart';
 import 'package:sep21/Widgets/payment.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:uuid/uuid.dart';
 import '../CustomCardPaymentScreen.dart';
 import '../NoWebhookPaymentCardFormScreen.dart';
@@ -79,7 +79,7 @@ class _CartState extends State<Cart> {
                         () => {cartProvider.clearCart()},
                         context);
                   },
-                  icon: Icon(MyAppIcons.trash),
+                  icon: Icon(MyAppIcons.trash, color: MyAppColor.black,),
                 )
               ],
             ),
@@ -134,7 +134,7 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
               ),
               child: Material(
                   borderRadius: BorderRadius.circular(30.0),
-                  color: Colors.transparent,
+                  color: MyAppColor.selected,
                   child: InkWell(
                       borderRadius: BorderRadius.circular(30.0),
                       onTap: () async {
@@ -176,7 +176,7 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
                       //() async{ Navigator.pushNamed(ctx, NoWebhookPaymentCardFormScreen.routName); },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('Checkout',
+                        child: Text('Pay now',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Theme.of(ctx).textSelectionColor,
@@ -186,12 +186,12 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
             ),
           ),
           Spacer(),
-          Text('Total ',
+          Text('Total: ',
               style: TextStyle(
                   color: Theme.of(ctx).textSelectionColor,
                   fontSize: 18,
                   fontWeight: FontWeight.w600)),
-          Text(totalAmount.toString() + '\€',
+          Text(totalAmount.toStringAsFixed(2)  + '\€',
               // textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.blue,
@@ -262,9 +262,3 @@ Future<int> initPaymentSheet(context,
   print('RESPONSE STATUS: ${response.statusCode}');
 }
 
-Future<void> Checkout() async {
-  print(Stripe.publishableKey);
-  //Stripe.buildWebCard();
-  //Stripe
-  //StripeService.payWithNewCard(amount: '100', currency: 'usd');
-}

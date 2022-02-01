@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
+import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Provider/Favorite_Provider.dart';
 import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Screens/Wishlist/wishlist.dart';
@@ -15,16 +16,31 @@ import 'package:sep21/Models/Match.dart';
 
 import 'Card/cart.dart';
 
-class Feed extends StatelessWidget{
+class Feed extends StatefulWidget{
 
 
   static const routeName = '/feed';
+
+  @override
+  State<Feed> createState() => _FeedState();
+}
+
+class _FeedState extends State<Feed> {
+
+  Future<void> _GetMatchesOnRefresh() async{
+    await Provider.of<Matches>(context, listen: false).FetchMatches();
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
     /// ************************************
     ///              PROVIDERS:
     /// ************************************
+    final themeChange = Provider.of<DarkThemeProvider>(context);
     final popular = ModalRoute.of(context)!.settings.arguments as String;
     final matchesProvider = Provider.of<Matches>(context);
    // matchesProvider.FetchMatches();
@@ -40,7 +56,7 @@ class Feed extends StatelessWidget{
       // List with all the available matches.
 
     appBar: AppBar(
-          title: Text('Available Matches', style: TextStyle(color: Colors.black54),),
+          title: Text('Available Matches', style: Theme.of(context).textTheme.headline6,),
           backgroundColor: Theme.of(context).canvasColor,
           actions: [
             /// --------------------
@@ -84,8 +100,8 @@ class Feed extends StatelessWidget{
                   style: TextStyle(color: Colors.white),
                 ),
                 child:   IconButton(
-                    icon: Icon(MyAppIcons.cart),
-                    color: Colors.black54,
+                    icon: Icon(MyAppIcons.cart, color: themeChange.darkTheme ? Colors.white : Colors.black54,),
+
                     iconSize: 24.0,
                     onPressed: () {
                       Navigator.of(context).pushNamed(Cart.routeName);
@@ -104,21 +120,23 @@ class Feed extends StatelessWidget{
       //   mainAxisSpacing: 8.0,
       //   crossAxisSpacing: 6.0,
       // )
-      GridView.count(crossAxisCount: 2,
-      childAspectRatio: 240/420,
-      crossAxisSpacing: 8,
-      mainAxisSpacing: 8,
-      children: List.generate(matchesList.length, (index) {
-        return ChangeNotifierProvider.value(
-        value: matchesList[index],
-        child: FeedProducts(
+      RefreshIndicator(
+        onRefresh: _GetMatchesOnRefresh ,
+        child: GridView.count(crossAxisCount: 2,
+        childAspectRatio: 240/420,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+        children: List.generate(matchesList.length, (index) {
+          return ChangeNotifierProvider.value(
+          value: matchesList[index],
+          child: FeedProducts(
 
 
-          ),
-        );
-      }),
+            ),
+          );
+        }),
+        ),
       )
     );
   }
-
 }

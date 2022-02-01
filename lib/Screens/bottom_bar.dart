@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Screens/Card/cart.dart';
 import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/Screens/home.dart';
@@ -36,7 +37,7 @@ class _BottomBarScreenState extends State<BottomBarScreen>{
   var _pages;
 
 
-  int _selectedIndex = 4;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -92,7 +93,7 @@ class _BottomBarScreenState extends State<BottomBarScreen>{
           onTap: _selectedPage,
         backgroundColor: Theme.of(context).primaryColor,
           unselectedItemColor: Theme.of(context).accentColor,
-          selectedItemColor: Colors.purple,
+          selectedItemColor: Colors.blue[100],
           selectedLabelStyle: TextStyle(fontSize: 15),
           currentIndex: _selectedIndex,
           items:

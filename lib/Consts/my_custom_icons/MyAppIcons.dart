@@ -24,19 +24,36 @@ class MyAppIcons {
   static IconData watch_later = Icons.watch_later;
   static IconData exit = Icons.exit_to_app_rounded;
   static IconData darkMode = Ionicons.md_moon;
+  static IconData lightMode = Icons.light_mode;
   static IconData camera = Icons.camera_alt_outlined;
   static IconData logout = IconData(0xe3b3, fontFamily: 'MaterialIcons');
   static const IconData seat = IconData(0xf54a, fontFamily: 'MaterialIcons');
+  static IconData favorite = Icons.favorite;
+  static const IconData feedback_outlined = IconData(0xf04f, fontFamily: 'MaterialIcons');
 
   // -- CART --
   static IconData trash = Feather.trash;
   static const IconData warning = IconData(0xf02a0, fontFamily: 'MaterialIcons');
+  static const IconData bin = IconData(0xf4c4, fontFamily: 'MaterialIcons');
+  static const IconData delete = IconData(0xf4c4);
 
 
   // -- HOME --
     // Back layer
   static IconData wishlist = Feather.heart;
   static IconData upload = Feather.upload;
+
+  // -- SPORTS --
+  static const IconData sports_soccer = IconData(0xe5f2, fontFamily: 'MaterialIcons');
+  static const IconData sports_basketball_rounded = IconData(0xf01ba, fontFamily: 'MaterialIcons');
+  static const IconData sports_volleyball_rounded = IconData(0xf01c9, fontFamily: 'MaterialIcons');
+  static const IconData sports_handball_rounded = IconData(0xf01bf, fontFamily: 'MaterialIcons');
+
+  static const IconData date_range = IconData(0xe1b6, fontFamily: 'MaterialIcons');
+  static const IconData location_on = IconData(0xe3ab, fontFamily: 'MaterialIcons');
+  static const IconData data_saver_off = IconData(0xe1b3, fontFamily: 'MaterialIcons');
+  static const IconData settings = IconData(0xe57f, fontFamily: 'MaterialIcons');
+  static const IconData access_time = IconData(0xe03a, fontFamily: 'MaterialIcons');
 
 }
 

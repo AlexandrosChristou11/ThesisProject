@@ -2,8 +2,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
+
 
 import '../feed.dart';
 
@@ -32,7 +33,7 @@ class  CartEmpty extends StatelessWidget{
           Text('You did not select any seat yet!',
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: themeChange.darkTheme? Theme.of(context).disabledColor: MyAppColor.subTitle,
+                color: themeChange.darkTheme? Theme.of(context).disabledColor : MyAppColor.selected,
                 fontSize: 25, fontWeight: FontWeight.w500),
           ),
 
@@ -50,7 +51,7 @@ class  CartEmpty extends StatelessWidget{
               Text('BOOK NOW',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Theme.of(context).textSelectionColor, fontSize: 25, fontWeight: FontWeight.w500),
+                    color: Colors.white, fontSize: 25, fontWeight: FontWeight.w500),
               )
 
             ),
