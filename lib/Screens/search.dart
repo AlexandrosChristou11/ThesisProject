@@ -58,7 +58,7 @@ class _SearchState extends State<Search> {
                   text: "Search",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: MyAppColor.title,
+                    color: MyAppColor.white,
                     fontSize: 24,
                   ),
                 ),
@@ -89,7 +89,7 @@ class _SearchState extends State<Search> {
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
                     width: 0,
-                    style: BorderStyle.none,
+                    style: BorderStyle.solid,
                   ),
                 ),
                 prefixIcon: Icon(

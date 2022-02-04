@@ -137,46 +137,46 @@ class _HomeState extends State<Home> {
                   /// ***************************************************
                   ///               SPORT TYPE (CATEGORY) SELECTION
                   /// ***************************************************
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Select your sport:",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800, fontSize: 20),
-                        ),
-                        Spacer(),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text("View all ..",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 15,
-                                  color: Colors.red)),
-                        )
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Row(
+                  //     children: [
+                  //       Text(
+                  //         "Select your sport:",
+                  //         style: TextStyle(
+                  //             fontWeight: FontWeight.w800, fontSize: 20),
+                  //       ),
+                  //       Spacer(),
+                  //       TextButton(
+                  //         onPressed: () {},
+                  //         child: Text("View all ..",
+                  //             style: TextStyle(
+                  //                 fontWeight: FontWeight.w800,
+                  //                 fontSize: 15,
+                  //                 color: Colors.red)),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
 
 
-                  Container(
-                      height: 180,
-                     width: MediaQuery.of(context).size.width * 0.95,
-                      child: Swiper(
-                        itemCount: _sportImages.length,
-                        autoplay: true,
-                        onTap: (index) {},
-                        itemBuilder: (BuildContext context, int index) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                                color: Colors.blueGrey,
-                                child: Image.asset(_sportImages[index],
-                                    fit: BoxFit.contain)),
-                          );
-                        },
-                      )),
+                  // Container(
+                  //     height: 180,
+                  //    width: MediaQuery.of(context).size.width * 0.95,
+                  //     child: Swiper(
+                  //       itemCount: _sportImages.length,
+                  //       autoplay: true,
+                  //       onTap: (index) {},
+                  //       itemBuilder: (BuildContext context, int index) {
+                  //         return ClipRRect(
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           child: Container(
+                  //               color: Colors.blueGrey,
+                  //               child: Image.asset(_sportImages[index],
+                  //                   fit: BoxFit.contain)),
+                  //         );
+                  //       },
+                  //     )),
 
                   /// ***************************************************
                   ///                 POPULAR TEAMS
@@ -245,6 +245,7 @@ class _HomeState extends State<Home> {
                   /// ***************************************************
                   ///                POPULAR MATCHES
                   /// ***************************************************
+                  Divider(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(

@@ -15,11 +15,11 @@ import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Provider/Favorite_Provider.dart';
 import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Widgets/show_tickets_feed.dart';
+import 'package:share_plus/share_plus.dart';
 
 class FeedDialog extends StatelessWidget {
   final String matchId;
   const FeedDialog({required this.matchId});
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,16 +60,14 @@ class FeedDialog extends StatelessWidget {
                   children: [
                     /// (1) Wishlist ...
                     Flexible(
-                        child: dialogContent(
-                            context,
-                            0, (){}
-                            ), ),
+                      child: dialogContent(context, 0, () {}),
+                    ),
 
                     /// (2) View Match ..
                     Flexible(child: dialogContent(context, 1, () {})),
 
                     /// (3) Add to Cart ..
-                    //Flexible(child: dialogContent(context, 2, () {})),
+                    Flexible(child: dialogContent(context, 2, () {})),
                   ],
                 ),
               ),
@@ -87,8 +85,9 @@ class FeedDialog extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
                     splashColor: Colors.grey,
-                    onTap: () =>
-                    Navigator.canPop(context) ? Navigator.pop(context) : null,
+                    onTap: () => Navigator.canPop(context)
+                        ? Navigator.pop(context)
+                        : null,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Icon(Icons.close, size: 28, color: Colors.white),
@@ -98,10 +97,8 @@ class FeedDialog extends StatelessWidget {
               ),
             ],
           ),
-
         ));
   }
-
 
   Widget dialogContent(BuildContext context, int index, Function fct) {
     /// ----------------
@@ -113,16 +110,12 @@ class FeedDialog extends StatelessWidget {
     final matchesProvider = Provider.of<Matches>(context, listen: false);
     final matchAtrr = matchesProvider.findByID(matchId);
 
-
-
-
     List<IconData> _dialogIcons = [
       favoritesProvider.getFavoriteItems.containsKey(matchId)
           ? Icons.favorite
           : Icons.favorite_border,
       Feather.eye,
-      //MyAppIcons.cart,
-
+      Icons.share,
     ];
 
     List<String> _texts = [
@@ -130,6 +123,8 @@ class FeedDialog extends StatelessWidget {
           ? 'In wishlist'
           : 'Add to wishlist',
       'View Match',
+      'Share'
+
       //cartProvider.getCartItems.containsKey(matchId) ? 'In Cart ' : 'Add to cart',
     ];
     List<Color> _colors = [
@@ -140,25 +135,36 @@ class FeedDialog extends StatelessWidget {
       Theme.of(context).textSelectionColor,
     ];
 
-    void _Favorites(){
-      favoritesProvider.AddAndRemoveFromFavorite(matchId, /*matchAtrr.price*/ 0, matchAtrr.title, matchAtrr.imageURL);
-      Navigator.canPop(context)? Navigator.pop(context):null;
+    void _Favorites() {
+      favoritesProvider.AddAndRemoveFromFavorite(
+          matchId, /*matchAtrr.price*/ 0, matchAtrr.title, matchAtrr.imageURL);
+      Navigator.canPop(context) ? Navigator.pop(context) : null;
     }
 
-
-
-    void _ViewMatch()  {
+    void _ViewMatch() {
       Navigator.pushNamed(context, MatchDetails.routeName, arguments: matchId)
-            .then((value) => Navigator.canPop(context)? Navigator.pop(context):null);
+          .then((value) =>
+              Navigator.canPop(context) ? Navigator.pop(context) : null);
+    }
 
+    void _Execute(int index) {
+      if (index == 0) {
+        _Favorites();
+      } else if (index == 1) {
+        _ViewMatch();
+      } else {
+        Share.share(
+            'Hey mate! Would you like to join the game ${matchAtrr.title}, with me? Hurry up, few tickets left!'
+            'Follow the link to download the app: https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.example.sep21',
+            subject: 'Tickets for ${matchAtrr.title}');
+      }
     }
 
     return FittedBox(
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: index==0 ?() async => _Favorites():
-          index ==1 ? () async=> _ViewMatch(): ()=>print(index),
+          onTap: () async => _Execute(index),
           splashColor: Colors.grey,
           child: Container(
             width: MediaQuery.of(context).size.width * 0.25,
@@ -213,6 +219,4 @@ class FeedDialog extends StatelessWidget {
       ),
     );
   }
-
-
 }

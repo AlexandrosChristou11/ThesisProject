@@ -73,11 +73,16 @@ class _MatchDetailsState extends State<MatchDetails> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          Container(
-              foregroundDecoration: BoxDecoration(color: Colors.black12),
-              height: MediaQuery.of(context).size.height * 0.45,
-              width: double.infinity,
-              child: Image.network(matchAtrr.imageURL), ),
+          Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+    ),
+            child: Container(
+                foregroundDecoration: BoxDecoration(color: Colors.black12),
+                height: MediaQuery.of(context).size.height * 0.45,
+                width: double.infinity,
+                child: Image.network(matchAtrr.imageURL), ),
+          ),
           SingleChildScrollView(
               padding: const EdgeInsets.only(top: 16.0, bottom: 20.0),
               child: Column(
@@ -95,7 +100,8 @@ class _MatchDetailsState extends State<MatchDetails> {
                                   splashColor: Colors.purple[200],
                                   onTap: () { Share.share(
                                       'Hey mate! Would you like to join the game ${matchAtrr.title}, with me? Hurry up, few tickets left!'
-                                          'Follow the link to download the app: https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.example.sep21', subject: 'Tickets for ${matchAtrr.title}'); },
+                                          'Follow the link to download the app: https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.example.sep21', subject: 'Tickets for ${matchAtrr.title}');
+                                  },
                                   borderRadius: BorderRadius.circular(30),
                                   child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -187,11 +193,10 @@ class _MatchDetailsState extends State<MatchDetails> {
                                 thickness: 1, color: Colors.grey, height: 1),
                             const SizedBox(height: 20.0),
 
-                            /// ***************************************************
-                            ///               Suggested Matches
-                            /// ***************************************************
 
-
+                            /// ---------------------------------------------------
+                            ///               SUGGESTED MATCHES :
+                            /// ---------------------------------------------------
 
                              Padding(
                                padding: const EdgeInsets.only(left:8.0),

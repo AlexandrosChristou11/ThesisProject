@@ -166,6 +166,7 @@ class _FeedProductsState extends State<FeedProducts> {
                                 color: Colors.transparent,
                                 child: InkWell(
                                     onTap: () async {
+
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context)=>FeedDialog(matchId: matchesAttributes.id)
@@ -179,32 +180,7 @@ class _FeedProductsState extends State<FeedProducts> {
 
                       ],
                     ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Text(
-                    //       'Available tickets: ${matchQuantity}',// + matchesAttributes.quantity.toString(),
-                    //       overflow: TextOverflow.ellipsis,
-                    //       style: TextStyle(
-                    //           fontSize: 12,
-                    //           //color: Colors.grey,
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //     Material(
-                    //       color: Colors.transparent,
-                    //       child: InkWell(
-                    //           onTap: () async {
-                    //             showDialog(
-                    //               context: context,
-                    //               builder: (BuildContext context)=>FeedDialog(matchId: matchesAttributes.id)
-                    //             );
-                    //           },
-                    //           borderRadius: BorderRadius.circular(18),
-                    //           child:
-                    //               Icon(Icons.more_horiz, color: Colors.grey)),
-                    //     )
-                    //   ],
-                    // )
+
                   ],
                 ),
               )

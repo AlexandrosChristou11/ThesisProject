@@ -97,7 +97,7 @@ class SearchByHeader extends SliverPersistentHeaderDelegate{
                     style: TextStyle(color: MyAppColor.white),
                   ),
                   child: IconButton(
-                    icon: Icon(Icons.favorite, color: MyAppColor.favColor),
+                    icon: Icon(Icons.favorite, color: MyAppColor.white,),
                     onPressed: ()=> {Navigator.of(context).pushNamed(Wishlist.routeName)},
                   ),
                 )
@@ -115,7 +115,7 @@ class SearchByHeader extends SliverPersistentHeaderDelegate{
                       style: TextStyle(color: MyAppColor.white),
                     ),
                     child: IconButton(
-                      icon: Icon(Icons.shopping_cart, color: MyAppColor.cartColor),
+                      icon: Icon(Icons.shopping_cart, color: MyAppColor.white),
                       onPressed: ()=> {Navigator.of(context).pushNamed(Cart.routeName)},
                     ),
                   )
