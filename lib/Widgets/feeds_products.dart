@@ -41,6 +41,7 @@ class _FeedProductsState extends State<FeedProducts> {
                   matchesAttributes.SectorB_RegularQuantity + matchesAttributes.SectorB_StudentQuantity +
                   matchesAttributes.SectorC_RegularQuantity + matchesAttributes.SectorC_StudentQuantity;
 
+    bool isBefore = DateTime.parse( matchesAttributes.date).isBefore(DateTime.now());
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
@@ -61,10 +62,15 @@ class _FeedProductsState extends State<FeedProducts> {
                     child: Container(
                         width: double.infinity,
                         height:MediaQuery.of(context).size.height * 0.3,
-                        child: Image.network(matchesAttributes.imageURL,
-                            fit: BoxFit.contain)),
+                        child: Card(
+                          color: Colors.black54,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0)),
+                          child: Image.network(matchesAttributes.imageURL,
+                              fit: BoxFit.contain),
+                        )),
                   ),
-                  Badge(
+                  !isBefore ? Badge(
                     toAnimate: true,
                     shape: BadgeShape.square,
                     badgeColor: Colors.red,
@@ -72,7 +78,7 @@ class _FeedProductsState extends State<FeedProducts> {
                         BorderRadius.only(bottomRight: Radius.circular(8)),
                     badgeContent:
                         Text('UPCOMING', style: TextStyle(color: Colors.white)),
-                  ),
+                  ) :Text(''),
                 ],
               ),
               Container(

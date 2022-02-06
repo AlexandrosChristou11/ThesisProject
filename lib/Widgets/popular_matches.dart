@@ -71,8 +71,8 @@ class PopularMatches extends StatelessWidget {
                     children: [
                       Card(
                         color: Colors.black54,
-                  shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0)),
+                        shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
                         child: Container(
                           height: 170,
                             decoration: BoxDecoration(

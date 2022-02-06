@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:backdrop/app_bar.dart';
 import 'package:backdrop/button.dart';
 import 'package:backdrop/scaffold.dart';
@@ -6,12 +8,15 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Inner%20Screens/team_navigation_rail.dart';
+import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Widgets/backlayer.dart';
 import 'package:sep21/Widgets/popular_matches.dart';
 import 'package:sep21/Widgets/sportCategories.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
+
 
 import 'feed.dart';
 
@@ -43,6 +48,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    /// --------------
+    ///   PROVIDERS:
+    /// --------------
+    final darkTheme = Provider.of<DarkThemeProvider>(context);
     final matchesData = Provider.of<Matches>(context);
     matchesData.FetchMatches();
     final popularMatches = matchesData.PopularMatches;
@@ -114,25 +123,44 @@ class _HomeState extends State<Home> {
                   ),
 
                   /// ***************************************************
-                  ///                 CLUB SELECTION
+                  ///                 SPORT SELECTION
                   /// ***************************************************
+                  Divider(),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Select Sport:",
-                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+                    padding: const EdgeInsets.all(10.0),
+                    child: Center(
+
+                      child: Container(
+                        decoration: BoxDecoration(
+
+                            color: Theme.of(context).bottomAppBarColor,
+                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0), bottomRight: Radius.circular(5.0))),
+                        child: Text(
+                          "  SPORTS ",
+                          style: TextStyle(fontWeight: FontWeight.w800, fontSize: 23),
+                        ),
+                      ),
                     ),
                   ),
-                  Container(
-                    width: double.infinity, height: 180,
-                    child: ListView.builder(
-                        itemCount: 4,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext ctx,
-                      int index){
-                          return TeamsWidget(index:index);
-                      }, )
+                  Padding(
+                    padding: const EdgeInsets.only(left:3.0, right: 3.0),
+                    child: Container(
+                        // decoration: BoxDecoration(
+                        //
+                        //     color: Theme.of(context).bottomAppBarColor,
+                        //     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0), bottomRight: Radius.circular(5.0))),
+
+                        width: double.infinity, height: 60,
+                      child: ListView.builder(
+                          itemCount: 4,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext ctx,
+                        int index){
+                            return TeamsWidget(index:index);
+                        }, )
+                    ),
                   ),
+                  SizedBox( height: 30),
 
                   /// ***************************************************
                   ///               SPORT TYPE (CATEGORY) SELECTION
@@ -181,34 +209,41 @@ class _HomeState extends State<Home> {
                   /// ***************************************************
                   ///                 POPULAR TEAMS
                   /// ***************************************************
+                  Divider(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Popular Clubs',
-                          style:
-                          TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
-                        ),
-                        Spacer(),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              TeamsNavigationRailScreen.routeName,
-                              arguments: {
-                                5,
-                              },
-                            );
-                          },
-                          child: Text(
-                            'View all...',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 15,
-                                color: Colors.red),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: darkTheme.darkTheme ? Colors.white24 : Colors.black54),
+                        color: Theme.of(context).bottomAppBarColor,
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0), bottomRight: Radius.circular(5.0))),
+                      child: Row(
+                        children: [
+                          Text(
+                            ' POPULAR CLUBS',
+                            style:
+                            TextStyle(fontWeight: FontWeight.w800, fontSize: 23),
                           ),
-                        )
-                      ],
+                          Spacer(),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                TeamsNavigationRailScreen.routeName,
+                                arguments: {
+                                  5,
+                                },
+                              );
+                            },
+                            child: Text(
+                              'View all...',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                  color: Colors.red),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   Container(
@@ -231,11 +266,13 @@ class _HomeState extends State<Home> {
                         return ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
-                            color: Colors.blueGrey,
-                            child: Image.asset(
-                              _ClubsLogosImages[index],
-                              fit: BoxFit.fill,
-                            ),
+                            color: Theme.of(context).splashColor,
+                              child: Image.asset(
+                                _ClubsLogosImages[index],
+                                fit: BoxFit.scaleDown,
+                              ),
+
+
                           ),
                         );
                       },
@@ -245,28 +282,37 @@ class _HomeState extends State<Home> {
                   /// ***************************************************
                   ///                POPULAR MATCHES
                   /// ***************************************************
+                  SizedBox(height: 10,),
                   Divider(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Popular Matches",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800, fontSize: 20),
-                        ),
-                        Spacer(),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(Feed.routeName, arguments: 'popular');
-                          },
-                          child: Text("View all ..",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 15,
-                                  color: Colors.red)),
-                        )
-                      ],
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: darkTheme.darkTheme ? Colors.white24 : Colors.black54),
+                        color: Theme.of(context).bottomAppBarColor,
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0), bottomRight: Radius.circular(5.0)),
+
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            " POPULAR MATCHES",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w800, fontSize: 23),
+                          ),
+                          Spacer(),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(Feed.routeName, arguments: 'popular');
+                            },
+                            child: Text("View all ..",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 15,
+                                    color: Colors.red)),
+                          )
+                        ],
+                      ),
                     ),
                   ),
 
