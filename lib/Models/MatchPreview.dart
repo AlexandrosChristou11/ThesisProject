@@ -1,13 +1,19 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+
 /// @author: Alexandros Christou
 /// Date: 06Feb21
 /// MatchPreview model
 
 
 class MatchPreview{
+  File? PickedImage;
   String MatchName;
   String HomeTeam ;
   String AwayTeam;
-  String DateAndTime;
+  DateTime Date;
+  TimeOfDay Time;
   String Location ;
   String SportType ;
   String MatchType ;
@@ -25,8 +31,8 @@ class MatchPreview{
   String SectorCRegularQuantity ;
   String SectorCRegularPrice;
 
-  MatchPreview(this.MatchName, this.HomeTeam, this.AwayTeam,
-      this.DateAndTime, this.Location, this.SportType, this.MatchType,
+  MatchPreview(this.PickedImage,this.MatchName, this.HomeTeam, this.AwayTeam,
+      this.Date, this.Time, this.Location, this.SportType, this.MatchType,
       this.SectorAStudentQuantity, this.SectorAStudentPrice,
       this.SectorARegularQuantity, this.SectorARegularPrice,
       this.SectorBStudentQuantity, this.SectorBStudentPrice,

@@ -4,6 +4,7 @@
 /// a new match in the Firebase db.
 
 import 'dart:io';
+import 'package:badges/badges.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Models/MatchPreview.dart';
 import 'package:sep21/Screens/matchPreview.dart';
 import 'package:sep21/Services/Global_methods.dart';
@@ -38,11 +40,11 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
   /// ----------------------
   var _matchName = '';
   var _homeTeam = '';
-  var _awayTeam = '';
+  var _awayTeam = 'Default';
   var _dateAndTime = '';
-  var _location = 'Antonis Papadopoulos';
+  var _location = 'Default';
   var _sportType = 'Default';
-  var _matchType = 'Championship';
+  var _matchType = 'Default';
 
   var _sectorAStudentQuantity = '';
   var _sectorAStudentPrice = '';
@@ -77,13 +79,11 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
   final TextEditingController _matchTypeController = TextEditingController();
   final TextEditingController _awayTeamController = TextEditingController();
 
-
-
   List _listFootballClubs = ['Anorthosis FC', 'Apoel', 'Omonoia', 'Aek'];
   List _listBasketabllClubs = ['Anorthosis FC', 'KERAVNOS', 'Omonoia', 'Aek'];
   List _listHandballClubs = ['Anorthosis FC', 'Apoel', 'ARARAT', 'Aek'];
   List _listVolleyClubs = ['Anorthosis FC', 'SALAMINA', 'Omonoia', 'Aek'];
-  List _defaultFootballClubsList = ['0'];
+  List _defaultFootballClubsList = ['Default'];
 
   List _listFootballStadiums = [
     'Antonis Papadopoulos',
@@ -112,7 +112,6 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   String _userId = "";
 
-
   File? _pickedImage;
   showAlertDialog(BuildContext ctx, String title, String body) {
     showDialog(
@@ -132,21 +131,49 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
         });
   }
 
-  Future<void> _trySubmit() async{
-
+  Future<void> _trySubmit() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
-    if (isValid) {
+    if (isValid && validateMatchDetailsFields()) {
       _formKey.currentState!.save();
 
-      try{
-        if (_pickedImage == null){
+      try {
+        if (_pickedImage == null) {
           gb.authenticationErrorHandler('Please pick an image', context);
-        }else{
+        } else {
           setState(() {
             _isLoading = true;
           });
+
+          /// Parsing the model to the MatchPreviewScreen ..
+          MatchPreview newMatch = new MatchPreview(
+              _pickedImage,
+              _matchName,
+              _homeTeam,
+              _awayTeam,
+              selectedDate,
+              selectedTime,
+              _location,
+              _sportType,
+              _matchType,
+              _sectorAStudentQuantity,
+              _sectorAStudentPrice,
+              _sectorARegularQuantity,
+              _sectorARegularPrice,
+              _sectorBStudentQuantity,
+              _sectorBStudentPrice,
+              _sectorBRegularQuantity,
+              _sectorBRegularPrice,
+              _sectorCStudentQuantity,
+              _sectorCStudentPrice,
+              _sectorCRegularQuantity,
+              _sectorCRegularPrice);
+          print("NEW MATCH HAS DATA location? : ${newMatch.Location}");
+          Navigator.pushNamed(context, MatchPreviewScreen.routeName,
+              arguments: newMatch);
+
+          /*
           final matchId = _uuid.v4(); /// setting a unique id for each match
           final reference = FirebaseStorage.instance.ref('MatchImages').child(matchId + ".jpg");
           await reference.putFile(_pickedImage!);
@@ -155,13 +182,6 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
           final User? user = _auth.currentUser;
           final userId = user!.uid;
 
-          MatchPreview newMatch = new MatchPreview
-            (_matchName, _homeTeam, _awayTeam, _dateAndTime, _location, _sportType, _matchType,
-              _sectorAStudentQuantity, _sectorAStudentPrice, _sectorARegularQuantity, _sectorARegularPrice,
-              _sectorBStudentQuantity, _sectorBStudentPrice, _sectorBRegularQuantity, _sectorBRegularPrice,
-            _sectorCStudentQuantity, _sectorCStudentPrice, _sectorCRegularQuantity, _sectorCRegularPrice);
-          print("NEW MATCH HAS DATA location? : ${newMatch.Location}");
-          //Navigator.pushNamed(context, MatchPreviewScreen.routeName, arguments: newMatch.MatchName);
 
 
           await FirebaseFirestore.instance.collection('Matches').doc(matchId).set({
@@ -194,25 +214,21 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
 
           });
 
-
+        */
           //Navigator.canPop(context) ? Navigator.pop(context) : null;
         }
-
-
-
-      }catch(e){
-
+      } catch (e) {
         gb.authenticationErrorHandler(e.toString(), context);
         print('error occurred : ' + e.toString());
-      }finally{
+      } finally {
         setState(() {
           _isLoading = false;
         });
       }
-
+    }else{
+      gb.authenticationErrorHandler('Please fill missing values', context);
     }
   }
-
 
   Future<void> _pickImageCamera() async {
     final picker = ImagePicker();
@@ -255,7 +271,7 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
       setState(() {
         selectedDate = picked;
         _dateController.text = DateFormat.yMd().format(selectedDate);
-        print (selectedDate.toString());
+        print(selectedDate.toString());
       });
   }
 
@@ -275,10 +291,11 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
             DateTime(2019, 08, 1, selectedTime.hour, selectedTime.minute),
             [hh, ':', nn, " ", am]).toString();
 
-        print (selectedTime.hour.toString() + ":" + selectedTime.minute.toString());
+        print(selectedTime.hour.toString() +
+            ":" +
+            selectedTime.minute.toString());
       });
   }
-
 
   @override
   void initState() {
@@ -302,7 +319,6 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
 
     return Scaffold(
       bottomSheet: Container(
-
         height: kBottomNavigationBarHeight * 0.8,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -322,18 +338,20 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(right: 2),
-                  child: _isLoading ? Center(
-                      child:
-                      Container(
-                          height: 40, width: 40
-                          ,child: CircularProgressIndicator())) : Text(
-                    'Preview new match',
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center,
-                  ),
+                  child: _isLoading
+                      ? Center(
+                          child: Container(
+                              height: 40,
+                              width: 40,
+                              child: CircularProgressIndicator()))
+                      : Text(
+                          'Preview new match',
+                          style: TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
                 ),
                 GradientIcon(
-                  Feather.upload,
+                  MyAppIcons.arrow_forward,
                   20,
                   LinearGradient(
                     colors: <Color>[
@@ -357,66 +375,15 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
           children: [
             Center(
               child: Card(
-                margin: EdgeInsets.all(15),
+                margin: EdgeInsets.all(8),
                 child: Padding(
                   padding: EdgeInsets.all(16),
                   child: Form(
                     key: _formKey,
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                      //mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        // Row(
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     Flexible(
-                        //         flex: 3,
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.only(right: 9),
-                        //           child: TextFormField(
-                        //             key: ValueKey('Title'),
-                        //             validator: (value) {
-                        //               if (!value!.isEmpty) {
-                        //                 return 'Please enter a Title ...';
-                        //               }
-                        //               return null;
-                        //             },
-                        //             keyboardType: TextInputType.emailAddress,
-                        //             decoration: InputDecoration(
-                        //               labelText: 'Match Title',
-                        //             ),
-                        //             onSaved: (value) {
-                        //               _matchName = value!;
-                        //             },
-                        //           ),
-                        //         )),
-                        //     Flexible(
-                        //         flex: 1,
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.only(right: 9),
-                        //           child: TextFormField(
-                        //             key: ValueKey('Price'),
-                        //             validator: (value) {
-                        //               if (!value!.isEmpty) {
-                        //                 return 'Price is missing';
-                        //               }
-                        //               return null;
-                        //             },
-                        //             inputFormatters: <TextInputFormatter>[
-                        //               FilteringTextInputFormatter.allow(
-                        //                   RegExp(r'[0-9]')),
-                        //             ],
-                        //             keyboardType: TextInputType.emailAddress,
-                        //             decoration: InputDecoration(
-                        //               labelText: 'Price',
-                        //             ),
-                        //             onSaved: (value) {
-                        //               _sectorARegularPrice = value!;
-                        //             },
-                        //           ),
-                        //         ))
-                        //   ],
-                        // ),
+
                         SizedBox(
                           height: 10,
                         ),
@@ -437,7 +404,8 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                       decoration: BoxDecoration(
                                         border: Border.all(width: 1),
                                         borderRadius: BorderRadius.circular(4),
-                                        color: Theme.of(context).backgroundColor,
+                                        color:
+                                            Theme.of(context).backgroundColor,
                                       ),
                                     )
                                   : Container(
@@ -476,8 +444,8 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                       'Camera',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        color:
-                                            Theme.of(context).textSelectionColor,
+                                        color: Theme.of(context)
+                                            .textSelectionColor,
                                       ),
                                     ),
                                   ),
@@ -492,8 +460,8 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                       'Gallery',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        color:
-                                            Theme.of(context).textSelectionColor,
+                                        color: Theme.of(context)
+                                            .textSelectionColor,
                                       ),
                                     ),
                                   ),
@@ -534,41 +502,31 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
-                             // crossAxisAlignment: CrossAxisAlignment.end,
-                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                            //     Expanded(
-                            //
-                            //         child: Padding(
-                            // padding: const EdgeInsets.only(right: 9),
-                            //           child: Container(
-                            //       child: TextFormField(
-                            //           controller: _sportTypeController,
-                            //           key: ValueKey('Sport Type'),
-                            //           validator: (value) {
-                            //             if (value!.isEmpty) {
-                            //               return 'Please enter the sport type';
-                            //             }
-                            //             return null;
-                            //           },
-                            //           decoration: InputDecoration(
-                            //             labelText: 'Add a new Sport Type',
-                            //           ),
-                            //           onSaved: (value) {
-                            //             _sportType = value!;
-                            //           },
-                            //       ),
-                            //     ),
-                            //         )),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('Sport:', style: TextStyle(fontSize: 15),),
+                                  padding: const EdgeInsets.only(left:2.0),
+                                  child: Flexible(
+                                    flex: 0,
+                                    child: _sportType == 'Default'
+                                        ? Icon(Feather.x_circle,
+                                            color: Colors.red)
+                                        : Icon(
+                                            MyAppIcons.check_circle,
+                                            color: Colors.green,
+                                          ),
+                                  ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left:58.0),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Sport:',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 58.0),
                                   child: DropdownButton<String>(
-
-                                  items: [
+                                    items: [
                                       DropdownMenuItem<String>(
                                         child: Text('Football'),
                                         value: 'Football',
@@ -585,15 +543,17 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                         child: Text('Volley'),
                                         value: 'Volley',
                                       ),
-                                    _sportType == 'Default' ? DropdownMenuItem<String>(
-                                      enabled: false,
-                                      child: Text('Select Sport ..', style: TextStyle(backgroundColor: Colors.amber),),
-                                      value: 'Default',
-                                    ) :DropdownMenuItem<String>(
-                                      enabled: false,
-                                      child: Text('Select Sport ..'),
-                                      value: '',
-                                    ),
+                                      _sportType == 'Default'
+                                          ? DropdownMenuItem<String>(
+                                              enabled: false,
+                                              child: Text('Select Sport ..'),
+                                              value: 'Default',
+                                            )
+                                          : DropdownMenuItem<String>(
+                                              enabled: false,
+                                              child: Text('Select Sport ..'),
+                                              value: '',
+                                            ),
                                     ],
                                     onChanged: (value) {
                                       setState(() {
@@ -611,6 +571,7 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                     value: _sportType,
                                   ),
                                 ),
+
                               ],
                             ),
                           ),
@@ -630,37 +591,29 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
-                              //crossAxisAlignment: CrossAxisAlignment.end,
-                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // Expanded(
-                                //     child: Padding(
-                                //       padding: const EdgeInsets.only(right: 9),
-                                //       child: Container(
-                                //   child: TextFormField(
-                                //       controller: _matchTypeController,
-                                //       key: ValueKey('Match Type'),
-                                //       validator: (value) {
-                                //         if (value!.isEmpty) {
-                                //           return 'Please enter the match type';
-                                //         }
-                                //         return null;
-                                //       },
-                                //       decoration: InputDecoration(
-                                //         labelText: 'Add a new match Type',
-                                //       ),
-                                //       onSaved: (value) {
-                                //         _matchType = value!;
-                                //       },
-                                //   ),
-                                // ),
-                                //     ))
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('Competition:', style: TextStyle(fontSize: 15),),
+                                  padding: const EdgeInsets.only(left:2.0),
+                                  child: Flexible(
+                                    flex: 0,
+                                    child: _matchType == 'Default'
+                                        ? Icon(Feather.x_circle,
+                                        color: Colors.red)
+                                        : Icon(
+                                      MyAppIcons.check_circle,
+                                      color: Colors.green,
+                                    ),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left:8.0),
+                                  child: Text(
+                                    'Competition:',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
                                   child: DropdownButton<String>(
                                     items: [
                                       DropdownMenuItem<String>(
@@ -679,18 +632,35 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                         child: Text('European'),
                                         value: 'European',
                                       ),
+                                      _matchType == 'Default'
+                                          ? DropdownMenuItem<String>(
+                                              enabled: false,
+                                              child:
+                                                  Text('Select Competition ..'),
+                                              value: 'Default',
+                                            )
+                                          : DropdownMenuItem<String>(
+                                              enabled: false,
+                                              child:
+                                                  Text('Select Competition ..'),
+                                              value: '',
+                                            ),
                                     ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _matchType = value!;
-                                        _matchTypeController.text = value;
-                                        print(_matchType);
-                                      });
-                                    },
-                                     hint: Text('Select match type'),
-
+                                    // onTap: ,
+                                    onChanged: previewsFieldIsNotNull(_sportType)
+                                        ? null
+                                        : (value) {
+                                            setState(() {
+                                              _matchType = value!;
+                                              _matchTypeController.text = value;
+                                              print(_matchType);
+                                            });
+                                          },
+                                    hint: Text('Select match type'),
+                                    value: _matchType,
                                   ),
                                 ),
+
                               ],
                             ),
                           ),
@@ -721,6 +691,15 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                 ),
                               ),
                             ),
+                            Flexible(
+                              flex: 1,
+                              child: _homeTeam == 'Default'
+                                  ? Icon(Feather.x_circle, color: Colors.red)
+                                  : Icon(
+                                      MyAppIcons.check_circle,
+                                      color: Colors.green,
+                                    ),
+                            )
                           ],
                         ),
 
@@ -738,45 +717,65 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
-                              //crossAxisAlignment: CrossAxisAlignment.end,
-                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
 
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left:2.0),
+                                  child: Flexible(
+                                    flex: 0,
+                                    child: _awayTeam == 'Default'
+                                        ? Icon(Feather.x_circle,
+                                        color: Colors.red)
+                                        : Icon(
+                                      MyAppIcons.check_circle,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text('Away Team:', style: TextStyle(fontSize: 15),),
+                                  child: Text(
+                                    'Away Team:',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 15.0),
                                   child: DropdownButton(
                                     items: _defaultFootballClubsList
-                                        .map((e) => DropdownMenuItem<String>(
-                                              value: e.toString(),
-                                              child: Row(
-                                                children: [
-                                                  SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Text(e)
-                                                ],
-                                              ),
-                                            ))
+                                        .map(
+                                          (e) => DropdownMenuItem<String>(
+                                            value: e.toString(),
+                                            child: Row(
+                                              children: [
+                                                SizedBox(
+                                                  height: 8,
+                                                ),
+                                                Text(e)
+                                              ],
+                                            ),
+                                          ),
+                                        )
                                         .toList(),
+
                                     /// Disable button if the Sport & Match type are not selected
                                     onChanged:
-                                    (_sportType == '' || _matchType == '') ? null
-                                     :
-                                        (value) {
-                                      setState(() {
-                                        _awayTeam = value.toString();
-                                        _awayTeamController.text = value.toString();
-                                        print(_matchType);
-                                      });
-                                    },
+                                      previewsFieldIsNotNull(_matchType)
+                                      ? null
+                                        : (value) {
+                                            setState(() {
+                                              _awayTeam = value.toString();
+                                              _awayTeamController.text =
+                                                  value.toString();
+                                              print(_matchType);
+                                            });
+                                          },
                                     hint: Text('Select away team'),
-                                   // value: _GetAwayTeamValue,
+                                    //value: _awayTeam
+                                    // value: _GetAwayTeamValue,
                                   ),
                                 ),
+
                               ],
                             ),
                           ),
@@ -796,16 +795,30 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
-                             // crossAxisAlignment: CrossAxisAlignment.end,
-                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('Stadium:', style: TextStyle(fontSize: 15),),
+                                  padding: const EdgeInsets.only(left:2.0),
+                                  child: Flexible(
+                                    flex: 0,
+                                    child: _location == 'Default'
+                                        ? Icon(Feather.x_circle,
+                                        color: Colors.red)
+                                        : Icon(
+                                      MyAppIcons.check_circle,
+                                      color: Colors.green,
+                                    ),
+                                  ),
                                 ),
-
                                 Padding(
-                                  padding: const EdgeInsets.only(left:6.0),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Stadium:',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 6.0),
                                   child: DropdownButton(
                                     items: _defaultStadiumList
                                         .map((e) => DropdownMenuItem<String>(
@@ -820,10 +833,13 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                               ),
                                             ))
                                         .toList(),
-                                    onChanged: (value) {
+                                    onChanged:
+                                    previewsFieldIsNotNull(_awayTeam) ? null :
+                                        (value) {
                                       setState(() {
                                         _location = value.toString();
-                                        _locationController.text = value.toString();
+                                        _locationController.text =
+                                            value.toString();
                                         print(_location);
                                       });
                                     },
@@ -850,24 +866,40 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
-                              //crossAxisAlignment: CrossAxisAlignment.end,
-                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
 
+                              children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('Date:', style: TextStyle(fontSize: 15),),
+                                  padding: const EdgeInsets.only(left:2.0),
+                                  child: Flexible(
+                                    flex: 0,
+                                    child: selectedDate == DateTime.now()
+                                        ? Icon(Feather.x_circle,
+                                        color: Colors.red)
+                                        : Icon(
+                                      MyAppIcons.check_circle,
+                                      color: Colors.green,
+                                    ),
+                                  ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 15.0, top:5.0, bottom: 5.0),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Date:',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 15.0, top: 5.0, bottom: 5.0),
                                   child: InkWell(
                                     onTap: () {
                                       _selectDate(context);
                                     },
                                     child: Padding(
-                                      padding: const EdgeInsets.only(left: 68.0),
+                                      padding:
+                                          const EdgeInsets.only(left: 68.0),
                                       child: Container(
-                                        width: 110,//_width / 1.7,
+                                        width: 110, //_width / 1.7,
                                         height: 40, //_height / 9,
                                         //margin: EdgeInsets.only(top: 10, bottom: 10),
                                         alignment: Alignment.center,
@@ -877,7 +909,8 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                             width: 0.5,
                                           ),
                                           color: Theme.of(context).accentColor,
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: TextFormField(
                                           style: TextStyle(fontSize: 20),
@@ -885,19 +918,23 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                           enabled: false,
                                           keyboardType: TextInputType.text,
                                           controller: _dateController,
-                                          onSaved: ( val) {
+                                          onSaved: (val) {
                                             _setDate = val!;
                                           },
                                           decoration: InputDecoration(
                                               disabledBorder:
-                                              UnderlineInputBorder(borderSide: BorderSide.none),
+                                                  UnderlineInputBorder(
+                                                      borderSide:
+                                                          BorderSide.none),
                                               // labelText: 'Time',
-                                              contentPadding: EdgeInsets.only(top: 0.0)),
+                                              contentPadding:
+                                                  EdgeInsets.only(top: 0.0)),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
+
                               ],
                             ),
                           ),
@@ -909,23 +946,37 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
-                              //crossAxisAlignment: CrossAxisAlignment.end,
-                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('Time:', style: TextStyle(fontSize: 15),),
+                                  padding: const EdgeInsets.only(left:2.0),
+                                  child: Flexible(
+                                    flex: 0,
+                                    child: selectedTime == TimeOfDay(hour: 00, minute: 00)
+                                        ? Icon(Feather.x_circle,
+                                        color: Colors.red)
+                                        : Icon(
+                                      MyAppIcons.check_circle,
+                                      color: Colors.green,
+                                    ),
+                                  ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 80.0, top:5.0, bottom: 5.0),
-                                  child:  InkWell(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Time:',
+                                    style: TextStyle(fontSize: 15),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 80.0, top: 5.0, bottom: 5.0),
+                                  child: InkWell(
                                     onTap: () {
                                       _selectTime(context);
                                     },
                                     child: Container(
                                       //margin: EdgeInsets.only(top: 10),
-                                      width: 110,//_width / 1.7,
+                                      width: 110, //_width / 1.7,
                                       height: 40,
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
@@ -947,7 +998,9 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                         controller: _timeController,
                                         decoration: InputDecoration(
                                             disabledBorder:
-                                            UnderlineInputBorder(borderSide: BorderSide.none),
+                                                UnderlineInputBorder(
+                                                    borderSide:
+                                                        BorderSide.none),
                                             // labelText: 'Time',
                                             contentPadding: EdgeInsets.all(5)),
                                       ),
@@ -959,10 +1012,6 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                           ),
                         ),
 
-
-
-
-
                         SizedBox(
                           height: 10,
                         ),
@@ -973,13 +1022,11 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                         ),
                         SizedBox(
                           height: 50,
-                          child:  Divider(
+                          child: Divider(
                             color: Theme.of(context).disabledColor,
                             thickness: 10.0,
                           ),
                         ),
-
-
 
                         /// ------------------------------------------------------
                         ///                   SECTOR A TICKETS - SOUTH
@@ -988,159 +1035,164 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                         Container(
                           decoration: BoxDecoration(
                             color: Theme.of(context).dividerColor,
-                              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0),
-                                  bottomRight: Radius.circular(5.0)),
-
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(5.0),
+                                bottomRight: Radius.circular(5.0)),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-
-
-                                children:[
+                            child: Column(children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 3.0),
+                                child: userTitle('SECTOR: SOUTH'),
+                              ),
+                              Row(
+                                //crossAxisAlignment: CrossAxisAlignment.end,
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 3.0),
-                                    child: userTitle('SECTOR: SOUTH'),
-                                  ),
-                                  Row(
-                                  //crossAxisAlignment: CrossAxisAlignment.end,
-                                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text('REGULAR', style: TextStyle(fontSize: 15),),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'REGULAR',
+                                      style: TextStyle(fontSize: 15),
                                     ),
-                                    Flexible(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(right: 9),
-                                          child: TextFormField(
-                                            key: ValueKey('Price'),
-                                            validator: (value) {
-                                              if (value!.isEmpty) {
-                                                return 'Price is missing';
-                                              }
-                                              return null;
-                                            },
-                                            inputFormatters: <TextInputFormatter>[
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'[0-9]')),
-                                            ],
-                                            keyboardType: TextInputType.emailAddress,
-                                            decoration: InputDecoration(
-                                              labelText: 'Price €',
-                                            ),
-                                            onSaved: (value) {
-                                              _sectorARegularPrice = value!;
-                                            },
-                                          ),
-                                        )),
-                                    Flexible(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(right: 9),
-                                          child: TextFormField(
-                                            key: ValueKey('Quantity'),
-                                            validator: (value) {
-                                              if (value!.isEmpty) {
-                                                return 'Quantity is missing';
-                                              }
-                                              return null;
-                                            },
-                                            inputFormatters: <TextInputFormatter>[
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'[0-9]')),
-                                            ],
-                                            keyboardType: TextInputType.emailAddress,
-                                            decoration: InputDecoration(
-                                              labelText: 'Quantity',
-                                            ),
-                                            onSaved: (value) {
-                                              _sectorARegularQuantity = value!;
-                                            },
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                                /// ---------- STUDENT --------------
-                                  Row(
-                                    //crossAxisAlignment: CrossAxisAlignment.end,
-                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('STUDENT', style: TextStyle(fontSize: 15),),
-                                      ),
-                                      Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Price'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Price is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Price €',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorAStudentPrice = value!;
-                                              },
-                                            ),
-                                          ))
-                                      ,Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Quantity'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Quantity is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Quantity',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorAStudentQuantity = value!;
-                                              },
-                                            ),
-                                          ))
-                                    ],
                                   ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Price'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Price is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Price €',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorARegularPrice = value!;
+                                          },
+                                        ),
+                                      )),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Quantity'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Quantity is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Quantity',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorARegularQuantity = value!;
+                                          },
+                                        ),
+                                      ))
+                                ],
+                              ),
 
-                                ]
-                            ),
+                              /// ---------- STUDENT --------------
+                              Row(
+                                //crossAxisAlignment: CrossAxisAlignment.end,
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'STUDENT',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                  ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Price'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Price is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Price €',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorAStudentPrice = value!;
+                                          },
+                                        ),
+                                      )),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Quantity'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Quantity is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Quantity',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorAStudentQuantity = value!;
+                                          },
+                                        ),
+                                      ))
+                                ],
+                              ),
+                            ]),
                           ),
                         ),
 
-
-
                         SizedBox(
                           height: 50,
-                          child:  Divider(
+                          child: Divider(
                             color: Colors.black54,
                             thickness: 2.0,
                           ),
                         ),
-
 
                         /// ------------------------------------------------------
                         ///                   SECTOR B -EAST TICKETS
@@ -1149,160 +1201,164 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                         Container(
                           decoration: BoxDecoration(
                             color: Theme.of(context).dividerColor,
-                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0),
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(5.0),
                                 bottomRight: Radius.circular(5.0)),
-
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-
-
-                                children:[
+                            child: Column(children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 3.0),
+                                child: userTitle('SECTOR: EAST'),
+                              ),
+                              Row(
+                                //crossAxisAlignment: CrossAxisAlignment.end,
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 3.0),
-                                    child: userTitle('SECTOR: EAST'),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'REGULAR',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
                                   ),
-                                  Row(
-                                    //crossAxisAlignment: CrossAxisAlignment.end,
-                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Price'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Price is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Price €',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorBRegularPrice = value!;
+                                          },
+                                        ),
+                                      )),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Quantity'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Quantity is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Quantity',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorBRegularQuantity = value!;
+                                          },
+                                        ),
+                                      ))
+                                ],
+                              ),
 
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('REGULAR', style: TextStyle(fontSize: 15),),
-                                      ),
-                                      Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Price'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Price is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Price €',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorBRegularPrice = value!;
-                                              },
-                                            ),
-                                          )),
-                                      Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Quantity'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Quantity is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Quantity',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorBRegularQuantity = value!;
-                                              },
-                                            ),
-                                          ))
-                                    ],
+                              /// ---------- STUDENT --------------
+                              Row(
+                                //crossAxisAlignment: CrossAxisAlignment.end,
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'STUDENT',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
                                   ),
-                                  /// ---------- STUDENT --------------
-                                  Row(
-                                    //crossAxisAlignment: CrossAxisAlignment.end,
-                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('STUDENT', style: TextStyle(fontSize: 15),),
-                                      ),
-                                      Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Price'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Price is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Price €',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorBStudentPrice = value!;
-                                              },
-                                            ),
-                                          ))
-                                      ,Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Quantity'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Quantity is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Quantity',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorBStudentQuantity = value!;
-                                              },
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-
-                                ]
-                            ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Price'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Price is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Price €',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorBStudentPrice = value!;
+                                          },
+                                        ),
+                                      )),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Quantity'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Quantity is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Quantity',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorBStudentQuantity = value!;
+                                          },
+                                        ),
+                                      ))
+                                ],
+                              ),
+                            ]),
                           ),
                         ),
 
-
-
                         SizedBox(
                           height: 50,
-                          child:  Divider(
+                          child: Divider(
                             color: Colors.black54,
                             thickness: 2.0,
                           ),
                         ),
-
-
 
                         /// ------------------------------------------------------
                         ///                   SECTOR C - WEST TICKETS
@@ -1311,154 +1367,163 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                         Container(
                           decoration: BoxDecoration(
                             color: Theme.of(context).dividerColor,
-                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0),
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(5.0),
                                 bottomRight: Radius.circular(5.0)),
-
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-
-
-                                children:[
+                            child: Column(children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 3.0),
+                                child: userTitle('SECTOR: WEST'),
+                              ),
+                              Row(
+                                //crossAxisAlignment: CrossAxisAlignment.end,
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 3.0),
-                                    child: userTitle('SECTOR: WEST'),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'REGULAR',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
                                   ),
-                                  Row(
-                                    //crossAxisAlignment: CrossAxisAlignment.end,
-                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Price'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Price is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Price €',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorCRegularPrice = value!;
+                                          },
+                                        ),
+                                      )),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Quantity'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Quantity is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Quantity',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorCRegularQuantity = value!;
+                                          },
+                                        ),
+                                      ))
+                                ],
+                              ),
 
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('REGULAR', style: TextStyle(fontSize: 15),),
-                                      ),
-                                      Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Price'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Price is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Price €',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorCRegularPrice = value!;
-                                              },
-                                            ),
-                                          )),
-                                      Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Quantity'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Quantity is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Quantity',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorCRegularQuantity = value!;
-                                              },
-                                            ),
-                                          ))
-                                    ],
+                              /// ---------- STUDENT --------------
+                              Row(
+                                //crossAxisAlignment: CrossAxisAlignment.end,
+                                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'STUDENT',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
                                   ),
-                                  /// ---------- STUDENT --------------
-                                  Row(
-                                    //crossAxisAlignment: CrossAxisAlignment.end,
-                                    //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text('STUDENT', style: TextStyle(fontSize: 15),),
-                                      ),
-                                      Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Price'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Price is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Price €',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorCStudentPrice = value!;
-                                              },
-                                            ),
-                                          ))
-                                      ,Flexible(
-                                          flex: 1,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(right: 9),
-                                            child: TextFormField(
-                                              key: ValueKey('Quantity'),
-                                              validator: (value) {
-                                                if (value!.isEmpty) {
-                                                  return 'Quantity is missing';
-                                                }
-                                                return null;
-                                              },
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(
-                                                    RegExp(r'[0-9]')),
-                                              ],
-                                              keyboardType: TextInputType.emailAddress,
-                                              decoration: InputDecoration(
-                                                labelText: 'Quantity',
-                                              ),
-                                              onSaved: (value) {
-                                                _sectorCStudentQuantity = value!;
-                                              },
-                                            ),
-                                          ))
-                                    ],
-                                  ),
-
-                                ]
-                            ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Price'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Price is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Price €',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorCStudentPrice = value!;
+                                          },
+                                        ),
+                                      )),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 9),
+                                        child: TextFormField(
+                                          key: ValueKey('Quantity'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Quantity is missing';
+                                            }
+                                            return null;
+                                          },
+                                          inputFormatters: <TextInputFormatter>[
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]')),
+                                          ],
+                                          keyboardType:
+                                              TextInputType.emailAddress,
+                                          decoration: InputDecoration(
+                                            labelText: 'Quantity',
+                                          ),
+                                          onSaved: (value) {
+                                            _sectorCStudentQuantity = value!;
+                                          },
+                                        ),
+                                      ))
+                                ],
+                              ),
+                            ]),
                           ),
                         ),
-                        SizedBox(height: 50,)
+                        SizedBox(
+                          height: 50,
+                        )
                       ],
                     ),
                   ),
                 ),
-
               ),
             )
           ],
@@ -1505,16 +1570,25 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
     return n;
   }
 
+  bool validateMatchDetailsFields() {
+    String defaultValue = "Default";
+    return ( _sportType != defaultValue && _matchType != defaultValue && _awayTeam != defaultValue
+            && _location != defaultValue && selectedDate != DateTime.now() && selectedTime != TimeOfDay(hour: 00, minute: 00) );
 
+  }
 
+  previewsFieldIsNotNull(String previousField) {
+    return (previousField == 'Default');
+  }
 }
 
-Widget userTitle (String title){
+Widget userTitle(String title) {
   return Padding(
     //padding: const EdgeInsets.all(5.0),
     padding: const EdgeInsets.only(right: 30.0, bottom: 10.0),
-    child: Text(title,
-      style: TextStyle (fontWeight: FontWeight.bold,fontSize: 22),
+    child: Text(
+      title,
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
     ),
   );
 }
@@ -1549,4 +1623,3 @@ class GradientIcon extends StatelessWidget {
     );
   }
 }
-

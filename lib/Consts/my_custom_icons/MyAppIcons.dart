@@ -48,12 +48,16 @@ class MyAppIcons {
   static const IconData sports_basketball_rounded = IconData(0xf01ba, fontFamily: 'MaterialIcons');
   static const IconData sports_volleyball_rounded = IconData(0xf01c9, fontFamily: 'MaterialIcons');
   static const IconData sports_handball_rounded = IconData(0xf01bf, fontFamily: 'MaterialIcons');
+  static const IconData ballot = IconData(0xe0cb, fontFamily: 'MaterialIcons');
+  static const IconData stadium_outlined = IconData(0xf0668, fontFamily: 'MaterialIcons');
 
   static const IconData date_range = IconData(0xe1b6, fontFamily: 'MaterialIcons');
   static const IconData location_on = IconData(0xe3ab, fontFamily: 'MaterialIcons');
   static const IconData data_saver_off = IconData(0xe1b3, fontFamily: 'MaterialIcons');
   static const IconData settings = IconData(0xe57f, fontFamily: 'MaterialIcons');
   static const IconData access_time = IconData(0xe03a, fontFamily: 'MaterialIcons');
+  static const IconData arrow_forward = IconData(0xe09b, fontFamily: 'MaterialIcons', matchTextDirection: true);
+  static const IconData check_circle = IconData(0xe159, fontFamily: 'MaterialIcons');
 
 }
 

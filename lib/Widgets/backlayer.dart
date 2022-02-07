@@ -115,7 +115,7 @@ class BackLayerMenu extends StatelessWidget {
                 /// upload new matches
                 if (user.displayName == "admin") content(context, () {
                   navigateTo(context, UploadMatchForm.routeName);
-                }, 'Upload a new product', 3) else const SizedBox(height: 10.0),
+                }, 'Upload a new match', 3) else const SizedBox(height: 10.0),
 
 
               ],
