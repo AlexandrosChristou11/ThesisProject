@@ -94,6 +94,9 @@ flutter:
     - assets/images/Teams/pafos.png
     - # (4) Wishlist
     - assets/images/Wishlist/empty-wishlist.png
+    - # (5) Policy
+    - assets/Policy/policy.txt
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

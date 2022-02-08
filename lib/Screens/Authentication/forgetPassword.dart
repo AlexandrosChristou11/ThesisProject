@@ -8,7 +8,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
+import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Services/Global_methods.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -63,6 +65,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final themeChange = Provider.of<DarkThemeProvider>(context);
     return Scaffold(
 
       body: Column(
@@ -70,7 +73,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 20,),
+          SizedBox(height: 40,),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text('Forget Password',
@@ -93,10 +96,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-                border: const UnderlineInputBorder(), filled: true,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                filled: true,
                 prefixIcon: Icon(Icons.email),
                 labelText: 'Email Address',
-                fillColor: Theme.of(context).backgroundColor ),
+                fillColor: themeChange.darkTheme ? Theme.of(context).splashColor : Colors.white ),
             onSaved: (value){
               _emailAddress = value!;
             } ,

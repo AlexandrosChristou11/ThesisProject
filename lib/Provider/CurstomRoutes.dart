@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Inner%20Screens/team_navigation_rail.dart';
 import 'package:sep21/Models/MatchPreview.dart';
+import 'package:sep21/Screens/Authentication/Policy.dart';
 import 'package:sep21/Screens/Authentication/forgetPassword.dart';
 import 'package:sep21/Screens/Authentication/signUp.dart';
 import 'package:sep21/Screens/CustomCardPaymentScreen.dart';
@@ -18,6 +19,7 @@ import 'package:sep21/Screens/userInfo.dart';
 import 'package:sep21/Screens/Wishlist/wishlist.dart';
 import 'package:sep21/Inner Screens/categories_feeds.dart';
 import 'package:sep21/Screens/Authentication/login.dart';
+import 'package:sep21/Screens/Authentication/Policy.dart';
 
 
 var customRoutes = <String, WidgetBuilder>{
@@ -39,6 +41,7 @@ var customRoutes = <String, WidgetBuilder>{
   NoWebhookPaymentCardFormScreen.routName: (ctx) => NoWebhookPaymentCardFormScreen(),
   Order.routeName: (ctx) => Order(),
   MatchPreviewScreen.routeName: (ctx) => MatchPreviewScreen(),
+  PolicyScreen.routeName: (ctx) => PolicyScreen(),
 
    // CategoriesFeedsScreen.routeName: (ctx) => CategoriesFeedsScreen(),
 };

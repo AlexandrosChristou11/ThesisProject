@@ -113,29 +113,29 @@ class _LandingPageState extends State<LandingPage>
     return Scaffold(
         body: Stack(
       children: [
-        CachedNetworkImage(
-          imageUrl:
-              sports[1],
-          // placeholder: (context, url) => Image.network(
-          //   "https://uploads.sitepoint.com/wp-content/uploads/2015/12/1450973046wordpress-errors.png",
-          //   fit: BoxFit.contain,
-          // ),
-          fit: BoxFit.cover,
-          errorWidget: (context, url, error) => Icon(Icons.error),
-          height: double.infinity,
-          width: double.infinity,
-          alignment: FractionalOffset(_animationController.value, 0),
-        ),
+        // CachedNetworkImage(
+        //   imageUrl:
+        //       sports[1],
+        //   // placeholder: (context, url) => Image.network(
+        //   //   "https://uploads.sitepoint.com/wp-content/uploads/2015/12/1450973046wordpress-errors.png",
+        //   //   fit: BoxFit.contain,
+        //   // ),
+        //   fit: BoxFit.cover,
+        //   errorWidget: (context, url, error) => Icon(Icons.error),
+        //   height: double.infinity,
+        //   width: double.infinity,
+        //   alignment: FractionalOffset(_animationController.value, 0),
+        // ),
         Container(
           margin: EdgeInsets.only(top: 30),
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                "Welcome",
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
-              ),
+              // Text(
+              //   "Welcome",
+              //   style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
+              // ),
               SizedBox(
                 height: 20,
               ),
@@ -144,7 +144,7 @@ class _LandingPageState extends State<LandingPage>
                   child: Text(
                     "Welcome to the CY-Seating",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
                   )),
             ],
           ),
@@ -241,7 +241,7 @@ class _LandingPageState extends State<LandingPage>
                 ),
                 Text(
                   "Or continue with",
-                  style: TextStyle(color: Colors.black54),
+                 // style: TextStyle(color: Colors.black54),
                 ),
                 Expanded(
                   child: Padding(
@@ -272,18 +272,18 @@ class _LandingPageState extends State<LandingPage>
                 ),
 
                 /// (4) Continue as guest ...
-                OutlineButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, BottomBarScreen.routeName);
-                  },
-                  shape: StadiumBorder(),
-                  highlightedBorderColor: Colors.deepPurpleAccent.shade200,
-
-                  /// Border color wiil change once its clicked. .
-                  borderSide:
-                      BorderSide(width: 2, color: Colors.deepPurpleAccent),
-                  child: Text("Signing as a guest"),
-                ),
+                // OutlineButton(
+                //   onPressed: () {
+                //     Navigator.pushNamed(context, BottomBarScreen.routeName);
+                //   },
+                //   shape: StadiumBorder(),
+                //   highlightedBorderColor: Colors.deepPurpleAccent.shade200,
+                //
+                //   /// Border color wiil change once its clicked. .
+                //   borderSide:
+                //       BorderSide(width: 2, color: Colors.deepPurpleAccent),
+                //   child: Text("Signing as a guest"),
+                // ),
               ],
             ),
 
