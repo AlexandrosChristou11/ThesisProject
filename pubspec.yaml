@@ -56,6 +56,10 @@ dependencies:
   share_plus: ^3.0.4
   jiffy: ^5.0.0
   flat_icons_flutter: ^1.0.2
+  connectivity_plus: ^2.2.0
+  data_connection_checker: ^0.3.4
+  another_flushbar: ^1.10.28
+  firebase_messaging: ^11.2.6
 
 dev_dependencies:
   flutter_test:

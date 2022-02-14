@@ -191,7 +191,7 @@ class PopularMatches extends StatelessWidget {
 
                                // Spacer(),
                                 Expanded(
-                                  flex: 1,
+                                //  flex: 1,
 
                                   child: Material ( color: Colors.transparent ,
                                       child: InkWell(

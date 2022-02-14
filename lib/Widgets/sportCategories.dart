@@ -48,6 +48,8 @@ class _TeamsWidgetState extends State<TeamsWidget> {
 
   ];
 
+
+
   @override
   Widget build(BuildContext context) {
     /// --------------
@@ -62,7 +64,6 @@ class _TeamsWidgetState extends State<TeamsWidget> {
             Navigator.of(context).pushNamed(CategoriesFeedsScreen.routeName, arguments: '${teams[widget.index]['sportName']}');
 
           },
-          child: Flexible(
 
               child: Container(
                 decoration: BoxDecoration(
@@ -85,7 +86,7 @@ class _TeamsWidgetState extends State<TeamsWidget> {
               ),
 
           ),
-        ),
+
         // Positioned(
         //   bottom: 0,
         //   left: 10,

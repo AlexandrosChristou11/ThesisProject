@@ -58,6 +58,7 @@ class MyAppIcons {
   static const IconData access_time = IconData(0xe03a, fontFamily: 'MaterialIcons');
   static const IconData arrow_forward = IconData(0xe09b, fontFamily: 'MaterialIcons', matchTextDirection: true);
   static const IconData check_circle = IconData(0xe159, fontFamily: 'MaterialIcons');
+  static const IconData policy_rounded = IconData(0xf00ae, fontFamily: 'MaterialIcons');
 
 }
 

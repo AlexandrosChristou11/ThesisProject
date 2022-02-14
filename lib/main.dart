@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
+import 'package:sep21/Provider/InternetConnection.dart';
 import 'package:sep21/Provider/OrdersProvider.dart';
 import 'package:sep21/Screens/Authentication/userState.dart';
 import 'package:sep21/Screens/bottom_bar.dart';
@@ -39,9 +40,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+
     getCurrentAppTheme();
     super.initState();
   }
+
 
   /// Firebase depends on firebase_core so we need to include the
   /// appropriate dependency in the pubspec.yaml file and

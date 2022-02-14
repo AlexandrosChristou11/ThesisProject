@@ -145,7 +145,14 @@ class _SingUpScreenState extends State<SingUpScreen> {
 
     Navigator.pop(context);
   }
-
+  String dataFromFile = "";
+  Future<void> readText() async {
+    final String response;
+    response = await rootBundle.loadString('assets/Policy/policy.txt');
+    setState(() {
+      dataFromFile = response;
+    });
+  }
   Future<void> _GoogleSignIn() async {
     final gooleSignIn = GoogleSignIn();
     final goolgeAccount = await gooleSignIn.signIn();
@@ -185,6 +192,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
     }
   }
 
+
   @override
   void dispose() {
     _passwordFocusNode.dispose();
@@ -193,10 +201,12 @@ class _SingUpScreenState extends State<SingUpScreen> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     final themeChange = Provider.of<DarkThemeProvider>(context);
     GlobalMethods globalMethods = GlobalMethods();
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -557,20 +567,28 @@ class _SingUpScreenState extends State<SingUpScreen> {
                             children: [
                               Align(
                                 alignment: Alignment.topLeft,
-                                child: Checkbox(
-                                  checkColor: Colors.white,
-                                  activeColor: Colors.blue,
-                                  value: _agree,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _agree = value ?? false;
-                                    });
-                                  },
+                                child: Theme(
+                                  data: ThemeData(
+                                    primarySwatch: Colors.blue,
+                                    unselectedWidgetColor: Colors.white, // Your color
+                                  ),
+                                  child: Checkbox(
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.blue,
+                                    value: _agree,
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _agree = value ?? false;
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 child: TextButton(
-                                  onPressed: ()=> Navigator.pushNamed(context, PolicyScreen.routeName),
+                                  onPressed: (){
+                                    globalMethods.getApplicationTermsAndPolicy(context);},
                                   child: Text(
                                     'I Agree to the Terms of Service and Privacy Policy of CY-Seating',
                                     maxLines: 2,
@@ -688,4 +706,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
       ),
     );
   }
+
+
 }

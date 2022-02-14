@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -32,14 +35,58 @@ class Order extends StatefulWidget {
 
 class _OrderState extends State<Order> {
 
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription< ConnectivityResult > _connectivitySubscription;
+  static bool isConnected = false;
+
   // @override
   void initState() {
 
     StripeService.init();
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_UpdateConnectionState);
     // Stripe.publishableKey =
     // "pk_test_51KICB0LhcxMZGOuNPKCRVuWpa2m3FKH9i1VwdB20AJyXqLXFUHm7waL3hr2Nv4o5WYB2LXvtIpWJ97oQKvBnvkuv00MLU3pHIw";
     // Stripe.merchantIdentifier = 'test';
     // Stripe.instance.applySettings();
+  }
+
+
+
+  Future< void > initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print("Error Occurred: ${e.toString()} ");
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+    return _UpdateConnectionState(result);
+  }
+
+  Future<void> _UpdateConnectionState(ConnectivityResult result) async {
+    if ((result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi ) ) {
+      if (!GlobalMethods.isConnected){
+        GlobalMethods.isConnected = true;
+      }
+
+    } else if (result == ConnectivityResult.none && GlobalMethods.isConnected) {
+      GlobalMethods.isConnected = false;
+      GlobalMethods.showStatus(result, false, context);
+    }
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+
+    super.dispose();
   }
 
   @override

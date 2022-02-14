@@ -5,9 +5,13 @@
 
 // COMMITS TEST !!
 
+import 'dart:async';
+
 import 'package:badges/badges.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
@@ -17,6 +21,7 @@ import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Screens/Card/cart.dart';
 import 'package:sep21/Screens/feed.dart';
 import 'package:sep21/Screens/Wishlist/wishlist.dart';
+import 'package:sep21/Services/Global_methods.dart';
 import 'package:sep21/Widgets/feeds_products.dart';
 import 'package:sep21/Widgets/show_tickets_feed.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +54,54 @@ class _MatchDetailsState extends State<MatchDetails> {
     }
 
     return MyAppIcons.sports_soccer;
+  }
+
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription< ConnectivityResult > _connectivitySubscription;
+  static bool isConnected = false;
+
+  @override
+  void initState() {
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_UpdateConnectionState);
+
+    super.initState();
+  }
+
+  Future< void > initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print("Error Occurred: ${e.toString()} ");
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+    return _UpdateConnectionState(result);
+  }
+
+  Future<void> _UpdateConnectionState(ConnectivityResult result) async {
+    if ((result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi ) ) {
+      if (!GlobalMethods.isConnected){
+        GlobalMethods.isConnected = true;
+      }
+
+    } else if (result == ConnectivityResult.none && GlobalMethods.isConnected) {
+      GlobalMethods.isConnected = false;
+      GlobalMethods.showStatus(result, false, context);
+    }
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+
+    super.dispose();
   }
 
   @override

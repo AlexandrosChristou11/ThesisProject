@@ -1,10 +1,13 @@
 
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
@@ -14,6 +17,7 @@ import 'package:list_tile_switch/list_tile_switch.dart';
 import 'package:sep21/Screens/Wishlist/wishlist.dart';
 import 'package:sep21/Screens/Card/cart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:sep21/Services/Global_methods.dart';
 
 import 'Orders/order.dart';
 
@@ -27,12 +31,56 @@ class _UserInfoState extends State<UserInfo> {
   @override
   void initState() {
     super.initState();
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_UpdateConnectionState);
+
     _scrollController =ScrollController();
     _scrollController.addListener(() {setState(() {
 
     });});
     GetData();
   }
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription< ConnectivityResult > _connectivitySubscription;
+  static bool isConnected = false;
+
+
+  Future< void > initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print("Error Occurred: ${e.toString()} ");
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+    return _UpdateConnectionState(result);
+  }
+
+  Future<void> _UpdateConnectionState(ConnectivityResult result) async {
+    if ((result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi ) ) {
+      if (!GlobalMethods.isConnected){
+        GlobalMethods.isConnected = true;
+      }
+
+    } else if (result == ConnectivityResult.none && GlobalMethods.isConnected) {
+      GlobalMethods.isConnected = false;
+      GlobalMethods.showStatus(result, false, context);
+    }
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+
+    super.dispose();
+  }
+
   FirebaseAuth _auth = FirebaseAuth.instance;
   String _userId = "";
   String _name = "";

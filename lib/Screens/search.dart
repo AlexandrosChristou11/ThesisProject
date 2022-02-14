@@ -1,10 +1,15 @@
 
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Models/Match.dart';
 import 'package:sep21/Provider/Matches.dart';
+import 'package:sep21/Services/Global_methods.dart';
 import 'package:sep21/Widgets/feeds_products.dart';
 import 'package:sep21/Widgets/searchByHeader.dart';
 
@@ -20,16 +25,53 @@ class _SearchState extends State<Search> {
   final FocusNode _node = FocusNode();
   void initState(){
     super.initState();
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_UpdateConnectionState);
+
     _searchTextController = TextEditingController();
     _searchTextController.addListener(() { setState(() {
 
     });});
   }
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription< ConnectivityResult > _connectivitySubscription;
+  static bool isConnected = false;
 
+
+
+  Future< void > initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print("Error Occurred: ${e.toString()} ");
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+    return _UpdateConnectionState(result);
+  }
+
+  Future<void> _UpdateConnectionState(ConnectivityResult result) async {
+    if ((result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi ) ) {
+      if (!GlobalMethods.isConnected){
+        GlobalMethods.isConnected = true;
+      }
+
+    } else if (result == ConnectivityResult.none && GlobalMethods.isConnected) {
+      GlobalMethods.isConnected = false;
+      GlobalMethods.showStatus(result, false, context);
+    }
+  }
 
   @override
   void dispose() {
     super.dispose();
+    _connectivitySubscription.cancel();
     _node.dispose();
     _searchTextController.dispose();
   }
