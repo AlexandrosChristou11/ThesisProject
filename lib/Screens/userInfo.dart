@@ -18,6 +18,7 @@ import 'package:sep21/Screens/Wishlist/wishlist.dart';
 import 'package:sep21/Screens/Card/cart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sep21/Services/Global_methods.dart';
+import 'package:sep21/Services/push_notification.dart';
 
 import 'Orders/order.dart';
 
@@ -372,6 +373,35 @@ class _UserInfoState extends State<UserInfo> {
 
               ),
             ),
+
+
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: ListTileSwitch(
+                  value: PushNotification.recieveNotifications,
+                  leading: Icon(MyAppIcons.notifications, color: Colors.green.shade100,) ,
+                  onChanged: (value) {
+                    setState(() {
+                      print('NEW VALUE FOR NOTITIFICATIONS: ${value}');
+                      PushNotification.recieveNotifications = value;
+                      if (!value) {
+                        PushNotification.unsubscrbeFromTopic();
+                      }else{
+                        PushNotification.subscrbeToTopic();
+                      }
+                    });
+                  },
+                  visualDensity: VisualDensity.comfortable,
+                  switchType: SwitchType.cupertino,
+                  switchActiveColor: Colors.indigo,
+                  title: Text('Notifications'),
+
+                ),
+              ),
+
+
               Material(
                 color: Colors.transparent,
                 child: InkWell(

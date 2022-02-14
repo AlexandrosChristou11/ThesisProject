@@ -117,6 +117,7 @@ class GlobalMethods{
                         softWrap: false,
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                            color: Colors.black45,
                             fontSize: 19,
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.w900)),
@@ -134,7 +135,7 @@ class GlobalMethods{
               ),
               child: SingleChildScrollView(child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(_getPolicy(), textAlign: TextAlign.left,),
+                child: Text(_getPolicy(), textAlign: TextAlign.left, style: TextStyle(color: Colors.black45),),
               ),)),
 
         actions: [

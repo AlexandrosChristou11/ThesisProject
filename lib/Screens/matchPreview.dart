@@ -27,6 +27,7 @@ import 'package:sep21/Services/Global_methods.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:icon_picker/icon_picker.dart';
 import 'package:date_format/date_format.dart';
+import 'package:sep21/Services/push_notification.dart';
 import 'package:uuid/uuid.dart';
 
 import 'feed.dart';
@@ -82,7 +83,7 @@ class _MatchPreviewScreenState extends State<MatchPreviewScreen> {
 
 
 
-          await FirebaseFirestore.instance.collection('Matches').doc(matchId).set({
+        var result =  await FirebaseFirestore.instance.collection('Matches').doc(matchId).set({
             'MatchId' : matchId,
             'MatchTitle': newMatch.HomeTeam + " vs " + newMatch.AwayTeam,
             'UserId': userId,
@@ -111,6 +112,7 @@ class _MatchPreviewScreenState extends State<MatchPreviewScreen> {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text('Match is now available!')));
           //Navigator.pushNamed(context, Feed.routeName);
+          PushNotification.sendPushNotification(newMatch.HomeTeam + " vs " + newMatch.AwayTeam);
           Navigator.canPop(context) ? Navigator.pop(context) : null;
 
         }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:backdrop/app_bar.dart';
@@ -7,8 +8,11 @@ import 'package:backdrop/scaffold.dart';
 import 'package:backdrop/sub_header.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
@@ -18,6 +22,7 @@ import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Provider/InternetConnection.dart';
 import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Services/Global_methods.dart';
+import 'package:sep21/Services/push_notification.dart';
 import 'package:sep21/Widgets/backlayer.dart';
 import 'package:sep21/Widgets/popular_matches.dart';
 import 'package:sep21/Widgets/sportCategories.dart';
@@ -25,6 +30,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:another_flushbar/flushbar_route.dart';
+import 'package:http/http.dart' as http;
 
 
 import 'feed.dart';
@@ -35,6 +41,16 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  /// Create a [AndroidNotificationChannel] for heads up notifications
+  late AndroidNotificationChannel channel;
+
+  /// Initialize the [FlutterLocalNotificationsPlugin] package.
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  String? _token;
+
+
   List _carouselImages = [
     'assets/images/pap.png',
     'assets/images/gsp.jpg',
@@ -66,8 +82,151 @@ class _HomeState extends State<Home> {
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_UpdateConnectionState);
 
+
+   PushNotification.requestPermission();
+   PushNotification.loadFCM();
+   PushNotification.listenFCM();
+
+
+    // requestPermission();
+    //
+    // loadFCM();
+    //
+    // listenFCM();
+    //
+     getToken();
+
+
+
     super.initState();
   }
+
+  void sendPushNotification() async{
+    if (_token == null) {
+      print('Unable to send FCM message, no token exists.');
+      return;
+    }
+
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AAAAT-yNvF0:APA91bFgrAeZcoDpYVpBvudz3em3vshAMhRUsANl6QmiSymO2LTs452Pc4s_Ehp2a_XqcWNaTrpytZZzTnC8YQCZRmdExbH1etSRwxbdTjxMQTK3J3i2baw_rlSQmfVH1GItIBy85-Zl',
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'notification': <String, dynamic>{
+              'body': 'Test Body',
+              'title': 'Test Title 2'
+            },
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'id': '1',
+              'status': 'done'
+            },
+            "to": "/topics/Animal",
+          },
+        ),
+      );
+      print('FCM request for device sent!');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void getToken() async{
+     await FirebaseMessaging.instance.getToken().then((token)  {
+       print('token: $token');
+       setState(() {
+         _token = token;
+       });
+     });
+
+  }
+
+  void requestPermission() async{
+
+     FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+     NotificationSettings settings = await messaging.requestPermission(
+       alert: true,
+       announcement: false,
+       badge: true,
+       carPlay: false,
+       criticalAlert: false,
+       provisional: false,
+       sound: true
+     );
+
+     if (settings.authorizationStatus == AuthorizationStatus.authorized){
+       print('User granted permission!');
+     }else if (settings.authorizationStatus == AuthorizationStatus.provisional){
+       print('User granted provisional permission!');
+     }else{
+       print('User declined or has not accepted permission !');
+     }
+
+  }
+
+  void listenFCM() async{
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null && !kIsWeb) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              // TODO add a proper drawable resource to android, for now using
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ),
+        );
+      }
+    });
+
+
+  }
+
+  void loadFCM() async{
+    if (!kIsWeb) {
+      channel = const AndroidNotificationChannel(
+        'high_importance_channel', // id
+        'High Importance Notifications', // title
+        importance: Importance.high,
+        enableVibration: true,
+      );
+
+      flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+      /// Create an Android Notification Channel.
+      ///
+      /// We use this channel in the `AndroidManifest.xml` file to override the
+      /// default FCM channel to enable heads up notifications.
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
+
+      /// Update the iOS foreground notification presentation options to allow
+      /// heads up notifications.
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
+
+  }
+
 
   Future< void > initConnectivity() async {
     late ConnectivityResult result;
@@ -149,10 +308,8 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   padding: const EdgeInsets.all(10),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Sending Message"),
-                    ));
+                  onPressed: () async {
+
                   },
                 )
               ],

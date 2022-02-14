@@ -16,6 +16,7 @@ import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Screens/Authentication/Policy.dart';
 import 'package:sep21/Services/Global_methods.dart';
 import 'package:sep21/Services/Global_methods.dart';
+import 'package:sep21/Services/push_notification.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'dart:async';
@@ -216,7 +217,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
             ///  (1) Background Wave ..
             /// ------------------------
             Container(
-              height: MediaQuery.of(context).size.height / 0.82,
+              height: MediaQuery.of(context).size.height / 0.70,
               child: RotatedBox(
                 quarterTurns: 10,
                 child: WaveWidget(
@@ -596,6 +597,50 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                     style: TextStyle(
                                         color: Colors.blue.shade100,
                                         decoration: TextDecoration.underline),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Row(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Theme(
+                                  data: ThemeData(
+                                    primarySwatch: Colors.blue,
+                                    unselectedWidgetColor: Colors.white, // Your color
+                                  ),
+                                  child: Checkbox(
+                                    checkColor: Colors.white,
+                                    activeColor: Colors.blue,
+                                    value: PushNotification.recieveNotifications,
+
+                                    onChanged: (value) {
+                                      setState(() {
+                                        PushNotification.recieveNotifications = value ?? false;
+                                        if (!value!) {
+                                          PushNotification.unsubscrbeFromTopic();
+                                        }else{
+                                          PushNotification.subscrbeToTopic();
+                                        }
+
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: TextButton(
+                                  onPressed: (){},
+                                  child: Text(
+                                    'I would like to recieve notifications from CY-Seating regarding new matches',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.blue.shade100,
+                                        ),
                                   ),
                                 ),
                               ),
