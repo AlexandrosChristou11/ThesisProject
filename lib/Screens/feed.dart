@@ -192,10 +192,7 @@ class _FeedState extends State<Feed> {
         children: List.generate(matchesList.length, (index) {
           return ChangeNotifierProvider.value(
           value: matchesList[index],
-          child: FeedProducts(
-
-
-            ),
+          child: FeedProducts(),
           );
         }),
         ),

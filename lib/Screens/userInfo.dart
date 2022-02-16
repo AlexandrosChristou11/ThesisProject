@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +20,7 @@ import 'package:sep21/Screens/Card/cart.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:sep21/Services/Global_methods.dart';
 import 'package:sep21/Services/push_notification.dart';
+import 'package:wiredash/wiredash.dart';
 
 import 'Orders/order.dart';
 
@@ -254,10 +256,10 @@ class _UserInfoState extends State<UserInfo> {
                       ),
                     ],
                   ),
-                  background: Image(
-                    image: _imageUrl !=null ? NetworkImage(
-                        _imageUrl.toString()) : NetworkImage("https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg"),
-                    fit: BoxFit.fill,
+                  background: CachedNetworkImage(
+                    imageUrl: _imageUrl ?? "",
+                    placeholder: (context, url) => new CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => new Icon(Icons.error),
                   ),
                 ),
               );
@@ -412,7 +414,7 @@ class _UserInfoState extends State<UserInfo> {
                     ),
                     child: ListTile(title: Text('Rate our application'),
                       trailing: Icon(Icons.chevron_right_rounded),
-                      onTap: ()=> Navigator.of(context).pushNamed(Cart.routeName),
+                      onTap: ()=> Wiredash.of(context)?.show(),
                       leading: Icon(MyAppIcons.feedback_outlined, color: Colors.amberAccent,),
                     ),
                   ),

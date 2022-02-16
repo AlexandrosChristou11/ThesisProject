@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,8 +67,12 @@ class _FeedProductsState extends State<FeedProducts> {
                           color: Colors.black54,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0)),
-                          child: Image.network(matchesAttributes.imageURL,
-                              fit: BoxFit.contain),
+                          child: CachedNetworkImage(
+                              imageUrl: matchesAttributes.imageURL,
+                              fit: BoxFit.contain,
+                            placeholder: (context, url) => new CircularProgressIndicator( backgroundColor: Colors.amberAccent,strokeWidth: 8.0),
+                            errorWidget: (context, url, error) => new Icon(Icons.error),
+                          ),
                         )),
                   ),
                   !isBefore ? Badge(

@@ -61,6 +61,7 @@ dependencies:
   another_flushbar: ^1.10.28
   firebase_messaging: ^11.2.6
   flutter_local_notifications: ^9.3.1
+  wiredash: ^0.7.0+1
 
 dev_dependencies:
   flutter_test:
@@ -101,6 +102,7 @@ flutter:
     - assets/images/Wishlist/empty-wishlist.png
     - # (5) Policy
     - assets/Policy/policy.txt
+    - assets/images/logo_footer.png
 
 
 

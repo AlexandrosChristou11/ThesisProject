@@ -8,6 +8,8 @@ import 'package:sep21/Screens/Authentication/userState.dart';
 import 'package:sep21/Screens/bottom_bar.dart';
 import 'package:sep21/Screens/mainScreen.dart';
 import 'package:sep21/consts/my_custom_icons/Theme_data.dart';
+import 'package:wiredash/wiredash.dart';
+import 'Consts/constants.dart';
 import 'Provider/Cart_Provider.dart';
 import 'Provider/CurstomRoutes.dart';
 import 'Provider/Favorite_Provider.dart';
@@ -61,6 +63,7 @@ class _MyAppState extends State<MyApp> {
   /// appropriate dependency in the pubspec.yaml file and
   /// initialise the firebase service on the application
   final Future<FirebaseApp> _firebaseInitialization = Firebase.initializeApp();
+  final _navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -104,12 +107,18 @@ class _MyAppState extends State<MyApp> {
             ],
             child:
                 Consumer<DarkThemeProvider>(builder: (context, themeData, child) {
-              return MaterialApp(
-                title: 'Flutter Demo',
-                theme: Styles.themeData(themeChangeProvide.darkTheme, context),
-                initialRoute: '/',
-                routes: customRoutes,
-                home: UserState()//MainScreens(), //LandingPage(),
+              return Wiredash(
+                secret: ConstantKeys.wiredashSecret,
+                projectId: ConstantKeys.wiredashProjectId,
+                navigatorKey: _navigatorKey ,
+                child: MaterialApp(
+                    navigatorKey: _navigatorKey,
+                  title: 'Flutter Demo',
+                  theme: Styles.themeData(themeChangeProvide.darkTheme, context),
+                  initialRoute: '/',
+                  routes: customRoutes,
+                  home: UserState()//MainScreens(), //LandingPage(),
+                ),
               );
             }));
       }
