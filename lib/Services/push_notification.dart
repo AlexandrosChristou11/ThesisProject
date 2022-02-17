@@ -43,7 +43,7 @@ class PushNotification{
               'id': '1',
               'status': 'done'
             },
-            "to": "/topics/Animal",
+            "to": "/topics/GetNotifications",
           },
         ),
       );

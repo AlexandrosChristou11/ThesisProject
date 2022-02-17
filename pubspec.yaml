@@ -102,7 +102,13 @@ flutter:
     - assets/images/Wishlist/empty-wishlist.png
     - # (5) Policy
     - assets/Policy/policy.txt
-    - assets/images/logo_footer.png
+    # (6) Logo
+    - assets/images/logos.png
+    - assets/images/logos (2).png
+    - assets/images/logos (4).png
+    - assets/images/logos-removebg.png
+
+
 
 
 

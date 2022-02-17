@@ -113,19 +113,33 @@ class _LandingPageState extends State<LandingPage>
     return Scaffold(
         body: Stack(
       children: [
-        // CachedNetworkImage(
-        //   imageUrl:
-        //       sports[1],
-        //   // placeholder: (context, url) => Image.network(
-        //   //   "https://uploads.sitepoint.com/wp-content/uploads/2015/12/1450973046wordpress-errors.png",
-        //   //   fit: BoxFit.contain,
-        //   // ),
-        //   fit: BoxFit.cover,
-        //   errorWidget: (context, url, error) => Icon(Icons.error),
-        //   height: double.infinity,
-        //   width: double.infinity,
-        //   alignment: FractionalOffset(_animationController.value, 0),
-        // ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 59.0),
+          child: Center(
+            child: Container(
+              decoration: BoxDecoration(
+                //color: Colors.white,
+                borderRadius: BorderRadius.all( Radius.circular(180.0)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Image.asset(
+                   'assets/images/logos-removebg.png',
+                fit: BoxFit.fill,
+                height: 300,
+                width: 300,
+                alignment: FractionalOffset(_animationController.value, 0),
+
+              ),
+            ),
+          ),
+        ),
         Container(
           margin: EdgeInsets.only(top: 30),
           width: double.infinity,

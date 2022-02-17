@@ -121,6 +121,7 @@ class _UserInfoState extends State<UserInfo> {
   }
 
   void _pickAvatarCamera() async{
+
     final picker = ImagePicker();
     final pickedImg = await picker.pickImage(source: ImageSource.camera);
     final pickedImgFile = File(pickedImg!.path);
@@ -134,11 +135,13 @@ class _UserInfoState extends State<UserInfo> {
   }
 
   void _pickAvatarGallery() async{
+
     final picker = ImagePicker();
     final pickedImg = await await picker.pickImage(source: ImageSource.gallery);
     final pickedImgFile = File(pickedImg!.path);
     setState(() {
       _pickedImage = pickedImgFile;
+
     });
 
     UpdateImageOnFirebaseCloud();
@@ -149,6 +152,7 @@ class _UserInfoState extends State<UserInfo> {
   void  _removeAvatar(){
     setState(() {
       _pickedImage = null;
+
     });
 
     Navigator.pop(context);
