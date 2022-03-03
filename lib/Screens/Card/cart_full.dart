@@ -147,63 +147,63 @@ class _CartFullState extends State<CartFull> {
                                   : Theme.of(context).accentColor),
                         ),
                         Spacer(),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(4),
-                            onTap: cartAttr.quantity <1? DisplayErrorMessage(context) :
-                                () { cartProvider.reduceItemCartByOne(widget.matchId); },
-                            child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(Entypo.minus,
-                                      color:
-                                      /// Set minus button '-' as grey - diactivated
-                                      /// when the quantity reaches 0
-                                      cartAttr.quantity <1?
-                                      Colors.grey : Colors.red, size: 23),
-                                )),
-                          ),
-                        ),
-                        Card(
-                          elevation: 12,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.12,
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                                gradient: LinearGradient(colors: [
-                              MyAppColor.gradiendLStart,
-                              MyAppColor.gradiendLEnd,
-                            ], stops: [
-                              0.0,
-                              0.7
-                            ],),
-                            ),
-                            // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text(cartAttr.quantity.toString(),
-                            textAlign: TextAlign.center,),
-                          ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(4),
-                            onTap:cartAttr.quantity ==6? DisplayErrorMessage(context) :
-                                (){
-                              cartProvider.addProductToCart(widget.matchId, cartAttr.price, cartAttr.title, cartAttr.imageUrl, cartAttr.sector, cartAttr.ticketType); },
-                            child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(Entypo.plus,
-                                      /// Display plus button '+' as grey - active
-                                      /// if quantity exceeds number 6 (limit of tickets)
-                                      color:
-                                      cartAttr.quantity >= 6
-                                          ? Colors.grey : Colors.green,
-                                      size: 23),
-                                )),
-                          ),
-                        ),
+                        //Material(
+                        //   color: Colors.transparent,
+                        //   child: InkWell(
+                        //     borderRadius: BorderRadius.circular(4),
+                        //     onTap: cartAttr.quantity <1? DisplayErrorMessage(context) :
+                        //         () { cartProvider.reduceItemCartByOne(widget.matchId); },
+                        //     child: Container(
+                        //         child: Padding(
+                        //           padding: const EdgeInsets.all(5.0),
+                        //           child: Icon(Entypo.minus,
+                        //               color:
+                        //               /// Set minus button '-' as grey - diactivated
+                        //               /// when the quantity reaches 0
+                        //               cartAttr.quantity <1?
+                        //               Colors.grey : Colors.red, size: 23),
+                        //         )),
+                        //   ),
+                        // ),
+                        // Card(
+                        //   elevation: 12,
+                        //   child: Container(
+                        //     width: MediaQuery.of(context).size.width * 0.12,
+                        //     padding: const EdgeInsets.all(5.0),
+                        //     decoration: BoxDecoration(
+                        //         gradient: LinearGradient(colors: [
+                        //       MyAppColor.gradiendLStart,
+                        //       MyAppColor.gradiendLEnd,
+                        //     ], stops: [
+                        //       0.0,
+                        //       0.7
+                        //     ],),
+                        //     ),
+                        //     // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
+                        //     child: Text(cartAttr.quantity.toString(),
+                        //     textAlign: TextAlign.center,),
+                        //   ),
+                        // ),
+                        // Material(
+                        //   color: Colors.transparent,
+                        //   child: InkWell(
+                        //     borderRadius: BorderRadius.circular(4),
+                        //     onTap:cartAttr.quantity ==6? DisplayErrorMessage(context) :
+                        //         (){
+                        //       cartProvider.addProductToCart(widget.matchId, cartAttr.price, cartAttr.title, cartAttr.imageUrl, cartAttr.sector, cartAttr.ticketType); },
+                        //     child: Container(
+                        //         child: Padding(
+                        //           padding: const EdgeInsets.all(5.0),
+                        //           child: Icon(Entypo.plus,
+                        //               /// Display plus button '+' as grey - active
+                        //               /// if quantity exceeds number 6 (limit of tickets)
+                        //               color:
+                        //               cartAttr.quantity >= 6
+                        //                   ? Colors.grey : Colors.green,
+                        //               size: 23),
+                        //         )),
+                        //   ),
+                        // ),
                       ],
                     )
                   ],

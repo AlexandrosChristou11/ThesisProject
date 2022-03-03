@@ -60,6 +60,7 @@ class MyAppIcons {
   static const IconData check_circle = IconData(0xe159, fontFamily: 'MaterialIcons');
   static const IconData policy_rounded = IconData(0xf00ae, fontFamily: 'MaterialIcons');
   static const IconData notifications = IconData(0xe164, fontFamily: 'MaterialIcons');
+  static const IconData card_membership_sharp = IconData(0xe83c, fontFamily: 'MaterialIcons');
 
 }
 

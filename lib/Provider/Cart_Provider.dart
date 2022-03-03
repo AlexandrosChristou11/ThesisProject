@@ -22,15 +22,13 @@ class CartProvider with ChangeNotifier{
   }
 //, String ticketId
   void addProductToCart(String matchID, double price, String title, String imageURL, String type, String sector){
-    if (_cartItems.containsKey(matchID)){
-      /// ToDoo:
-      /// 1) add additional IDs arguments to each product
-      ///   representing each sector and apply more checks
-      ///   to distinguish the ticket type and sector !
-      _cartItems.update(matchID, (existingCart) => CartAttr(
+
+
+    _cartItems.update(matchID, (existingCart) => CartAttr(
         id: existingCart.id,
         title: existingCart.title,
-        quantity: existingCart.quantity + 1,
+        //quantity: existingCart.quantity + 1,
+        quantity: 1,
         price: existingCart.price,
         imageUrl: existingCart.imageUrl,
         //,stadium: existingCart.stadium,
@@ -38,27 +36,41 @@ class CartProvider with ChangeNotifier{
         sector: sector,
         ticketType: type
 
-      ));
-    }else{
-      _cartItems.putIfAbsent(matchID, () => CartAttr(
-          id: DateTime.now().toString(),
-          title: title,
-          quantity:  1,
-          price: price,
-          imageUrl: imageURL,
-          // stadium:  new Stadium("Antonis Papadopoulos", 7000,
-          //   new Sector("SOUTH", 2400),
-          //   new Sector("NORTH", 1200),
-          //   new Sector("WEST", 3700),
-          //   new Sector("EAST", 1500),
-          // ),
-          matchId: matchID,
-        ticketType: type,
-        sector:  sector
+    ));
 
-      ));
-
-    }
+    // if (_cartItems.containsKey(matchID)){
+    //   _cartItems.update(matchID, (existingCart) => CartAttr(
+    //     id: existingCart.id,
+    //     title: existingCart.title,
+    //     quantity: existingCart.quantity + 1,
+    //     price: existingCart.price,
+    //     imageUrl: existingCart.imageUrl,
+    //     //,stadium: existingCart.stadium,
+    //     matchId: matchID,
+    //     sector: sector,
+    //     ticketType: type
+    //
+    //   ));
+    // }else{
+    //   _cartItems.putIfAbsent(matchID, () => CartAttr(
+    //       id: DateTime.now().toString(),
+    //       title: title,
+    //       quantity:  1,
+    //       price: price,
+    //       imageUrl: imageURL,
+    //       // stadium:  new Stadium("Antonis Papadopoulos", 7000,
+    //       //   new Sector("SOUTH", 2400),
+    //       //   new Sector("NORTH", 1200),
+    //       //   new Sector("WEST", 3700),
+    //       //   new Sector("EAST", 1500),
+    //       // ),
+    //       matchId: matchID,
+    //     ticketType: type,
+    //     sector:  sector
+    //
+    //   ));
+    //
+    // }
     notifyListeners();
   }
 
