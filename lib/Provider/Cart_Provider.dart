@@ -21,7 +21,7 @@ class CartProvider with ChangeNotifier{
     return total;
   }
 //, String ticketId
-  void addProductToCart(String matchID, double price, String title, String imageURL){
+  void addProductToCart(String matchID, double price, String title, String imageURL, String type, String sector){
     if (_cartItems.containsKey(matchID)){
       /// ToDoo:
       /// 1) add additional IDs arguments to each product
@@ -32,9 +32,11 @@ class CartProvider with ChangeNotifier{
         title: existingCart.title,
         quantity: existingCart.quantity + 1,
         price: existingCart.price,
-        imageUrl: existingCart.imageUrl
-        ,stadium: existingCart.stadium,
-        matchId: matchID
+        imageUrl: existingCart.imageUrl,
+        //,stadium: existingCart.stadium,
+        matchId: matchID,
+        sector: sector,
+        ticketType: type
 
       ));
     }else{
@@ -44,12 +46,16 @@ class CartProvider with ChangeNotifier{
           quantity:  1,
           price: price,
           imageUrl: imageURL,
-          stadium:  new Stadium("Antonis Papadopoulos", 7000,
-            new Sector("SOUTH", 2400),
-            new Sector("NORTH", 1200),
-            new Sector("WEST", 3700),
-            new Sector("EAST", 1500),
-          ), matchId: matchID
+          // stadium:  new Stadium("Antonis Papadopoulos", 7000,
+          //   new Sector("SOUTH", 2400),
+          //   new Sector("NORTH", 1200),
+          //   new Sector("WEST", 3700),
+          //   new Sector("EAST", 1500),
+          // ),
+          matchId: matchID,
+        ticketType: type,
+        sector:  sector
+
       ));
 
     }
@@ -70,7 +76,9 @@ class CartProvider with ChangeNotifier{
               price: existingCart.price,
               imageUrl: existingCart.imageUrl,
               matchId: '3' ,
-              stadium: existingCart.stadium
+             // stadium: existingCart.stadium
+            sector:  existingCart.sector,
+            ticketType:  existingCart.ticketType
           ));
     }
     notifyListeners();

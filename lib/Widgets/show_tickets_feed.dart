@@ -2,6 +2,7 @@
 /// when the user press add to cart and will
 ///  display the available tickets for each sector
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -14,519 +15,300 @@ import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
 
+import '../Services/Global_methods.dart';
+
 class DisplayTickets extends StatefulWidget {
   //Match matchAttr;
+  final _formKey = GlobalKey<FormState>();
 
+  bool _obscureText = true;
+  final FocusNode _credentials = FocusNode();
+  final FocusNode _fanId = FocusNode();
+
+  GlobalMethods gb = new GlobalMethods();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
+  bool _agree = false;
   final Match matchAttr;
-  const DisplayTickets(this.matchAttr);
+
+   DisplayTickets(this.matchAttr);
 
 
   @override
   _DisplayTicketsState createState() => _DisplayTicketsState();
 }
 
+enum TicketTypesEnum { regular, student }
+enum SectorsEnum { west, east, south }
+
 class _DisplayTicketsState extends State<DisplayTickets> {
+  TicketTypesEnum? _ticketType = TicketTypesEnum.regular;
+  SectorsEnum? _sector = SectorsEnum.west;
 
   @override
   Widget build(BuildContext context) {
-    final themeChanged = Provider.of<DarkThemeProvider>(context);
+
     final cartProvider = Provider.of<CartProvider>(context);
     //final cartAttr = Provider.of<CartAttr>(context);
+    final themeChange = Provider.of<DarkThemeProvider>(context);
+    GlobalMethods globalMethods = GlobalMethods();
 
-
-
+    bool _value = false;
+    int? val = -1;
 
    // Match match = Provider.of<Match>(context);
     print(widget.matchAttr.title + ' | ' + widget.matchAttr.id);
-    return Scaffold(
-      body: ListView(
-        children: [
-/// **************************************
-///            WEST SECTOR
-/// **************************************
-          Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                ListTile(
-                  leading: Icon(Icons.arrow_drop_down_circle),
-                  //title: Text(widget.matchAttr.stadium.west.name.toString()),
-                  subtitle: Text(
-                    'Available Tickets:' + ( widget.matchAttr.SectorA_StudentQuantity + widget.matchAttr.SectorA_RegularQuantity).toString(),
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.all(16.0),
-                //   child: Text(
-                //     'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-                //     style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                    children: [
-                    Text(
-                    'Regular',
-                    style: TextStyle(
-                        color: themeChanged.darkTheme
-                            ? Colors.brown.shade900
-                            : Theme.of(context).accentColor),
-                  ),
-                  Spacer(),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(4),
-                      onTap: () {},
-                      child: Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Icon(Entypo.minus,
-                                color: Colors.red, size: 23),
-                          )),
-                    ),
-                  ), Card(
-                        elevation: 12,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.12,
-                          padding: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              MyAppColor.gradiendLStart,
-                              MyAppColor.blueGrey,
-                            ], stops: [
-                              0.0,
-                              0.7
-                            ],),
-                          ),
-                          // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                          child: Text('0',//widget.matchAttr.SectorA_RegularQuantity.toString(),
-                            textAlign: TextAlign.center,),
-                        ),
-                      ),
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(4),
-                          onTap: () {},
-                          child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Icon(Entypo.plus,
-                                    color: Colors.green, size: 23),
-                              )),
-                        ),
-                      ),
 
-                  ]),),
-                  Divider(),
-                  Row(
-                      children: [
-                        Text(
-                          'Student',
-                          style: TextStyle(
-                              color: themeChanged.darkTheme
-                                  ? Colors.brown.shade900
-                                  : Theme.of(context).accentColor),
-                        ),
-                        Spacer(),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(4),
-                            onTap: () {},
-                            child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(Entypo.minus,
-                                      color: Colors.red, size: 23),
-                                )),
-                          ),
-                        ), Card(
-                          elevation: 12,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.12,
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                MyAppColor.gradiendLStart,
-                                MyAppColor.blueGrey,
-                              ], stops: [
-                                0.0,
-                                0.7
-                              ],),
-                            ),
-                            // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text( '0',//widget.matchAttr.SectorA_StudentQuantity.toString(),
-                              //cartAttr.quantity.toString(),
-                              textAlign: TextAlign.center,),
-                          ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(4),
-                            onTap: () {},
-                            child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(Entypo.plus,
-                                      color: Colors.green, size: 23),
-                                )),
-                          ),
-                        ),
-
-                      ]),
+    String _selectedGender = 'male';
+    return  SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: <Widget>[
 
 
+            /// ------------------------------------------------------
+            ///                   TICKET TYPE !!
+            /// ------------------------------------------------------
 
-                // ButtonBar(
-                //   alignment: MainAxisAlignment.start,
-                //   children: [
-                //     FlatButton(
-                //       onPressed: () {
-                //         // Perform some action
-                //       },
-                //       child: const Text('ACTION 1'),
-                //     ),
-                //     FlatButton(
-                //       onPressed: () {
-                //         // Perform some action
-                //       },
-                //       child: const Text('ACTION 2'),
-                //     ),
-                //   ],
-                // ),
-                //Image.asset('assets/card-sample-image.jpg'),
-              ],
-            ),
-          ),
-          /// **************************************
-          ///            SOUTH SECTOR
-          /// **************************************
-          Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                ListTile(
-                  //leading: Icon(Icons.arrow_drop_down_circle),
-                  //title: Text(widget.matchAttr.stadium.east.name.toString()),
-                  subtitle: Text(
-                    'Available Tickets: ' + (widget.matchAttr.SectorB_StudentQuantity + widget.matchAttr.SectorB_RegularQuantity).toString(),
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.all(16.0),
-                //   child: Text(
-                //     'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-                //     style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                      children: [
-                        Text(
-                          'Regular',
-                          style: TextStyle(
-                              color: themeChanged.darkTheme
-                                  ? Colors.brown.shade900
-                                  : Theme.of(context).accentColor),
-                        ),
-                        Spacer(),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(4),
-                            onTap: () {},
-                            child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(Entypo.minus,
-                                      color: Colors.red, size: 23),
-                                )),
-                          ),
-                        ), Card(
-                          elevation: 12,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.12,
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                MyAppColor.gradiendLStart,
-                                MyAppColor.blueGrey,
-                              ], stops: [
-                                0.0,
-                                0.7
-                              ],),
-                            ),
-                            // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text('0',//widget.matchAttr.SectorB_RegularQuantity.toString(),
-                              textAlign: TextAlign.center,),
-                          ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(4),
-                            onTap: () {},
-                            child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(Entypo.plus,
-                                      color: Colors.green, size: 23),
-                                )),
-                          ),
-                        ),
+            Container(
 
-                      ]),),
-                Divider(),
-                Row(
-                    children: [
-                      Text(
-                        'Student',
-                        style: TextStyle(
-                            color: themeChanged.darkTheme
-                                ? Colors.brown.shade900
-                                : Theme.of(context).accentColor),
-                      ),
-                      Spacer(),
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(4),
-                          onTap: () {},
-                          child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Icon(Entypo.minus,
-                                    color: Colors.red, size: 23),
-                              )),
-                        ),
-                      ), Card(
-                        elevation: 12,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.12,
-                          padding: const EdgeInsets.all(5.0),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              MyAppColor.gradiendLStart,
-                              MyAppColor.blueGrey,
-                            ], stops: [
-                              0.0,
-                              0.7
-                            ],),
-                          ),
-                          // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                          child: Text('0',//widget.matchAttr.SectorB_StudentQuantity.toString(),
-                            textAlign: TextAlign.center,),
-                        ),
-                      ),
-                      Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(4),
-                          onTap: () {},
-                          child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Icon(Entypo.plus,
-                                    color: Colors.green, size: 23),
-                              )),
-                        ),
-                      ),
-
-                    ],
-
-                ),
-
-
-              ],
-            ),
-          ),
-
-      /// **************************************
-          ///       SOUTH SECTOR
-      /// **************************************
-          Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: [
-                ListTile(
-                  //leading: Icon(Icons.arrow_drop_down_circle),
-                  //title: Text(widget.matchAttr.stadium.south.name.toString()),
-                  subtitle: Text(
-                    'Available Tickets:' + (widget.matchAttr.SectorC_RegularQuantity + widget.matchAttr.SectorC_StudentQuantity).toString(),
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.all(16.0),
-                //   child: Text(
-                //     'Greyhound divisively hello coldly wonderfully marginally far upon excluding.',
-                //     style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Row(
-                      children: [
-                        Text(
-                          'Regular',
-                          style: TextStyle(
-                              color: themeChanged.darkTheme
-                                  ? Colors.brown.shade900
-                                  : Theme.of(context).accentColor),
-                        ),
-                        Spacer(),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(4),
-                            onTap: () {},
-                            child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(Entypo.minus,
-                                      color: Colors.red, size: 23),
-                                )),
-                          ),
-                        ),
-
-                        Card(
-                          elevation: 12,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.12,
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [
-                                MyAppColor.gradiendLStart,
-                                MyAppColor.blueGrey,
-                              ], stops: [
-                                0.0,
-                                0.7
-                              ],),
-                            ),
-                            // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                            child: Text('0',//widget.matchAttr.SectorC_RegularQuantity.toString(),
-                              textAlign: TextAlign.center,),
-                          ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(4),
-                            onTap: () {},
-                            child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Icon(Entypo.plus,
-                                      color: Colors.green, size: 23),
-                                )),
-                          ),
-                        ),
-
-                      ]),),
-                Divider(),
-                Row(
-                  children: [
-                    Text(
-                      'Student',
-                      style: TextStyle(
-                          color: themeChanged.darkTheme
-                              ? Colors.brown.shade900
-                              : Theme.of(context).accentColor),
-                    ),
-                    Spacer(),
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(4),
-                        onTap: () {},
-                        child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Icon(Entypo.minus,
-                                  color: Colors.red, size: 23),
-                            )),
-                      ),
-                    ), Card(
-                      elevation: 12,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.12,
-                        padding: const EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(colors: [
-                            MyAppColor.gradiendLStart,
-                            MyAppColor.blueGrey,
-                          ], stops: [
-                            0.0,
-                            0.7
-                          ],),
-                        ),
-                        // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                        child: Text( '0',//widget.matchAttr.SectorC_RegularQuantity.toString(),
-                          textAlign: TextAlign.center,),
-                      ),
-                    ),
-                    Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(4),
-                        onTap: () {},
-                        child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Icon(Entypo.plus,
-                                  color: Colors.green, size: 23),
-                            )),
-                      ),
-                    ),
-
-                  ],
-
-                ),
-
-
-              ],
-            ),
-          ),
-          Column(
-
-            children: [
-              Container(
-                  height: 50,
-                  child: RaisedButton(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      shape: RoundedRectangleBorder(side: BorderSide.none),
-                      color: Colors.redAccent.shade400,
-                      onPressed: (){
-                        //ShowTicketOptions(matcAtrr, context);
-                        cartProvider.addProductToCart(widget.matchAttr.id, widget.matchAttr.SectorB_RegularPrice, widget.matchAttr.title, widget.matchAttr.imageURL);
-                        cartProvider.addProductToCart(widget.matchAttr.id, widget.matchAttr.SectorA_RegularPrice, widget.matchAttr.title, widget.matchAttr.imageURL);
-
-                        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        //   content: Text("Tickes added to your basket!"),
-                        // ));
-                      },
-                      child: Text(
-                          'Add to Card'.toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 16, color: Colors.white
-                          )
-                      )
-                  )
+              decoration: BoxDecoration(
+                color: Theme.of(context).dividerColor,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(5.0),
+                    bottomRight: Radius.circular(5.0)),
               ),
-            ],
-          ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 3.0),
+                    child: Text("Specify ticket type:", style: TextStyle(
+                      fontSize: 20
+                    ),),
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    height: 10,
+                  ),
+                  ListTile(
+                    title: const Text('Regular'),
+                    leading: Radio<TicketTypesEnum>(
+                      value: TicketTypesEnum.regular,
+                      groupValue: _ticketType,
+                      onChanged: (TicketTypesEnum? value) {
+                        setState(() {
+                          _ticketType = value;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Student'),
+                    leading: Radio<TicketTypesEnum>(
+                      value: TicketTypesEnum.student,
+                      groupValue: _ticketType,
+                      onChanged: (TicketTypesEnum? value) {
+                        setState(() {
+                          _ticketType = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-        ],
+            SizedBox(
+              height: 30,
+              child: Divider(
+                color: Theme.of(context).disabledColor,
+                thickness: 1.0,
+              ),
+            ),
+
+            /// ------------------------------------------------------
+            ///                  SECTOR SELECTION !!
+            /// ------------------------------------------------------
+            Container(
+
+              decoration: BoxDecoration(
+                color: Theme.of(context).dividerColor,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(5.0),
+                    bottomRight: Radius.circular(5.0)),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 3.0),
+                    child: Text("Select seating sector:", style: TextStyle(
+                        fontSize: 20
+                    ),),
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    height: 10,
+                  ),
+                  ListTile(
+                    title: const Text('West'),
+                    leading: Radio<SectorsEnum>(
+                      value: SectorsEnum.west,
+                      groupValue: _sector,
+                      onChanged: (SectorsEnum? value) {
+                        setState(() {
+                          _sector = value;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('East'),
+                    leading: Radio<SectorsEnum>(
+                      value: SectorsEnum.east,
+                      groupValue: _sector,
+                      onChanged: (SectorsEnum? value) {
+                        setState(() {
+                          _sector = value;
+                        });
+                      },
+                    ),
+                  ),
+
+                  ListTile(
+                    title: const Text('South'),
+                    leading: Radio<SectorsEnum>(
+                      value: SectorsEnum.south,
+                      groupValue: _sector,
+                      onChanged: (SectorsEnum? value) {
+                        setState(() {
+                          _sector = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(
+              height: 30,
+              child: Divider(
+                color: Theme.of(context).disabledColor,
+                thickness: 1.0,
+              ),
+            ),
+
+            /// ------------------------------------------------------
+            ///                 Availability !!
+            /// ------------------------------------------------------
+            Container(
+
+              decoration: BoxDecoration(
+                color: Theme.of(context).dividerColor,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(5.0),
+                    bottomRight: Radius.circular(5.0)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0),
+                    child: Text("Available Tickets : ", textAlign: TextAlign.left,
+                      style: TextStyle(
+
+                        fontSize: 20
+                    ),),
+                  ),
+                  Divider(
+                    color: Colors.grey,
+                    height: 10,
+                  ),
+
+                ],
+              ),
+            ),
+
+
+
+          ],
+
+
+                    // Form(
+                    //   key: widget._formKey,
+                    //
+                    //   child: Column(
+                    //     children: [
+                    //
+                    //       // Row(
+                    //       //   children: [
+                    //           ListTile(
+                    //             title: Text("Male"),
+                    //             leading: Radio(
+                    //               value: 1,
+                    //               groupValue: val,
+                    //               onChanged: (value) {
+                    //                 setState(() {
+                    //                   val = value as int?;
+                    //                 });
+                    //               },
+                    //               activeColor: Colors.green,
+                    //             ),
+                    //           ),
+                    //           ListTile(
+                    //             title: Text("Female"),
+                    //             leading: Radio(
+                    //               value: 2,
+                    //               groupValue: val,
+                    //               onChanged: (value) {
+                    //                 setState(() {
+                    //                   val = value as int?;
+                    //                 });
+                    //               },
+                    //               activeColor: Colors.green,
+                    //             ),
+                    //           ),
+                    //       //   ],
+                    //       // ),
+                    //
+                    //       Container(
+                    //           height: 50,
+                    //           child: RaisedButton(
+                    //               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    //               shape: RoundedRectangleBorder(side: BorderSide.none),
+                    //               color: Colors.redAccent.shade400,
+                    //               onPressed: (){
+                    //
+                    //                 /// create new variable that will represent ticket type and sector..
+                    //                 cartProvider.addProductToCart(widget.matchAttr.id,
+                    //                     widget.matchAttr.SectorB_RegularPrice, widget.matchAttr.title,
+                    //                     widget.matchAttr.imageURL, "Regular", "West");
+                    //
+                    //               },
+                    //               child: Text(
+                    //                   'Add to Card'.toUpperCase(),
+                    //                   style: TextStyle(
+                    //                       fontSize: 16, color: Colors.white
+                    //                   )
+                    //               )
+                    //           )
+                    //       ),
+                    //
+                    //     ],
+                    //   ),
+                    //
+                    // ),
+
+
+
+
+
+
+        ),
       ),
-
     );
+
+
   }
 }
 

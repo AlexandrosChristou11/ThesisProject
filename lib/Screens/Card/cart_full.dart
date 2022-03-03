@@ -189,7 +189,8 @@ class _CartFullState extends State<CartFull> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(4),
                             onTap:cartAttr.quantity ==6? DisplayErrorMessage(context) :
-                                (){ cartProvider.addProductToCart(widget.matchId, cartAttr.price, cartAttr.title, cartAttr.imageUrl); },
+                                (){
+                              cartProvider.addProductToCart(widget.matchId, cartAttr.price, cartAttr.title, cartAttr.imageUrl, cartAttr.sector, cartAttr.ticketType); },
                             child: Container(
                                 child: Padding(
                                   padding: const EdgeInsets.all(5.0),
