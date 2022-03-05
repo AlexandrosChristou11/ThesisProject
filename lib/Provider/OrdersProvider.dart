@@ -33,6 +33,9 @@ class OrderProvider with ChangeNotifier{
             element.get('imageUrl'),
             element.get('quantity').toString(),
             element.get('orderDate'),
+            element.get('sector'),
+            element.get('date'),
+            element.get('stadium'),
           ));
         })
       });

@@ -61,6 +61,11 @@ class MyAppIcons {
   static const IconData policy_rounded = IconData(0xf00ae, fontFamily: 'MaterialIcons');
   static const IconData notifications = IconData(0xe164, fontFamily: 'MaterialIcons');
   static const IconData card_membership_sharp = IconData(0xe83c, fontFamily: 'MaterialIcons');
+  static const IconData apps = IconData(0xe08f, fontFamily: 'MaterialIcons');
+  static const IconData perm_identity = IconData(0xe48d, fontFamily: 'MaterialIcons');
+  static const IconData payment = IconData(0xe481, fontFamily: 'MaterialIcons');
+
+
 
 }
 

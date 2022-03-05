@@ -6,6 +6,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:sep21/Models/CartAttr.dart';
 import 'package:sep21/Models/Sector.dart';
 import 'package:sep21/Models/Stadium.dart';
+import 'package:uuid/uuid.dart';
 
 class CartProvider with ChangeNotifier{
 
@@ -21,20 +22,27 @@ class CartProvider with ChangeNotifier{
     return total;
   }
 //, String ticketId
-  void addProductToCart(String matchID, double price, String title, String imageURL, String type, String sector){
+  void addProductToCart(String matchID, double price, String title, String imageURL, String type, String sector,
+      String stadium, String date, String fanId, String ticketId
+      ){
 
 
-    _cartItems.update(matchID, (existingCart) => CartAttr(
-        id: existingCart.id,
-        title: existingCart.title,
+
+    _cartItems.putIfAbsent(ticketId, () => CartAttr(
+      ticketId: ticketId,
+        id: matchID,
+        title: title,
         //quantity: existingCart.quantity + 1,
         quantity: 1,
-        price: existingCart.price,
-        imageUrl: existingCart.imageUrl,
+        price: price,
+        imageUrl: imageURL,
         //,stadium: existingCart.stadium,
         matchId: matchID,
         sector: sector,
-        ticketType: type
+        ticketType: type,
+        date: date,
+        stadium: stadium,
+        fanId: fanId
 
     ));
 
@@ -74,14 +82,15 @@ class CartProvider with ChangeNotifier{
     notifyListeners();
   }
 
-  void reduceItemCartByOne(String matchID) {
-    if (_cartItems.containsKey(matchID)) {
+  void reduceItemCartByOne(String TicketId) {
+    if (_cartItems.containsKey(TicketId)) {
       /// ToDoo:
       /// 1) add additional IDs arguments to each product
       ///   representing each sector and apply more checks
       ///   to distinguish the ticket type and sector !
-      _cartItems.update(matchID, (existingCart) =>
+      _cartItems.update(TicketId, (existingCart) =>
           CartAttr(
+              ticketId: TicketId,
               id: existingCart.id,
               title: existingCart.title,
               quantity: existingCart.quantity - 1 ,
@@ -90,7 +99,10 @@ class CartProvider with ChangeNotifier{
               matchId: '3' ,
              // stadium: existingCart.stadium
             sector:  existingCart.sector,
-            ticketType:  existingCart.ticketType
+            ticketType:  existingCart.ticketType,
+            stadium: existingCart.stadium,
+            date: existingCart.date,
+            fanId: existingCart.fanId
           ));
     }
     notifyListeners();

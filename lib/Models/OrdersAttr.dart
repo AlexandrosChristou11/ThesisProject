@@ -11,9 +11,13 @@ class OrdersAttr with ChangeNotifier {
   final String imageUrl;
   final String quantity;
   final Timestamp orderDate;
+  final String sector;
+  final String date;
+  final String stadium;
+
 
   OrdersAttr(this.orderId, this.userId, this.matchId, this.title, this.imageUrl,
-      this.quantity, this.orderDate);
+      this.quantity, this.orderDate, this.sector, this.date, this.stadium);
 
 // final String ticketId
 

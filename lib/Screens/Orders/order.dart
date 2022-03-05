@@ -25,6 +25,8 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 
 
+
+
 class Order extends StatefulWidget {
 
   static const routeName = '/order';
@@ -122,7 +124,13 @@ class _OrderState extends State<Order> {
         // -> then show 'Basket'
             : Scaffold(
                 appBar: AppBar(
-                  backgroundColor: Theme.of(context).backgroundColor,
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                          MyAppColor.starterColor,
+                          MyAppColor.endColor
+                        ])),
+                  ),
                   title: Text('MyTickets (${orderProvider.getOrders.length}) ', style: TextStyle(color: Colors.black),),
 
                   actions: [

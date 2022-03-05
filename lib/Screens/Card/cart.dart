@@ -25,6 +25,7 @@ import 'cart_full.dart';
 import 'package:sep21/Services/Global_methods.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
+import 'package:crypto/crypto.dart';
 
 class Cart extends StatefulWidget {
   static const routeName = '/cart';
@@ -107,7 +108,13 @@ class _CartState extends State<Cart> {
         : Scaffold(
             bottomSheet: checkoutSection(context, cartProvider.totalAmount),
             appBar: AppBar(
-              backgroundColor: Theme.of(context).backgroundColor,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                      MyAppColor.starterColor,
+                      MyAppColor.endColor
+                    ])),
+              ),
               title: Text(
                 'Cart (${cartProvider.getCartItems.length}) ',
                 style: TextStyle(color: Colors.black),
@@ -208,6 +215,9 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
                                 'title': orderValue.title,
                                 'imageUrl': orderValue.imageUrl,
                                 'quantity': orderValue.quantity,
+                                'date' : orderValue.date,
+                                'stadium': orderValue.stadium,
+                                'sector' : orderValue.sector,
                                 'orderDate': DateTime.now()
                               });
                             } catch (e) {

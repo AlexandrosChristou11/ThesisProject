@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Inner%20Screens/match_details.dart';
 import 'package:sep21/Models/CartAttr.dart';
 import 'package:sep21/Models/Stadium.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Services/Global_methods.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppColors.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
+
 
 
 class CartFull extends StatefulWidget {
@@ -49,10 +51,11 @@ class _CartFullState extends State<CartFull> {
     final cartProvider = Provider.of<CartProvider>(context);
     
     double subTotal = cartAttr.price * cartAttr.quantity;
+    print ("MATCH ID: ${widget.matchId}");
     return InkWell(
-        onTap:  () => Navigator.pushNamed(context, MatchDetails.routeName, arguments: widget.matchId) ,
+        onTap:  () =>  Navigator.pushNamed(context, MatchDetails.routeName, arguments: cartAttr.matchId) ,
       child: Container(
-        height: 140,
+        height: 180,
         margin: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -62,14 +65,22 @@ class _CartFullState extends State<CartFull> {
         ),
         child: Row(
           children: [
-            Container(
-              width: 130,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          cartAttr.imageUrl),
-                     // fit: BoxFit.contain
-                    )
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 130,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(20),
+                      topRight: const Radius.circular(20),
+                    ),
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            cartAttr.imageUrl),
+                       // fit: BoxFit.contain
+                      )
+                ),
               ),
             ),
             Flexible(
@@ -86,7 +97,8 @@ class _CartFullState extends State<CartFull> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15),
+                                fontWeight: FontWeight.w900, fontSize: 16,)
+                            ,textAlign: TextAlign.center,
                           ),
                         ),
                         Material(
@@ -107,105 +119,105 @@ class _CartFullState extends State<CartFull> {
                         )
                       ],
                     ),
+
                     Row(
                       children: [
-                        Text('Price'),
-                        SizedBox(
-                          width: 5,
+                        Icon(MyAppIcons.date_range, size: 14,),
+
+                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            //' ${DateFormat("dd-MM-yyyy").format(DateTime.parse(matchesAttributes.date))}' ,//+ matchesAttributes.price.toString(),
+                            ' ${Jiffy(cartAttr.date).yMMMd}' ,//+ matchesAttributes.price.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900),
+
+                          ),
                         ),
-                        Text(
-                          cartAttr.price.toStringAsFixed(2) + '€',
-                          style:
-                              TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                        )
                       ],
                     ),
                     Row(
                       children: [
-                        Text('Subtotal'),
-                        SizedBox(
-                          width: 5,
+                        Icon(MyAppIcons.seat, size: 14,),
+
+                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            ' ${cartAttr.sector}' ,//+ matchesAttributes.price.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900),
+
+                          ),
                         ),
-                        Text(
-                          subTotal.toStringAsFixed(2) + '€' ,
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: themeChanged.darkTheme
-                                  ? Colors.brown.shade900
-                                  : Theme.of(context).accentColor),
-                        )
                       ],
                     ),
                     Row(
                       children: [
-                        Text(
-                          'Quantity:',
-                          style: TextStyle(
-                              color: themeChanged.darkTheme
-                                  ? Colors.brown.shade900
-                                  : Theme.of(context).accentColor),
+                        Icon(MyAppIcons.apps, size: 14,),
+
+                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            ' ${cartAttr.ticketType}' ,//+ matchesAttributes.price.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900),
+
+                          ),
                         ),
-                        Spacer(),
-                        //Material(
-                        //   color: Colors.transparent,
-                        //   child: InkWell(
-                        //     borderRadius: BorderRadius.circular(4),
-                        //     onTap: cartAttr.quantity <1? DisplayErrorMessage(context) :
-                        //         () { cartProvider.reduceItemCartByOne(widget.matchId); },
-                        //     child: Container(
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.all(5.0),
-                        //           child: Icon(Entypo.minus,
-                        //               color:
-                        //               /// Set minus button '-' as grey - diactivated
-                        //               /// when the quantity reaches 0
-                        //               cartAttr.quantity <1?
-                        //               Colors.grey : Colors.red, size: 23),
-                        //         )),
-                        //   ),
-                        // ),
-                        // Card(
-                        //   elevation: 12,
-                        //   child: Container(
-                        //     width: MediaQuery.of(context).size.width * 0.12,
-                        //     padding: const EdgeInsets.all(5.0),
-                        //     decoration: BoxDecoration(
-                        //         gradient: LinearGradient(colors: [
-                        //       MyAppColor.gradiendLStart,
-                        //       MyAppColor.gradiendLEnd,
-                        //     ], stops: [
-                        //       0.0,
-                        //       0.7
-                        //     ],),
-                        //     ),
-                        //     // ** BOX TO DISPLAY THE NUMBER OF QUANTITY **
-                        //     child: Text(cartAttr.quantity.toString(),
-                        //     textAlign: TextAlign.center,),
-                        //   ),
-                        // ),
-                        // Material(
-                        //   color: Colors.transparent,
-                        //   child: InkWell(
-                        //     borderRadius: BorderRadius.circular(4),
-                        //     onTap:cartAttr.quantity ==6? DisplayErrorMessage(context) :
-                        //         (){
-                        //       cartProvider.addProductToCart(widget.matchId, cartAttr.price, cartAttr.title, cartAttr.imageUrl, cartAttr.sector, cartAttr.ticketType); },
-                        //     child: Container(
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.all(5.0),
-                        //           child: Icon(Entypo.plus,
-                        //               /// Display plus button '+' as grey - active
-                        //               /// if quantity exceeds number 6 (limit of tickets)
-                        //               color:
-                        //               cartAttr.quantity >= 6
-                        //                   ? Colors.grey : Colors.green,
-                        //               size: 23),
-                        //         )),
-                        //   ),
-                        // ),
                       ],
-                    )
+                    ),
+                    Row(
+                      children: [
+                        Icon(MyAppIcons.perm_identity, size: 14,),
+
+                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            ' ${cartAttr.fanId}' ,//+ matchesAttributes.price.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900),
+
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Icon(MyAppIcons.payment, size: 14,),
+
+                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                              cartAttr.price.toStringAsFixed(2) + '€',//+ matchesAttributes.price.toString(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w900),
+
+                          ),
+                        ),
+                      ],
+                    ),
+
+
                   ],
                 ),
               ),

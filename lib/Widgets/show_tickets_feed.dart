@@ -14,6 +14,7 @@ import 'package:sep21/Models/CartAttr.dart';
 import 'package:sep21/Models/Match.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
+import 'package:uuid/uuid.dart';
 
 
 
@@ -33,19 +34,19 @@ class DisplayTickets extends StatefulWidget {
   bool _agree = false;
   final Match matchAttr;
 
-   DisplayTickets(this.matchAttr);
+  DisplayTickets(this.matchAttr);
 
 
   @override
   _DisplayTicketsState createState() => _DisplayTicketsState();
 }
 
-enum TicketTypesEnum { regular, student }
-enum SectorsEnum { west, east, south }
+enum TicketTypesEnum { Regular, Student }
+enum SectorsEnum { West, East, South }
 
 class _DisplayTicketsState extends State<DisplayTickets> {
-  TicketTypesEnum? _ticketType = TicketTypesEnum.regular;
-  SectorsEnum? _sector = SectorsEnum.west;
+  TicketTypesEnum? _ticketType = TicketTypesEnum.Regular;
+  SectorsEnum? _sector = SectorsEnum.West;
   final _formKey = new GlobalKey<FormState>();
 
   @override
@@ -61,7 +62,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
     bool _isLoading = false;
 
     int _availableTickets = 0;
-    String _fanId;
+    String? _fanId;
 
     String _selectedGender = 'male';
 
@@ -90,7 +91,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                   Padding(
                     padding: const EdgeInsets.only(left: 3.0),
                     child: Text("Specify ticket type:", style: TextStyle(
-                      fontSize: 20
+                        fontSize: 20
                     ),),
                   ),
                   Divider(
@@ -100,7 +101,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                   ListTile(
                     title: const Text('Regular'),
                     leading: Radio<TicketTypesEnum>(
-                      value: TicketTypesEnum.regular,
+                      value: TicketTypesEnum.Regular,
                       groupValue: _ticketType,
                       onChanged: (TicketTypesEnum? value) {
                         setState(() {
@@ -112,7 +113,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                   ListTile(
                     title: const Text('Student'),
                     leading: Radio<TicketTypesEnum>(
-                      value: TicketTypesEnum.student,
+                      value: TicketTypesEnum.Student,
                       groupValue: _ticketType,
                       onChanged: (TicketTypesEnum? value) {
                         setState(() {
@@ -159,7 +160,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                   ListTile(
                     title: const Text('West'),
                     leading: Radio<SectorsEnum>(
-                      value: SectorsEnum.west,
+                      value: SectorsEnum.West,
                       groupValue: _sector,
                       onChanged: (SectorsEnum? value) {
                         setState(() {
@@ -171,7 +172,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                   ListTile(
                     title: const Text('East'),
                     leading: Radio<SectorsEnum>(
-                      value: SectorsEnum.east,
+                      value: SectorsEnum.East,
                       groupValue: _sector,
                       onChanged: (SectorsEnum? value) {
                         setState(() {
@@ -184,7 +185,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                   ListTile(
                     title: const Text('South'),
                     leading: Radio<SectorsEnum>(
-                      value: SectorsEnum.south,
+                      value: SectorsEnum.South,
                       groupValue: _sector,
                       onChanged: (SectorsEnum? value) {
                         setState(() {
@@ -236,7 +237,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                             color: MyAppColor.starterColor,
                             borderRadius: BorderRadius.circular(9.0),
 
-                        ),
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.all( 5.0),
                             child: Text(
@@ -304,7 +305,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                           child: Padding(
                             padding: const EdgeInsets.all( 5.0),
                             child: Text(
-                                "€  ${_getPriceByTicket()} ",
+                              "€  ${_getPriceByTicket()} ",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20
@@ -337,14 +338,14 @@ class _DisplayTicketsState extends State<DisplayTickets> {
             ///                FANS DETAILS
             /// ------------------------------------------------------
 
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Container(
-                          decoration: BoxDecoration(
-                          color: Theme.of(context).dividerColor,
-                          borderRadius: BorderRadius.only(
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).dividerColor,
+                      borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(5.0),
                           bottomRight: Radius.circular(5.0)),
                     ),
@@ -378,81 +379,98 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                               : Colors.white,
                         ),
                         onSaved: (value) {
-                         _fanId = value!;
+                          _fanId = value!;
                         },
                       ),
                     ),
-            ),
+                  ),
 
 
-                    SizedBox(
-                      height: 30,
-                      child: Divider(
-                        color: Theme.of(context).disabledColor,
-                        thickness: 1.0,
-                      ),
+                  SizedBox(
+                    height: 30,
+                    child: Divider(
+                      color: Theme.of(context).disabledColor,
+                      thickness: 1.0,
                     ),
+                  ),
 
-                    Container(
-                        height: 50,
-                        child:
-                        ///  Progress bar indicator
-                        _isLoading
-                            ? CircularProgressIndicator() :
-                        RaisedButton(
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            shape: RoundedRectangleBorder(side: BorderSide.none),
-                            color: Colors.redAccent.shade400,
-                            onPressed: (){
+                  Container(
+                      height: 50,
+                      child:
+                      ///  Progress bar indicator
+                      _isLoading
+                          ? CircularProgressIndicator() :
+                      RaisedButton(
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(side: BorderSide.none),
+                          color: Colors.redAccent.shade400,
+                          onPressed: (){
 
-                              bool isValid = _formKey.currentState!.validate();
-                              FocusScope.of(context).unfocus();
-                              double price = _getPriceByTicket();
-                              setState(() {
-                                _isLoading = true;
-                              });
+                            bool isValid = _formKey.currentState!.validate();
+                            FocusScope.of(context).unfocus();
+                            double price = _getPriceByTicket();
+                            setState(() {
+                              _isLoading = true;
+                            });
 
-                              try {
-                                /// return true if the form is valid ..
+                            try {
+                              /// return true if the form is valid ..
 
-                                if (isValid) {
-                                  //_formKey.currentState!.save();
+                              if (isValid) {
+                                _formKey.currentState!.save();
 
-                                  /// create new variable that will represent ticket type and sector..
-                                  cartProvider.addProductToCart(
-                                      widget.matchAttr.id,
-                                      price, widget.matchAttr.title,
-                                      widget.matchAttr.imageURL,
-                                      _ticketType.toString(),
-                                      _sector.toString());
-
-                                  Navigator.canPop(context) ? Navigator.pop(
-                                      context) : null;
+                                String fanId;
+                                if ( _fanId == null ){
+                                  fanId = '123';
+                                }else{
+                                  fanId = _fanId!;
                                 }
-                              }catch(e){
-                                print("ERROR | $e");
+                                var uuid = Uuid();
+
+
+                                // Generate a v4 (random) id
+                                var ticketId =  uuid.v4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
+
+                                /// create new variable that will represent ticket type and sector..
+                                cartProvider.addProductToCart(
+                                    widget.matchAttr.id,
+                                    price, widget.matchAttr.title,
+                                    widget.matchAttr.imageURL,
+                                    _ticketType.toString().split('.').last,
+                                    _sector.toString().split('.').last,
+                                    widget.matchAttr.stadium,
+                                    widget.matchAttr.date,
+                                    fanId,
+                                   ticketId
+                                );
+
+                                Navigator.canPop(context) ? Navigator.pop(
+                                    context) : null;
                               }
-                              finally{
-                                setState(() {
-                                  _isLoading = false;
+                            }catch(e){
+                              print("ERROR | $e");
+                            }
+                            finally{
+                              setState(() {
+                                _isLoading = false;
 
-                                });
-                              }
+                              });
+                            }
 
 
-                            },
-                            child: Text(
-                                'Add to Card'.toUpperCase(),
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white
-                                )
-                            )
-                        )
-                    ),
-                  ],
-                ),
-
+                          },
+                          child: Text(
+                              'Add to Card'.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.white
+                              )
+                          )
+                      )
+                  ),
+                ],
               ),
+
+            ),
 
 
 
@@ -475,11 +493,11 @@ class _DisplayTicketsState extends State<DisplayTickets> {
 
   String _getAvailableTickets() {
 
-    if (this._ticketType == TicketTypesEnum.regular){
-      if (this._sector == SectorsEnum.west){
+    if (this._ticketType == TicketTypesEnum.Regular){
+      if (this._sector == SectorsEnum.West){
         return widget.matchAttr.SectorA_RegularQuantity.toString();
       }
-      else if (this._sector == SectorsEnum.east){
+      else if (this._sector == SectorsEnum.East){
         return widget.matchAttr.SectorB_RegularQuantity.toString();
       }
       else{
@@ -487,10 +505,10 @@ class _DisplayTicketsState extends State<DisplayTickets> {
       }
     }
     else{
-      if (this._sector == SectorsEnum.west){
+      if (this._sector == SectorsEnum.West){
         return widget.matchAttr.SectorA_StudentQuantity.toString();
       }
-      else if (this._sector == SectorsEnum.east){
+      else if (this._sector == SectorsEnum.East){
         return widget.matchAttr.SectorB_StudentQuantity.toString();
       }
       else{
@@ -503,11 +521,11 @@ class _DisplayTicketsState extends State<DisplayTickets> {
   }
   double _getPriceByTicket() {
 
-    if (this._ticketType == TicketTypesEnum.regular){
-      if (this._sector == SectorsEnum.west){
+    if (this._ticketType == TicketTypesEnum.Regular){
+      if (this._sector == SectorsEnum.West){
         return widget.matchAttr.SectorA_RegularPrice;
       }
-      else if (this._sector == SectorsEnum.east){
+      else if (this._sector == SectorsEnum.East){
         return widget.matchAttr.SectorB_RegularPrice;
       }
       else{
@@ -515,10 +533,10 @@ class _DisplayTicketsState extends State<DisplayTickets> {
       }
     }
     else{
-      if (this._sector == SectorsEnum.west){
+      if (this._sector == SectorsEnum.West){
         return widget.matchAttr.SectorA_StudentPrice;
       }
-      else if (this._sector == SectorsEnum.east){
+      else if (this._sector == SectorsEnum.East){
         return widget.matchAttr.SectorB_StudentPrice;
       }
       else{
