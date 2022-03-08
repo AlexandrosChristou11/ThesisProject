@@ -151,7 +151,8 @@ class _MatchDetailsState extends State<MatchDetails> {
                               color: Colors.transparent,
                               child: InkWell(
                                   splashColor: Colors.purple[200],
-                                  onTap: () { Share.share(
+                                  onTap: () {
+                                    Share.share(
                                       'Hey mate! Would you like to join the game ${matchAtrr.title}, with me? Hurry up, few tickets left!'
                                           'Follow the link to download the app: https://play.app.goo.gl/?link=https://play.google.com/store/apps/details?id=com.example.sep21', subject: 'Tickets for ${matchAtrr.title}');
                                   },

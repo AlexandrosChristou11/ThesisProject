@@ -305,7 +305,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                           child: Padding(
                             padding: const EdgeInsets.all( 5.0),
                             child: Text(
-                              "€  ${_getPriceByTicket()} ",
+                              "€  ${_getPriceByTicket().toStringAsFixed(2)} ",
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20
@@ -356,7 +356,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                         key: ValueKey('fan id'),
                         //focusNode: _emailFocusNode,
                         validator: (value) {
-                          if (value!.isEmpty ) {
+                          if (value!.isEmpty || value.length < 7) {
                             return 'Please enter a valid Fan Id';
                           } else {
                             return null;
@@ -399,7 +399,8 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                       child:
                       ///  Progress bar indicator
                       _isLoading
-                          ? CircularProgressIndicator() :
+                          ? CircularProgressIndicator( backgroundColor: Colors.amberAccent,strokeWidth: 8.0)
+                          :
                       RaisedButton(
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(side: BorderSide.none),
@@ -446,6 +447,9 @@ class _DisplayTicketsState extends State<DisplayTickets> {
 
                                 Navigator.canPop(context) ? Navigator.pop(
                                     context) : null;
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(content: Text('Ticket added to your basket')));
                               }
                             }catch(e){
                               print("ERROR | $e");

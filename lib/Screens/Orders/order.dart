@@ -38,12 +38,11 @@ class Order extends StatefulWidget {
 class _OrderState extends State<Order> {
 
   final Connectivity _connectivity = Connectivity();
-  late StreamSubscription< ConnectivityResult > _connectivitySubscription;
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   static bool isConnected = false;
 
   // @override
   void initState() {
-
     StripeService.init();
     initConnectivity();
 
@@ -56,8 +55,7 @@ class _OrderState extends State<Order> {
   }
 
 
-
-  Future< void > initConnectivity() async {
+  Future<void> initConnectivity() async {
     late ConnectivityResult result;
     try {
       result = await _connectivity.checkConnectivity();
@@ -73,11 +71,10 @@ class _OrderState extends State<Order> {
 
   Future<void> _UpdateConnectionState(ConnectivityResult result) async {
     if ((result == ConnectivityResult.mobile ||
-        result == ConnectivityResult.wifi ) ) {
-      if (!GlobalMethods.isConnected){
+        result == ConnectivityResult.wifi)) {
+      if (!GlobalMethods.isConnected) {
         GlobalMethods.isConnected = true;
       }
-
     } else if (result == ConnectivityResult.none && GlobalMethods.isConnected) {
       GlobalMethods.isConnected = false;
       GlobalMethods.showStatus(result, false, context);
@@ -95,11 +92,8 @@ class _OrderState extends State<Order> {
   Widget build(BuildContext context) {
 
 
-
     /// Declaration of Global methods class ...
     GlobalMethods globalMethods = GlobalMethods();
-
-
 
 
     /// ************
@@ -111,56 +105,56 @@ class _OrderState extends State<Order> {
 
 
     return FutureBuilder(
-      future: orderProvider.FetchOrders(),
-      builder: (context, snapshot) {
-        return orderProvider.getOrders.isEmpty
-        // (a) In case that 'Cart' is empty (No tickets selected)
-        // -> then appear a different screen !
-            ? Scaffold(
-                body: OrderEmpty(),
-              )
+        future: orderProvider.FetchOrders(),
+        builder: (context, snapshot) {
+          return orderProvider.getOrders.isEmpty
+          // (a) In case that 'Cart' is empty (No tickets selected)
+          // -> then appear a different screen !
+              ? Scaffold(
+            body: OrderEmpty(),
+          )
 
-        // (b) in case that 'Cart' is not empty (Tickets are selected)
-        // -> then show 'Basket'
-            : Scaffold(
-                appBar: AppBar(
-                  flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                          MyAppColor.starterColor,
-                          MyAppColor.endColor
-                        ])),
-                  ),
-                  title: Text('MyTickets (${orderProvider.getOrders.length}) ', style: TextStyle(color: Colors.black),),
+          // (b) in case that 'Cart' is not empty (Tickets are selected)
+          // -> then show 'Basket'
+              : Scaffold(
+              appBar: AppBar(
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [
+                        MyAppColor.starterColor,
+                        MyAppColor.endColor
+                      ])),
+                ),
+                title: Text('MyTickets (${orderProvider.getOrders.length}) ',
+                  style: TextStyle(color: Colors.black),),
 
-                  actions: [
-                    IconButton(color: Colors.black,
-                      onPressed: (){},
+                actions: [
+                  IconButton(color: Colors.black,
+                    onPressed: () {},
 
-                      /*{ globalMethods.showDialogForRemoveItem('Clear Cart', 'Do you want to clear your cart?',
+                    /*{ globalMethods.showDialogForRemoveItem('Clear Cart', 'Do you want to clear your cart?',
                               ()=> {cartProvider.clearCart() }
                       ,context); },*/
-                      icon: Icon(MyAppIcons.trash),
-                    )
-                  ],
+                    icon: Icon(MyAppIcons.trash),
+                  )
+                ],
+              ),
+              body: Container(
+                margin: EdgeInsets.only(bottom: 60),
+                child: ListView.builder(
+                    itemCount: orderProvider.getOrders.length,
+                    itemBuilder: (BuildContext ctx, int index) {
+                      return ChangeNotifierProvider.value(
+                          value: orderProvider.getOrders[index],
+                          child: OrderFull());
+                    }
+
                 ),
-                    body: Container(
-                      margin: EdgeInsets.only(bottom: 60),
-                      child: ListView.builder(itemCount:orderProvider.getOrders.length,
-                          itemBuilder: (BuildContext ctx, int index){
-                        return ChangeNotifierProvider.value(
-                            value: orderProvider.getOrders[index],
-                            child: OrderFull());
-
-                          }
-
-                      ),
-                    )
-                );
-      }
+              )
+          );
+        }
     );
-    }
-
+  }
 
 }
 

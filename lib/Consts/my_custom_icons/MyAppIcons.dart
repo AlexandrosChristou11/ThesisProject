@@ -51,6 +51,7 @@ class MyAppIcons {
   static const IconData ballot = IconData(0xe0cb, fontFamily: 'MaterialIcons');
   static const IconData stadium_outlined = IconData(0xf0668, fontFamily: 'MaterialIcons');
 
+  static const IconData calendar_month = IconData(0xf06bb, fontFamily: 'MaterialIcons');
   static const IconData date_range = IconData(0xe1b6, fontFamily: 'MaterialIcons');
   static const IconData location_on = IconData(0xe3ab, fontFamily: 'MaterialIcons');
   static const IconData data_saver_off = IconData(0xe1b3, fontFamily: 'MaterialIcons');
@@ -64,6 +65,8 @@ class MyAppIcons {
   static const IconData apps = IconData(0xe08f, fontFamily: 'MaterialIcons');
   static const IconData perm_identity = IconData(0xe48d, fontFamily: 'MaterialIcons');
   static const IconData payment = IconData(0xe481, fontFamily: 'MaterialIcons');
+  static const IconData calendar_month_rounded = IconData(0xf06c8, fontFamily: 'MaterialIcons');
+  static const IconData add_to_queue = IconData(0xe05f, fontFamily: 'MaterialIcons');
 
 
 

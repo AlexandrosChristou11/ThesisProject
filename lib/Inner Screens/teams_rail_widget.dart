@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class TeamsNavigationRail extends StatelessWidget {
         padding: const EdgeInsets.only(right: 18.0, top: 8.0, bottom: 8.0),
         child: Container(
           width: 250,
-          height: 290,
+          height: MediaQuery.of(context).size.height * 0.46,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
               //color: Theme.of(context).backgroundColor),
@@ -46,8 +47,12 @@ class TeamsNavigationRail extends StatelessWidget {
                           color: Colors.black54,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0)),
-                          child: Image.network(matchesAttributes.imageURL,
-                              fit: BoxFit.contain),
+                          child: CachedNetworkImage(
+                            imageUrl: matchesAttributes.imageURL,
+                            fit: BoxFit.contain,
+                            placeholder: (context, url) => new CircularProgressIndicator( backgroundColor: Colors.amberAccent,strokeWidth: 8.0),
+                            errorWidget: (context, url, error) => new Icon(Icons.error),
+                          ),
                         )),
                   ),
                     !isBefore ?  Badge(
@@ -82,7 +87,7 @@ class TeamsNavigationRail extends StatelessWidget {
                                 softWrap: false,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w900)),
 

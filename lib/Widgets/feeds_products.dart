@@ -107,7 +107,7 @@ class _FeedProductsState extends State<FeedProducts> {
                                   softWrap: false,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 10,
+                                      fontSize: 14,
                                       color: Colors.black,
                                       fontWeight: FontWeight.w900)),
                             
