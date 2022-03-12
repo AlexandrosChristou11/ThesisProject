@@ -128,7 +128,7 @@ class BackLayerMenu extends StatelessWidget {
 
    List _contentIcons = [
     MyAppIcons.rss,
-    MyAppIcons.bag,
+    MyAppIcons.shopping_basket_outlined,
     MyAppIcons.wishlist,
     MyAppIcons.upload
   ];

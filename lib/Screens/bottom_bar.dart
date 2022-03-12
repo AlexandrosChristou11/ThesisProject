@@ -9,7 +9,8 @@ import 'package:sep21/Screens/home.dart';
 import 'package:sep21/Screens/search.dart';
 import 'package:sep21/Screens/userInfo.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:sep21/consts/my_custom_icons/MyAppIcons.dart';
+
+import '../Consts/my_custom_icons/MyAppIcons.dart';
 
 
 class BottomBarScreen extends StatefulWidget{
@@ -101,11 +102,11 @@ class _BottomBarScreenState extends State<BottomBarScreen>{
             // (1) Home
             BottomNavigationBarItem(icon: Icon(MyAppIcons.home), tooltip: 'Home', label: 'Home'),
             // (2) Feed
-            BottomNavigationBarItem(icon: Icon(MyAppIcons.rss), tooltip: 'Feed', label: 'Feed'),
+            BottomNavigationBarItem(icon: Icon(MyAppIcons.ballot), tooltip: 'Games', label: 'Games'),
             // (3) Search
             BottomNavigationBarItem(activeIcon:null , icon: Icon(null), tooltip: 'Search', label: 'Search'),
             // (4) Cart
-            BottomNavigationBarItem(icon: Icon(MyAppIcons.bag), tooltip: 'Cart', label: 'Cart'),
+            BottomNavigationBarItem(icon: Icon(MyAppIcons.shopping_basket_outlined), tooltip: 'Cart', label: 'Cart'),
             // (5) User
             BottomNavigationBarItem(icon: Icon(MyAppIcons.user), tooltip: 'User', label: 'Account'),
           ]

@@ -7,7 +7,9 @@ import 'package:backdrop/button.dart';
 import 'package:backdrop/scaffold.dart';
 import 'package:backdrop/sub_header.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,8 @@ import 'package:sep21/Inner%20Screens/team_navigation_rail.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Provider/InternetConnection.dart';
 import 'package:sep21/Provider/Matches.dart';
+import 'package:sep21/Screens/Wishlist/wishlist.dart';
+import 'package:sep21/Screens/userInfo.dart' as userInfos;
 import 'package:sep21/Services/Global_methods.dart';
 import 'package:sep21/Services/push_notification.dart';
 import 'package:sep21/Widgets/backlayer.dart';
@@ -50,7 +54,9 @@ class _HomeState extends State<Home> {
 
   String? _token;
 
-
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  String _userId = "";
+  String? _imageUrl;
   List _carouselImages = [
     'assets/images/pap.png',
     'assets/images/gsp.jpg',
@@ -262,9 +268,17 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-  /// ** TODOO.. **
-  /// https://www.flutterant.com/network-connectivity-checker-in-flutter/
-  /// LINK FOR INTERNET CONNECTION- WORKS
+  Future<void> GetData () async{
+    User? user = _auth.currentUser;
+    _userId = user!.uid;
+    final DocumentSnapshot userDocuments =
+    await FirebaseFirestore.instance.collection('Users').doc(_userId).get();
+
+    setState(() {
+      _imageUrl =   userDocuments.get('ImageUrl');
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -275,6 +289,8 @@ class _HomeState extends State<Home> {
     final matchesData = Provider.of<Matches>(context);
     matchesData.FetchMatches();
     final popularMatches = matchesData.PopularMatches;
+
+    GetData();
 
 
 
@@ -296,22 +312,27 @@ class _HomeState extends State<Home> {
                 ])),
               ),
               actions: <Widget>[
-                IconButton(
-                  iconSize: 15,
-                  icon: CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      radius: 13,
-                      backgroundImage: NetworkImage(
-                          'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                InkWell(
+                  onTap: ()=> Navigator.of(context).pushNamed('/userInfo'),
+                  child: Container(
+                    height: kToolbarHeight / 1.8,
+                    width: kToolbarHeight / 1.8,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white,
+                          blurRadius: 1.0,
+                        ),
+                      ],
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.scaleDown,
+                        image: NetworkImage(
+                            this._imageUrl.toString() ?? "https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg"),
+                      ),
                     ),
                   ),
-                  padding: const EdgeInsets.all(10),
-                  onPressed: () async {
-
-                  },
-                )
+                ),
               ],
             ),
             backLayer: BackLayerMenu(),
@@ -360,7 +381,7 @@ class _HomeState extends State<Home> {
                             color: Theme.of(context).bottomAppBarColor,
                             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0), bottomRight: Radius.circular(5.0))),
                         child: Text(
-                         'Sports',
+                         ' Find your tickets for each sport: ',
                           style: TextStyle(fontWeight: FontWeight.w800, fontSize: 23),
                         ),
                       ),
@@ -369,7 +390,7 @@ class _HomeState extends State<Home> {
                   Padding(
                     padding: const EdgeInsets.only(left:3.0, right: 3.0),
                     child: Container(
-                        // decoration: BoxDecoration(
+                        // decoration: Boxc.Decoration(
                         //
                         //     color: Theme.of(context).bottomAppBarColor,
                         //     borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5.0), bottomRight: Radius.circular(5.0))),
@@ -380,7 +401,24 @@ class _HomeState extends State<Home> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext ctx,
                         int index){
-                            return TeamsWidget(index:index);
+                            return Container(
+                                decoration: BoxDecoration(
+                                    color: darkTheme.darkTheme ? Colors.white : Colors.black38,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8),
+                                        topRight: Radius.circular(8),
+                                        bottomLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(8)
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.4),
+                                        spreadRadius: 1,
+                                        blurRadius: 1,
+                                        offset: Offset(0, 1),
+                                      ),
+                                    ] ,),
+                                child: TeamsWidget(index:index));
                         }, )
                     ),
                   ),
@@ -444,7 +482,7 @@ class _HomeState extends State<Home> {
                       child: Row(
                         children: [
                           Text(
-                            ' POPULAR CLUBS',
+                            ' TICKETS BY CLUB',
                             style:
                             TextStyle(fontWeight: FontWeight.w800, fontSize: 23),
                           ),

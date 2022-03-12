@@ -9,7 +9,7 @@ import 'package:sep21/Models/Stadium.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Provider/DarkTheme.dart';
 import 'package:sep21/Services/Global_methods.dart';
-
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 
@@ -51,7 +51,7 @@ class _CartFullState extends State<CartFull> {
     final cartProvider = Provider.of<CartProvider>(context);
     
     double subTotal = cartAttr.price * cartAttr.quantity;
-    print ("MATCH ID: ${widget.matchId}");
+
     return InkWell(
         onTap:  () =>  Navigator.pushNamed(context, MatchDetails.routeName, arguments: cartAttr.matchId) ,
       child: Container(

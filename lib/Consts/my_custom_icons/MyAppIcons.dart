@@ -48,7 +48,7 @@ class MyAppIcons {
   static const IconData sports_basketball_rounded = IconData(0xf01ba, fontFamily: 'MaterialIcons');
   static const IconData sports_volleyball_rounded = IconData(0xf01c9, fontFamily: 'MaterialIcons');
   static const IconData sports_handball_rounded = IconData(0xf01bf, fontFamily: 'MaterialIcons');
-  static const IconData ballot = IconData(0xe0cb, fontFamily: 'MaterialIcons');
+  static const IconData ballot =  IconData(0xeebb, fontFamily: 'MaterialIcons');
   static const IconData stadium_outlined = IconData(0xf0668, fontFamily: 'MaterialIcons');
 
   static const IconData calendar_month = IconData(0xf06bb, fontFamily: 'MaterialIcons');
@@ -67,6 +67,11 @@ class MyAppIcons {
   static const IconData payment = IconData(0xe481, fontFamily: 'MaterialIcons');
   static const IconData calendar_month_rounded = IconData(0xf06c8, fontFamily: 'MaterialIcons');
   static const IconData add_to_queue = IconData(0xe05f, fontFamily: 'MaterialIcons');
+  static const IconData local_activity_outlined = IconData(0xf171, fontFamily: 'MaterialIcons');
+  static const IconData shopping_basket_outlined = IconData(0xf37e, fontFamily: 'MaterialIcons');
+  static const IconData qr_code_2_rounded = IconData(0xf00ca, fontFamily: 'MaterialIcons');
+  static const IconData not_found = IconData(0xef00, fontFamily: 'MaterialIcons');
+
 
 
 

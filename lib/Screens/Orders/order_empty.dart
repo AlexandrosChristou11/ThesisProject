@@ -30,7 +30,7 @@ class  OrderEmpty extends StatelessWidget{
             color: Theme.of(context).textSelectionColor, fontSize: 35, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 25,),  // margin between 2 texts!
-          Text('You did not select any seat yet!',
+          Text('You have not book any ticket yet!',
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: themeChange.darkTheme? Theme.of(context).disabledColor: MyAppColor.subTitle,

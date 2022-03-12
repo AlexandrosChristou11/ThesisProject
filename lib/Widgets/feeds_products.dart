@@ -11,13 +11,14 @@ import 'package:sep21/Widgets/feeds_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 
-class FeedProducts extends StatefulWidget {
+class FeedProducts extends StatefulWidget  {
 
 
 
   @override
   _FeedProductsState createState() => _FeedProductsState();
 }
+
 
 class _FeedProductsState extends State<FeedProducts> {
   IconData _getSportIcon(String type){

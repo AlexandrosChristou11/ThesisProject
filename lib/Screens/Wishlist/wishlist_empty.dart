@@ -33,7 +33,7 @@ class  WishlistsEmpty extends StatelessWidget{
                 color: Theme.of(context).textSelectionColor, fontSize: 35, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 25,),  // margin between 2 texts!
-          Text('Add your favorite team and games in your wishlist',
+          Text('Add your favorite games in your wishlist',
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: themeChange.darkTheme? Theme.of(context).disabledColor: MyAppColor.subTitle,
@@ -51,7 +51,7 @@ class  WishlistsEmpty extends StatelessWidget{
                   side: BorderSide(color: Colors.red),),
                 color: Colors.redAccent,
                 child:
-                Text('Add a Wish',
+                Text('Add a favorite',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Theme.of(context).textSelectionColor, fontSize: 25, fontWeight: FontWeight.w500),

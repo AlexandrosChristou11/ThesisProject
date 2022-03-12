@@ -449,7 +449,7 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                                     context) : null;
 
                                 ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(content: Text('Ticket added to your basket')));
+                                    .showSnackBar(const SnackBar(content: Text('Ticket added to your basket'), duration: Duration(seconds: 1, milliseconds: 500)));
                               }
                             }catch(e){
                               print("ERROR | $e");
@@ -499,24 +499,24 @@ class _DisplayTicketsState extends State<DisplayTickets> {
 
     if (this._ticketType == TicketTypesEnum.Regular){
       if (this._sector == SectorsEnum.West){
-        return widget.matchAttr.SectorA_RegularQuantity.toString();
+        return widget.matchAttr.SectorC_RegularQuantity.toString();
       }
       else if (this._sector == SectorsEnum.East){
         return widget.matchAttr.SectorB_RegularQuantity.toString();
       }
       else{
-        return widget.matchAttr.SectorC_RegularQuantity.toString();
+        return widget.matchAttr.SectorA_RegularQuantity.toString();
       }
     }
     else{
       if (this._sector == SectorsEnum.West){
-        return widget.matchAttr.SectorA_StudentQuantity.toString();
+        return widget.matchAttr.SectorC_StudentQuantity.toString();
       }
       else if (this._sector == SectorsEnum.East){
         return widget.matchAttr.SectorB_StudentQuantity.toString();
       }
       else{
-        return widget.matchAttr.SectorC_StudentQuantity.toString();
+        return widget.matchAttr.SectorA_StudentQuantity.toString();
       }
 
     }
@@ -527,24 +527,24 @@ class _DisplayTicketsState extends State<DisplayTickets> {
 
     if (this._ticketType == TicketTypesEnum.Regular){
       if (this._sector == SectorsEnum.West){
-        return widget.matchAttr.SectorA_RegularPrice;
+        return widget.matchAttr.SectorC_RegularPrice;
       }
       else if (this._sector == SectorsEnum.East){
         return widget.matchAttr.SectorB_RegularPrice;
       }
       else{
-        return widget.matchAttr.SectorC_RegularPrice;
+        return widget.matchAttr.SectorA_RegularPrice;
       }
     }
     else{
       if (this._sector == SectorsEnum.West){
-        return widget.matchAttr.SectorA_StudentPrice;
+        return widget.matchAttr.SectorC_StudentPrice;
       }
       else if (this._sector == SectorsEnum.East){
         return widget.matchAttr.SectorB_StudentPrice;
       }
       else{
-        return  widget.matchAttr.SectorB_StudentPrice;
+        return  widget.matchAttr.SectorA_StudentPrice;
       }
 
     }

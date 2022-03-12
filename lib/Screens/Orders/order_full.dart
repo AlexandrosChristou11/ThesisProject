@@ -16,7 +16,7 @@ import 'package:sep21/Services/Global_methods.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
-
+import 'package:ticketview/ticketview.dart';
 import '../../Consts/my_custom_icons/MyAppColors.dart';
 import '../../Consts/my_custom_icons/MyAppIcons.dart';
 import '../../Widgets/feeds_dialog.dart';
@@ -47,8 +47,25 @@ class _OrderFullState extends State<OrderFull> {
 
 
     return FocusedMenuHolder(
+      duration: Duration.zero,
       menuWidth: MediaQuery.of(context).size.width - 40.0 * 2,
       menuItems: [
+        FocusedMenuItem(
+          title: Text('View QR Code', style: TextStyle(color: Colors.black),),
+          onPressed: () async{
+            try {
+
+              gb.getTicketQrCode(context, orderAttrProvider.matchId, orderAttrProvider.orderId);
+
+            }on Exception catch (exception) {
+                 gb.authenticationErrorHandler(exception.toString(), context);
+            } catch (error) {
+                 gb.authenticationErrorHandler(error.toString(), context);
+            }
+          },
+          trailingIcon: Icon(MyAppIcons.qr_code_2_rounded, color: Colors.black,),
+
+        ),
         FocusedMenuItem(
           title: Text('Add to calender', style: TextStyle(color: Colors.black),),
           onPressed: () async{
@@ -76,9 +93,9 @@ class _OrderFullState extends State<OrderFull> {
 
               Add2Calendar.addEvent2Cal(event);
             }on Exception catch (exception) {
-                 gb.authenticationErrorHandler(exception.toString(), context);
+              gb.authenticationErrorHandler(exception.toString(), context);
             } catch (error) {
-                 gb.authenticationErrorHandler(error.toString(), context);
+              gb.authenticationErrorHandler(error.toString(), context);
             }
           },
           trailingIcon: Icon(MyAppIcons.add_to_queue, color: Colors.black,),
@@ -103,7 +120,7 @@ class _OrderFullState extends State<OrderFull> {
         ),
       ],
       onPressed: (){},
-      openWithTap: false,
+      openWithTap: true,
       //duration: Duration(seconds: 0),
       menuOffset: 20,
        // onTap :  () async {
@@ -111,166 +128,145 @@ class _OrderFullState extends State<OrderFull> {
         // await buildMenu(context);
 
       //  } ,
-      child: Container(
-        height: 140 ,
-        margin: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              bottomRight: const Radius.circular(16.0),
-              topRight: const Radius.circular(16.0)),
-          color: Theme.of(context).backgroundColor,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 130,
-              decoration: BoxDecoration(
+      child: TicketView(
+        //backgroundPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+        backgroundColor: MyAppColor.selected,
+       // contentPadding: EdgeInsets.symmetric(vertical: 24, horizontal: 0),
+        drawArc: false,
+        triangleAxis: Axis.vertical,
+        borderRadius: 6,
+        drawDivider: true,
+        trianglePos: .5,
+        child: Container(
+          height: 140 ,
+          margin: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                bottomRight: const Radius.circular(16.0),
+                topRight: const Radius.circular(16.0)),
+            color: Theme.of(context).backgroundColor,
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 90,
+                decoration: BoxDecoration(
 
-              ),
-              child: QrImage(
-                backgroundColor: Colors.white,
-                data: " { 'matchId' : ${orderAttrProvider.matchId}, 'ticketId' : ${orderAttrProvider.orderId}  } ",
-              ),
-            ),
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            orderAttrProvider.title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15),
-                          ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(32),
-                            onTap:() {
-                              globalMethods.showDialogForRemoveItem('Remove Ticket', 'Tickets will be removed from MyTickets',
-                                      () async{
-                                setState(() {
-                                  _isLoading = true;
-                                });
-
-                               await FirebaseFirestore.instance.collection('Order').doc(orderAttrProvider.orderId).delete(); }
-                                  , context);
-
-                              },
-                            //{cartProvider.removeItem(widget.matchId); },
-                            child: Container(
-                                height: 50,
-                                width: 50,
-                                child:
-                                _isLoading ? CircularProgressIndicator() :
-                                Icon(Entypo.cross,
-                                    color: Colors.red, size: 23)),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(MyAppIcons.date_range, size: 14,),
-
-                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(
-                            //' ${DateFormat("dd-MM-yyyy").format(DateTime.parse(matchesAttributes.date))}' ,//+ matchesAttributes.price.toString(),
-                            ' ${Jiffy(orderAttrProvider.date).yMMMd}' ,//+ matchesAttributes.price.toString(),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w900),
-
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(MyAppIcons.seat, size: 14,),
-
-                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(
-                            ' ${orderAttrProvider.sector}' ,//+ matchesAttributes.price.toString(),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w900),
-
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(MyAppIcons.location_on, size: 14,),
-
-                        // padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(
-                            ' ${orderAttrProvider.stadium}' ,//+ matchesAttributes.price.toString(),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w900),
-
-                          ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                              onTap: () async {
-
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context){
-                                      return new Dialog(
-                                        child:  Container(
-                                          constraints: BoxConstraints(
-                                              minHeight: 100,
-                                              maxHeight: MediaQuery.of(context).size.height * 0.5),
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                              color: Theme.of(context).scaffoldBackgroundColor),
-                                          child:  QrImage(
-                                            eyeStyle: const QrEyeStyle(
-                                              eyeShape: QrEyeShape.square,
-                                              color: Colors.black,
-                                            ),
-                                      data: " { 'matchId' : ${orderAttrProvider.matchId}, 'ticketId' : ${orderAttrProvider.orderId}  } ",
-                                        ),
-
-                                      ));
-                                    }
-                                );
-                              },
-                              borderRadius: BorderRadius.circular(18),
-                              child:
-                              Icon(Icons.more_horiz, color: MyAppColor.gradiendLStart)),
-                        ),
-                      ],
-                    ),
-                  ],
+                ),
+                child: QrImage(
+                  backgroundColor: Colors.white,
+                  data: " { 'matchId' : ${orderAttrProvider.matchId}, 'ticketId' : ${orderAttrProvider.orderId}  } ",
                 ),
               ),
-            ),
-          ],
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              orderAttrProvider.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 15),
+                            ),
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(32),
+                              onTap:() {
+                                globalMethods.showDialogForRemoveItem('Remove Ticket', 'Tickets will be removed from MyTickets',
+                                        () async{
+                                  setState(() {
+                                    _isLoading = true;
+                                  });
+
+                                 await FirebaseFirestore.instance.collection('Order').doc(orderAttrProvider.orderId).delete(); }
+                                    , context);
+
+                                },
+                              //{cartProvider.removeItem(widget.matchId); },
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  child:
+                                  _isLoading ? CircularProgressIndicator() :
+                                  Icon(Entypo.cross,
+                                      color: Colors.red, size: 23)),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(MyAppIcons.date_range, size: 14,),
+
+                          // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text(
+                              //' ${DateFormat("dd-MM-yyyy").format(DateTime.parse(matchesAttributes.date))}' ,//+ matchesAttributes.price.toString(),
+                              ' ${Jiffy(orderAttrProvider.date).yMMMd}' ,//+ matchesAttributes.price.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w900),
+
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(MyAppIcons.seat, size: 14,),
+
+                          // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text(
+                              ' ${orderAttrProvider.sector}' ,//+ matchesAttributes.price.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w900),
+
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(MyAppIcons.location_on, size: 14,),
+
+                          // padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text(
+                              ' ${orderAttrProvider.stadium}' ,//+ matchesAttributes.price.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w900),
+
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

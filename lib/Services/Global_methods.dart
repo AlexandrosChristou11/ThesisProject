@@ -9,6 +9,7 @@ import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 
@@ -77,6 +78,18 @@ class GlobalMethods{
             Navigator.pop(context);
           }, child: Text('OK', style: TextStyle(color: MyAppColor.favColor),)),
         ],
+      );
+
+    });
+  }
+
+  Future<void> getTicketQrCode(BuildContext context, String matchId, String ticketId) async {
+    showDialog(context: context, builder: (BuildContext ctx){
+      return Dialog(
+        child: QrImage(
+          backgroundColor: Colors.white,
+          data: " { 'matchId' : $matchId , 'ticketId' : $ticketId  } ",
+        ),
       );
 
     });

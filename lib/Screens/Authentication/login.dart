@@ -54,10 +54,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 password: _password.trim())
             .then((value) =>
                 Navigator.canPop(context) ? Navigator.pop(context) : null);
-      } catch (e) {
-        gb.authenticationErrorHandler(e.toString(), context);
+      }  on FirebaseAuthException catch (e) {
+        gb.authenticationErrorHandler( e.message.toString() , context);
         print('error occured: ' + e.toString());
-      } finally {
+      } catch(error){
+        gb.authenticationErrorHandler( error.toString() , context);
+        print('error occured: ' + error.toString());
+      }
+      finally {
         setState(() {
           _isLoading = false;
         });
@@ -272,7 +276,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             alignment: Alignment.topLeft,
                             child: TextButton(
                               onPressed: (){ Navigator.pushNamed(context, ForgetPassword.routeName); },
-                              child: Text('Forget password?',
+                              child: Text('Forgot password?',
                                   style: TextStyle(
                                       color: themeChange.darkTheme ? Colors.blue.shade100 : Colors.blue.shade900,
                                       decoration: TextDecoration.underline)),

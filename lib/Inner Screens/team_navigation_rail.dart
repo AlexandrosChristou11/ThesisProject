@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:sep21/Inner%20Screens/teams_rail_widget.dart';
 import 'package:sep21/Provider/Matches.dart';
 
@@ -219,7 +220,7 @@ class ContentSpace extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Feather.database, size: 100,),
+                  Icon(MyAppIcons.not_found, size: 100,),
                   SizedBox(height: 40,),
                   Text('No matches available for this team', textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
                 ],

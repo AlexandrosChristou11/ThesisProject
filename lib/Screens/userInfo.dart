@@ -312,7 +312,7 @@ class _UserInfoState extends State<UserInfo> {
                     child: ListTile(title: Text('My Tickets'),
                       trailing: Icon(Icons.chevron_right_rounded),
                       onTap: ()=> Navigator.of(context).pushNamed(Order.routeName),
-                      leading: Icon(MyAppIcons.seat, color: Colors.green.shade300,),
+                      leading: Icon(MyAppIcons.local_activity_outlined, color: Colors.green.shade300,),
                     ),
                   ),
                 ),
@@ -448,7 +448,7 @@ class _UserInfoState extends State<UserInfo> {
                                     ),
                                   ],
                                 ),
-                                content: Text('Do you wanna Sign out?'),
+                                content: Text('Do you want to Sign out?'),
                                 actions: [
                                   TextButton(
                                       onPressed: () async {

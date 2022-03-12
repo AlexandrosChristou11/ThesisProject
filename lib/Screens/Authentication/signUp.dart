@@ -26,6 +26,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 
 class SingUpScreen extends StatefulWidget {
   static const routName = '\SingUpScreen';
@@ -52,6 +53,17 @@ class _SingUpScreenState extends State<SingUpScreen> {
   bool _isLoading = false;
   bool _agree = false;
 
+  Future<File> getImageFileFromAssets(String path) async {
+
+    final byteData = await rootBundle.load('./assets/$path');
+
+    final file = File('${(await getTemporaryDirectory()).path}/us.jpg');
+
+    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+    return file;
+  }
+
   void _submitForm() async {
     bool isValid = _formKey.currentState!.validate();
 
@@ -66,9 +78,16 @@ class _SingUpScreenState extends State<SingUpScreen> {
       _formKey.currentState!.save();
       try {
         /// Image validator
+        ///  await getImageFileFromAssets('images/default.jpg');
         if (_pickedImage == null) {
-          gb.authenticationErrorHandler('Please pick an image', context);
-        } else {
+          File f = await getImageFileFromAssets('images/us.jpg');
+          _pickedImage = f;
+          setState(() {
+
+          });
+          //gb.authenticationErrorHandler('Please pick an image', context);
+        }
+
           setState(() {
             _isLoading = true;
           });
@@ -105,7 +124,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
             });
             Navigator.canPop(context) ? Navigator.pop(context) : null;
           }
-          }
+
         } catch (e) {
         gb.authenticationErrorHandler(e.toString(), context);
         print('error occurred : ' + e.toString());
@@ -131,7 +150,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
 
   void _pickAvatarGallery() async {
     final picker = ImagePicker();
-    final pickedImg = await await picker.pickImage(source: ImageSource.gallery);
+    final pickedImg = await picker.pickImage(source: ImageSource.gallery);
     final pickedImgFile = File(pickedImg!.path);
     setState(() {
       _pickedImage = pickedImgFile;
@@ -484,7 +503,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                               key: ValueKey('password'),
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 7) {
-                                  return 'Please enter a valid password';
+                                  return 'Password should be at least 7 characters';
                                 } else {
                                   return null;
                                 }

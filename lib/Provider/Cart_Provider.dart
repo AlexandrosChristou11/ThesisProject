@@ -6,6 +6,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:sep21/Models/CartAttr.dart';
 import 'package:sep21/Models/Sector.dart';
 import 'package:sep21/Models/Stadium.dart';
+import 'package:sep21/ViewModels/CartDetailsVM.dart';
 import 'package:uuid/uuid.dart';
 
 class CartProvider with ChangeNotifier{
@@ -45,6 +46,7 @@ class CartProvider with ChangeNotifier{
         fanId: fanId
 
     ));
+    //_items.add(new CartDetailsVM.name(type, sector, matchID, ticketId));
 
     // if (_cartItems.containsKey(matchID)){
     //   _cartItems.update(matchID, (existingCart) => CartAttr(
@@ -123,6 +125,19 @@ class CartProvider with ChangeNotifier{
   void clearCart(){
     _cartItems.clear();
     notifyListeners();
+  }
+
+  /// get quantity and sector for each ticket in the provider ..
+  List<CartDetailsVM> getCartDetails(){
+    List<CartDetailsVM> items = [];
+    
+    // for (int i = 0; i < _cartItems.values.where((x) => x.ticketId != '').length; i ++){
+    //   items.add(new CartDetailsVM(_cartItems[i]!.ticketType, _cartItems[i]!.sector, _cartItems[i]!.matchId));
+    // }
+    _cartItems.forEach((key, value) { items.add(new CartDetailsVM(value.ticketType, value.sector, value.matchId)) ; });
+    
+    return items;
+    
   }
 
 }

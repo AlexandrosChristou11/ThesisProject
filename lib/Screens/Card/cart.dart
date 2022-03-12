@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppColors.dart';
 import 'package:sep21/Provider/Cart_Provider.dart';
 import 'package:sep21/Services/payment_service.dart';
+import 'package:sep21/ViewModels/CartDetailsVM.dart';
+import 'package:sep21/ViewModels/TicketVM.dart';
 import 'package:sep21/Widgets/payment.dart';
 import 'package:sep21/Consts/my_custom_icons/MyAppIcons.dart';
 import 'package:uuid/uuid.dart';
@@ -162,7 +164,7 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
   String userId = "";
   var uuid = Uuid();
 
-  return Container(
+  return Container (
     decoration: BoxDecoration(
         border: Border(top: BorderSide(color: Colors.grey, width: 0.5))),
     child: Padding(
@@ -220,6 +222,26 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
                                 'sector' : orderValue.sector,
                                 'orderDate': DateTime.now()
                               });
+
+                              List <CartDetailsVM> items = List.from(cartProvider.getCartDetails());
+                              for (int i = 0; i < items.length; i ++){
+                                print ('items: ${items[i].Type} & ${items[i].Sector}');
+                               // String sector = _getSectorAttribute(items[i].Sector);
+                                //int quantity = 1;
+                                TicketVM ticket = await _getSectorAttribute(items[i].Sector, items[i].Type, items[i].MatchId);
+                                var collection = FirebaseFirestore.instance.collection('Matches');
+                                collection
+                                    .doc(items[i].MatchId) // <-- Doc ID where data should be updated.
+                                    .update({ ticket.Field!  : '${ticket.Quantity}' } );
+                              }
+
+                              cartProvider.addListener(() { });
+
+                              /// to do... reduce availability of tickets from
+                              cartProvider.clearCart();
+
+
+
                             } catch (e) {
                               print('Error has been occured: ${e.toString()}');
                             }
@@ -254,6 +276,92 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
       ),
     ),
   );
+}
+
+Future<TicketVM> _getSectorAttribute(String sector, String type, String matchId) async{
+
+
+  if (  sector == 'South'){
+    if (type == 'Regular'){
+      String Field = 'Sector A Regular Ticket Quantity';
+      var collection = FirebaseFirestore.instance.collection('Matches');
+      var docSnapshot = await collection.doc(matchId)
+          .get();
+      Map<String, dynamic>? data = docSnapshot.data();
+      var quantity = int.parse(data?['Sector A Regular Ticket Quantity']); // <-- The value you want to retrieve.
+      print ('QUANTITY: $quantity');
+      quantity =- 1;
+      TicketVM ticketVM = new TicketVM.name(Field, quantity);
+      return ticketVM;
+    }else{
+      String Field = 'Sector A Student Ticket Quantity';
+      var collection = FirebaseFirestore.instance.collection('Matches');
+      var docSnapshot = await collection.doc(matchId)
+          .get();
+      Map<String, dynamic>? data = docSnapshot.data();
+      var quantity = int.parse(data?['Sector A Student Ticket Quantity']); // <-- The value you want to retrieve.
+      print ('QUANTITY: $quantity');
+      int Quantity = quantity-=1;
+      TicketVM ticketVM = new TicketVM.name(Field, Quantity);
+      return ticketVM;
+    }
+
+  }
+  else if (  sector == 'East'){
+   if (type == 'Regular'){
+     String Field = 'Sector B Regular Ticket Quantity';
+     var collection = FirebaseFirestore.instance.collection('Matches');
+     var docSnapshot = await collection.doc(matchId)
+         .get();
+     Map<String, dynamic>? data = docSnapshot.data();
+     var quantity = int.parse(data?['Sector B Regular Ticket Quantity']); // <-- The value you want to retrieve.
+     print ('QUANTITY: $quantity');
+     int Quantity = quantity-=1;
+     TicketVM ticketVM = new TicketVM.name(Field, Quantity);
+     return ticketVM;
+   }else{
+     String Field = 'Sector B Student Ticket Quantity';
+     var collection = FirebaseFirestore.instance.collection('Matches');
+     var docSnapshot = await collection.doc(matchId)
+         .get();
+     Map<String, dynamic>? data = docSnapshot.data();
+     var quantity = int.parse(data?['Sector B Student Ticket Quantity']); // <-- The value you want to retrieve.
+     print ('QUANTITY: $quantity');
+     int Quantity = quantity-=1;
+     TicketVM ticketVM = new TicketVM.name(Field, Quantity);
+     return ticketVM;
+   }
+
+  }
+  else if (  sector == 'West'){
+    if (type == 'Regular'){
+      String Field = 'Sector C Regular Ticket Quantity';
+      var collection = FirebaseFirestore.instance.collection('Matches');
+      var docSnapshot = await collection.doc(matchId)
+          .get();
+      Map<String, dynamic>? data = docSnapshot.data();
+      var quantity = int.parse(data?['Sector C Regular Ticket Quantity']); // <-- The value you want to retrieve.
+      print ('QUANTITY: $quantity');
+      int Quantity = quantity-=1;
+      TicketVM ticketVM = new TicketVM.name(Field, Quantity);
+      return ticketVM;
+    }else{
+      String Field = 'Sector C Student Ticket Quantity';
+      var collection = FirebaseFirestore.instance.collection('Matches');
+      var docSnapshot = await collection.doc(matchId)
+          .get();
+      Map<String, dynamic>? data = docSnapshot.data();
+      var quantity = int.parse(data?['Sector C Student Ticket Quantity']); // <-- The value you want to retrieve.
+      print ('QUANTITY: $quantity');
+      int Quantity = quantity-=1;
+      TicketVM ticketVM = new TicketVM.name(Field, Quantity);
+      return ticketVM;
+    }
+
+  }
+  TicketVM ticketVM = new TicketVM.name('Field', 1);
+  return ticketVM;
+
 }
 
 void Checkouts(BuildContext context) => showDialog(
@@ -291,6 +399,8 @@ Future<int> initPaymentSheet(context,
 
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Payment Completed!')));
+
+
     return response.statusCode;
   } catch (e) {
     if (e is StripeException) {

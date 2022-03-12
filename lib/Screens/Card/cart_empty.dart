@@ -24,7 +24,7 @@ class  CartEmpty extends StatelessWidget{
             decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill,
                         image: AssetImage('assets/images/emptycart.png'))),
           ),
-          Text('Your card is empty!',
+          Text('Your cart is empty!',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Theme.of(context).textSelectionColor, fontSize: 35, fontWeight: FontWeight.w500),

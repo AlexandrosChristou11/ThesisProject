@@ -156,7 +156,7 @@ class _LandingPageState extends State<LandingPage>
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
-                    "Welcome to the CY-Seating",
+                    "Welcome to CY-Seating",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.w600),
                   )),
