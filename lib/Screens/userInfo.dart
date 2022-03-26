@@ -574,22 +574,22 @@ class _UserInfoState extends State<UserInfo> {
                         ),
                       ),
 
-                      /// (3) Remove Avatar Image ..
-                      InkWell(
-                        onTap: (){},
-                        splashColor: Colors.red,
-                        child:
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.remove_circle, color:Colors.red ,),
-                            ),
-                            Text('Remove', style: TextStyle(fontSize: 18, color: MyAppColor.title, fontWeight: FontWeight.w500),)
-                          ],
-
-                        ),
-                      )
+                      // /// (3) Remove Avatar Image ..
+                      // InkWell(
+                      //   onTap: _removeAvatar,
+                      //   splashColor: Colors.red,
+                      //   child:
+                      //   Row(
+                      //     children: [
+                      //       Padding(
+                      //         padding: const EdgeInsets.all(8.0),
+                      //         child: Icon(Icons.remove_circle, color:Colors.red ,),
+                      //       ),
+                      //       Text('Remove', style: TextStyle(fontSize: 18, color: MyAppColor.title, fontWeight: FontWeight.w500),)
+                      //     ],
+                      //
+                      //   ),
+                      // )
 
                     ],
                   ),
