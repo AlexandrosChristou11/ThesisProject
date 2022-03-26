@@ -274,10 +274,11 @@ class _HomeState extends State<Home> {
     final DocumentSnapshot userDocuments =
     await FirebaseFirestore.instance.collection('Users').doc(_userId).get();
 
-    setState(() {
-      _imageUrl =   userDocuments.get('ImageUrl');
-
-    });
+    if (this.mounted) {
+      setState(() {
+        _imageUrl = userDocuments.get('ImageUrl');
+      });
+    }
   }
 
   @override

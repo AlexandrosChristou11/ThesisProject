@@ -503,19 +503,20 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left:2.0),
-                                  child: Flexible(
-                                    flex: 0,
-                                    child: _sportType == 'Default'
-                                        ? Icon(Feather.x_circle,
-                                            color: Colors.red)
-                                        : Icon(
-                                            MyAppIcons.check_circle,
-                                            color: Colors.green,
-                                          ),
+                                Flexible(
+                                  flex: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left:2.0),
+                                      child: _sportType == 'Default'
+                                          ? Icon(Feather.x_circle,
+                                              color: Colors.red)
+                                          : Icon(
+                                              MyAppIcons.check_circle,
+                                              color: Colors.green,
+                                            ),
+                                    ),
                                   ),
-                                ),
+
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
@@ -592,19 +593,21 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left:2.0),
-                                  child: Flexible(
-                                    flex: 0,
-                                    child: _matchType == 'Default'
-                                        ? Icon(Feather.x_circle,
-                                        color: Colors.red)
-                                        : Icon(
-                                      MyAppIcons.check_circle,
-                                      color: Colors.green,
+                                Flexible(
+                                  flex: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left:2.0),
+
+                                      child: _matchType == 'Default'
+                                          ? Icon(Feather.x_circle,
+                                          color: Colors.red)
+                                          : Icon(
+                                        MyAppIcons.check_circle,
+                                        color: Colors.green,
+                                      ),
                                     ),
                                   ),
-                                ),
+
                                 Padding(
                                   padding: const EdgeInsets.only(left:8.0),
                                   child: Text(
@@ -719,19 +722,19 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             child: Row(
 
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left:2.0),
-                                  child: Flexible(
-                                    flex: 0,
-                                    child: _awayTeam == 'Default'
-                                        ? Icon(Feather.x_circle,
-                                        color: Colors.red)
-                                        : Icon(
-                                      MyAppIcons.check_circle,
-                                      color: Colors.green,
+                                Flexible(
+                                  flex: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left:2.0),
+                                      child: _awayTeam == 'Default'
+                                          ? Icon(Feather.x_circle,
+                                          color: Colors.red)
+                                          : Icon(
+                                        MyAppIcons.check_circle,
+                                        color: Colors.green,
+                                      ),
                                     ),
                                   ),
-                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
@@ -797,19 +800,19 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             child: Row(
 
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left:2.0),
-                                  child: Flexible(
-                                    flex: 0,
-                                    child: _location == 'Default'
-                                        ? Icon(Feather.x_circle,
-                                        color: Colors.red)
-                                        : Icon(
-                                      MyAppIcons.check_circle,
-                                      color: Colors.green,
+                                Flexible(
+                                  flex: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left:2.0),
+                                      child: _location == 'Default'
+                                          ? Icon(Feather.x_circle,
+                                          color: Colors.red)
+                                          : Icon(
+                                        MyAppIcons.check_circle,
+                                        color: Colors.green,
+                                      ),
                                     ),
                                   ),
-                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
@@ -868,19 +871,19 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                             child: Row(
 
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left:2.0),
-                                  child: Flexible(
-                                    flex: 0,
-                                    child: selectedDate == DateTime.now()
-                                        ? Icon(Feather.x_circle,
-                                        color: Colors.red)
-                                        : Icon(
-                                      MyAppIcons.check_circle,
-                                      color: Colors.green,
+                                Flexible(
+                                  flex: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left:2.0),
+                                      child: selectedDate == DateTime.now()
+                                          ? Icon(Feather.x_circle,
+                                          color: Colors.red)
+                                          : Icon(
+                                        MyAppIcons.check_circle,
+                                        color: Colors.green,
+                                      ),
                                     ),
                                   ),
-                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
@@ -947,19 +950,20 @@ class _UploadMatchFormState extends State<UploadMatchForm> {
                                 borderRadius: BorderRadius.circular(15.0)),
                             child: Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left:2.0),
-                                  child: Flexible(
-                                    flex: 0,
-                                    child: selectedTime == TimeOfDay(hour: 00, minute: 00)
-                                        ? Icon(Feather.x_circle,
-                                        color: Colors.red)
-                                        : Icon(
-                                      MyAppIcons.check_circle,
-                                      color: Colors.green,
+                                Flexible(
+                                  flex: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left:2.0),
+                                      child: selectedTime == TimeOfDay(hour: 00, minute: 00)
+                                          ? Icon(Feather.x_circle,
+                                          color: Colors.red)
+                                          : Icon(
+                                        MyAppIcons.check_circle,
+                                        color: Colors.green,
+                                      ),
                                     ),
                                   ),
-                                ),
+
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(

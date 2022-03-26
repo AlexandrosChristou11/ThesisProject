@@ -190,18 +190,21 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
                   child: InkWell(
                       borderRadius: BorderRadius.circular(30.0),
                       onTap: () async {
+                      try{
+                        User? user = _auth.currentUser;
+                        userId = user!.uid;
                         /// Stripe's receives amount as Integer - in cents, so we need to convert the total amount to cents
                         /// e.g $10.19 -> 10019 cents
                         double amountInCents = totalAmount * 1000;
                         int integerAmount = (amountInCents / 10).ceil();
-                        int responseStatus = await initPaymentSheet(ctx,
-                            email: 'example@gmail.com', amount: integerAmount);
+                          int responseStatus = await initPaymentSheet(ctx,
+                              email: user.email.toString(),
+                              amount: integerAmount);
 
                         /// Complete order if transaction was successful
                         /// status code: 200 indicates that the https post request was OK
                         if (responseStatus == 200) {
-                          User? user = _auth.currentUser;
-                          userId = user!.uid;
+
 
                           cartProvider.getCartItems
                               .forEach((key, orderValue) async {
@@ -229,7 +232,7 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
                                // String sector = _getSectorAttribute(items[i].Sector);
                                 //int quantity = 1;
                                 TicketVM ticket = await _getSectorAttribute(items[i].Sector, items[i].Type, items[i].MatchId);
-                                var collection = FirebaseFirestore.instance.collection('Matches');
+                                var collection = await FirebaseFirestore.instance.collection('Matches');
                                 collection
                                     .doc(items[i].MatchId) // <-- Doc ID where data should be updated.
                                     .update({ ticket.Field!  : '${ticket.Quantity}' } );
@@ -247,6 +250,17 @@ Widget checkoutSection(BuildContext ctx, double totalAmount) {
                             }
                           });
                         }
+                      } on StripeException catch (er){
+                        print("STRIPE ERROR: ${er.toString()}");
+                        GlobalMethods gb = new GlobalMethods();
+                        gb.authenticationErrorHandler(er.error.toString(), ctx);
+
+                      }catch(error){
+                        print("STRIPE ERROR: ${error.toString()}");
+                        GlobalMethods gb = new GlobalMethods();
+                        gb.authenticationErrorHandler(error.toString(), ctx);
+                      }
+
                       },
                       //() async{ Navigator.pushNamed(ctx, NoWebhookPaymentCardFormScreen.routName); },
                       child: Padding(

@@ -8,6 +8,8 @@ import 'package:sep21/Provider/Matches.dart';
 import 'package:sep21/Widgets/feeds_products.dart';
 import 'package:sep21/Models/Match.dart';
 
+import '../Consts/my_custom_icons/MyAppIcons.dart';
+
 class CategoriesFeedsScreen extends StatelessWidget{
 
 
@@ -30,7 +32,7 @@ class CategoriesFeedsScreen extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Feather.database, size: 100,),
+              Icon(MyAppIcons.not_found, size: 100,),
               SizedBox(height: 40,),
               Text('No matches available for sport ${categoryName}', textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),),
             ],

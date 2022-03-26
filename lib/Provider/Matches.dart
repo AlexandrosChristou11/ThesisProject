@@ -23,7 +23,7 @@ class Matches with ChangeNotifier {
 
   Future <void> FetchMatches() async{
     await FirebaseFirestore.instance.collection('Matches')
-        //.where("DateAndTime", isGreaterThan:  DateTime.now())
+        .where("DateAndTime", isGreaterThan:  DateTime.now().toString())
         .get()
         .then((QuerySnapshot matchesSnapshots) => {
           _matches = [], /// We place this here to avoid re-initialization and duplication of content

@@ -424,48 +424,54 @@ class _UserInfoState extends State<UserInfo> {
                   ),
                 ),
               ),
+
+
               Material(
                   color: Colors.transparent,
                   child: InkWell(
                     splashColor: Theme.of(context).splashColor,
-                    child:  ListTile(title: Text('Logout'),
-                      onTap: () async{
-                        // Navigator.canPop(context)? Navigator.pop(context):null;
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext ctx) {
-                              return AlertDialog(
-                                title: Row(
-                                  children: [
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.only(right: 6.0),
-                                      child: Icon(MyAppIcons.logout,size: 24, color: Colors.red,),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text('Sign out'),
-                                    ),
+                    child:  Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),),
+                      child: ListTile(title: Text('Logout'),
+                        onTap: () async{
+                          // Navigator.canPop(context)? Navigator.pop(context):null;
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext ctx) {
+                                return AlertDialog(
+                                  title: Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(right: 6.0),
+                                        child: Icon(MyAppIcons.logout,size: 24, color: Colors.red,),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text('Sign out'),
+                                      ),
+                                    ],
+                                  ),
+                                  content: Text('Do you want to Sign out?'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('Cancel')),
+                                    TextButton(
+                                        onPressed: () async {
+                                          await _auth.signOut().then((value) => Navigator.pop(context));
+                                        },
+                                        child: Text('OK', style: TextStyle(color: Colors.red),))
                                   ],
-                                ),
-                                content: Text('Do you want to Sign out?'),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () async {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Cancel')),
-                                  TextButton(
-                                      onPressed: () async {
-                                        await _auth.signOut().then((value) => Navigator.pop(context));
-                                      },
-                                      child: Text('OK', style: TextStyle(color: Colors.red),))
-                                ],
-                              );
-                            });
-                      },
-                      leading: Icon(MyAppIcons.exit ),
+                                );
+                              });
+                        },
+                        leading: Icon(MyAppIcons.exit ),
           ),
+                    ),
         ),
       ),
             ],
