@@ -40,7 +40,7 @@ class _OrderState extends State<Order> {
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   static bool isConnected = false;
-
+  GlobalMethods gb = new GlobalMethods();
   // @override
   void initState() {
     StripeService.init();
@@ -128,16 +128,19 @@ class _OrderState extends State<Order> {
                 title: Text('MyTickets (${orderProvider.getOrders.length}) ',
                   style: TextStyle(color: Colors.black),),
 
-                actions: [
-                  IconButton(color: Colors.black,
-                    onPressed: () {},
-
-                    /*{ globalMethods.showDialogForRemoveItem('Clear Cart', 'Do you want to clear your cart?',
-                              ()=> {cartProvider.clearCart() }
-                      ,context); },*/
-                    icon: Icon(MyAppIcons.trash),
-                  )
-                ],
+                // actions: [
+                //   IconButton(color: Colors.black,
+                //     onPressed: () {
+                //
+                //       { gb.showDialogForRemoveItem('Clear MyTickets', 'Do you want to clear your tickets?',
+                //               ()=> {orderProvider.clearOrders() }
+                //           ,context); }
+                //     },
+                //
+                //
+                //     icon: Icon(MyAppIcons.trash),
+                //   )
+                // ],
               ),
               body: Container(
                 margin: EdgeInsets.only(bottom: 60),

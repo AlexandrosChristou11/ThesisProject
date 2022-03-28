@@ -140,4 +140,9 @@ class CartProvider with ChangeNotifier{
     
   }
 
+  /// return cart's quantity
+  int getCartQuantity(){
+    return _cartItems.length;
+  }
+
 }

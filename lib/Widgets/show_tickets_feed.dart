@@ -405,63 +405,85 @@ class _DisplayTicketsState extends State<DisplayTickets> {
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           shape: RoundedRectangleBorder(side: BorderSide.none),
                           color: Colors.redAccent.shade400,
-                          onPressed: (){
-
-                            bool isValid = _formKey.currentState!.validate();
-                            FocusScope.of(context).unfocus();
-                            double price = _getPriceByTicket();
-                            setState(() {
-                              _isLoading = true;
-                            });
-
-                            try {
-                              /// return true if the form is valid ..
-
-                              if (isValid) {
-                                _formKey.currentState!.save();
-
-                                String fanId;
-                                if ( _fanId == null ){
-                                  fanId = '123';
-                                }else{
-                                  fanId = _fanId!;
-                                }
-                                var uuid = Uuid();
-
-
-                                // Generate a v4 (random) id
-                                var ticketId =  uuid.v4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
-
-                                /// create new variable that will represent ticket type and sector..
-                                cartProvider.addProductToCart(
-                                    widget.matchAttr.id,
-                                    price, widget.matchAttr.title,
-                                    widget.matchAttr.imageURL,
-                                    _ticketType.toString().split('.').last,
-                                    _sector.toString().split('.').last,
-                                    widget.matchAttr.stadium,
-                                    widget.matchAttr.date,
-                                    fanId,
-                                   ticketId
-                                );
-
-                                Navigator.canPop(context) ? Navigator.pop(
-                                    context) : null;
-
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(content: Text('Ticket added to your basket'), duration: Duration(seconds: 1, milliseconds: 500)));
-                              }
-                            }catch(e){
-                              print("ERROR | $e");
+                          onPressed: () {
+                            print ('AVAILABLE TICKETS: ${_getAvailableTickets()}');
+                            print ('AVAILABLE TICKETS: ${ int.parse(_getAvailableTickets()) + cartProvider
+                                .getCartQuantity()}');
+                            if (int.parse(_getAvailableTickets()) <= 0 ||
+                                int.parse(_getAvailableTickets()) - cartProvider
+                                    .getCartQuantity() <= 0) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  content: Text('No other tickets available!'),
+                                  duration: Duration(
+                                      seconds: 1, milliseconds: 500)));
                             }
-                            finally{
+                            else {
+                              bool isValid = _formKey.currentState!.validate();
+                              FocusScope.of(context).unfocus();
+                              double price = _getPriceByTicket();
                               setState(() {
-                                _isLoading = false;
-
+                                _isLoading = true;
                               });
+
+                              try {
+                                /// return true if the form is valid ..
+
+                                if (isValid) {
+                                  _formKey.currentState!.save();
+
+                                  String fanId;
+                                  if (_fanId == null) {
+                                    fanId = '123';
+                                  } else {
+                                    fanId = _fanId!;
+                                  }
+                                  var uuid = Uuid();
+
+
+                                  // Generate a v4 (random) id
+                                  var ticketId = uuid
+                                      .v4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
+
+                                  /// create new variable that will represent ticket type and sector..
+                                  cartProvider.addProductToCart(
+                                      widget.matchAttr.id,
+                                      price,
+                                      widget.matchAttr.title,
+                                      widget.matchAttr.imageURL,
+                                      _ticketType
+                                          .toString()
+                                          .split('.')
+                                          .last,
+                                      _sector
+                                          .toString()
+                                          .split('.')
+                                          .last,
+                                      widget.matchAttr.stadium,
+                                      widget.matchAttr.date,
+                                      fanId,
+                                      ticketId
+                                  );
+
+                                  Navigator.canPop(context) ? Navigator.pop(
+                                      context) : null;
+
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                      content: Text(
+                                          'Ticket added to your basket'),
+                                      duration: Duration(
+                                          seconds: 1, milliseconds: 500)));
+                                }
+                              } catch (e) {
+                                print("ERROR | $e");
+                              }
+                              finally {
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              }
                             }
-
-
                           },
                           child: Text(
                               'Add to Card'.toUpperCase(),

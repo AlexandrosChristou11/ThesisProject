@@ -163,7 +163,7 @@ class GlobalMethods{
               alignment: Alignment.center,
                 child: TextButton(onPressed: (){
                   Navigator.pop(context);
-                }, child: Text('I read it', style: TextStyle(color: MyAppColor.white),)),
+                }, child: Text('I agree', style: TextStyle(color: MyAppColor.white),)),
 
             ),
           ),

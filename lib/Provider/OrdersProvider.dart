@@ -47,5 +47,11 @@ class OrderProvider with ChangeNotifier{
     notifyListeners();
   }
 
+  /// when method clearCart  is invoked
+  /// then the cart will be cleared.
+  void clearOrders(){
+    _orders.clear();
+    notifyListeners();
+  }
 
 }
